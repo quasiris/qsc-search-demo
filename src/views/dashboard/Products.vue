@@ -2,7 +2,7 @@
     <v-card class="base-64-encoder tools-view-card">
         <v-toolbar dark color="grey lighten-5">
             <v-toolbar-title class="font-weight-light card-title">
-                Movies
+                Products
             </v-toolbar-title>
             <v-spacer/>
             <v-icon color="primary"
@@ -25,7 +25,7 @@
                                         v-model="form.query"
                                         name="Query"
                                         :rules="formOptions.query"
-                                        label="Search Movies"
+                                        label="Search Products"
                                 />
                             </v-col>
                             <v-col cols="12"
@@ -45,7 +45,7 @@
                 </article>
                 <article class="movies-list">
                     <v-row no-gutters>
-                        <v-col v-for="(movie, index) in MOVIES" :key="index" class="grid">
+                        <v-col v-for="(movie, index) in PRODUCTS" :key="index" class="grid">
                             <v-card
                                     class="movies-list_card ma-5"
                             >
@@ -76,14 +76,14 @@
 
 
     export default {
-        name: "Movies",
+        name: "Products",
         computed: {
             ...mapGetters([
-                'MOVIES',
+                'PRODUCTS',
             ]),
         },
         beforeMount() {
-            this.$store.dispatch('GET_MOVIES');
+            this.$store.dispatch('GET_PRODUCTS');
         },
         data: () => ({
             form: Object.assign({}, form),
@@ -97,6 +97,7 @@
         methods: {
             formSubmit() {
                 console.log('query', this.form);
+                this.$store.dispatch('GET_PRODUCTS_BY_QUERY', {form: this.form});
             }
 
         }
