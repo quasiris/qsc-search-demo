@@ -28,8 +28,7 @@ export default {
         GET_MOVIES: async (context) => {
             try {
                 const {data} = await axios.get(`search/hornbach-de/search?q=*`);
-                console.log('data', data);
-                context.commit('SET_MOVIES', data);
+                context.commit('SET_MOVIES', data.result.search.documents.slice(0,9));
             } catch (e) {
                 throw new Error(e);
             }

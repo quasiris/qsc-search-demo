@@ -12,7 +12,7 @@
         </v-toolbar>
         <v-container>
             <section class="ma-5">
-                test
+                MOVIES: {{MOVIES}}
             </section>
         </v-container>
     </v-card>
@@ -24,7 +24,7 @@
         name: "Movies",
         computed: {
             ...mapGetters([
-                'ENCODER',
+                'MOVIES',
             ]),
         },
         beforeMount() {
