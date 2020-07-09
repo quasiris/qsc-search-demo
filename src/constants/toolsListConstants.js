@@ -1,9 +1,8 @@
 export const toolsListConstants = [
     {
-        icon: 'mdi-home',
+        icon: 'mdi-filmstrip',
         name: 'Movies',
         text: 'Lorem ipsum dolor sit amet consectetur,Lorem ipsum dolor sit amet consectetur ',
-
     }
 ];
 
