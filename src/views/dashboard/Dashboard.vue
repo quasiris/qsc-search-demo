@@ -46,6 +46,7 @@
             </v-app-bar>
             <v-content>
                 <v-container>
+
                     <router-view/>
                 </v-container>
             </v-content>
