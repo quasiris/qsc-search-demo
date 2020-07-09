@@ -4,12 +4,19 @@ Vue.use(VueRouter);
 
 /* Views */
 import Dashboard from "../views/dashboard/Dashboard";
+import Movies from "../views/dashboard/Movies";
 
 const routes = [
   {
     path: '/',
     name: 'Dashboard',
     component: Dashboard,
+    children: [
+      {
+        path: '/movies',
+        name: 'Movies',
+        component: Movies,
+      }]
 
   }
 ];

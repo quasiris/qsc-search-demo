@@ -21,11 +21,14 @@
     import {mapGetters} from "vuex";
 
     export default {
-        name: "Base-64-Encoder",
+        name: "Movies",
         computed: {
             ...mapGetters([
                 'ENCODER',
             ]),
+        },
+        beforeMount() {
+            this.$store.dispatch('GET_MOVIES');
         },
         created() {
 
