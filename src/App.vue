@@ -1,60 +1,63 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-content>
-      <HelloWorld/>
-    </v-content>
-  </v-app>
+  <div id="app">
+    <router-view/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-
-export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
-  },
-
-  data: () => ({
-    //
-  }),
-};
+  export default {
+    name: 'App',
+  };
 </script>
+<style type="text/css">
+  :root {
+    --primary-color: #2f3033;
+    --secondary-color: #fcfcfc;
+    --danger-color: #b71c1c;
+  }
+
+  .v-application--wrap {
+    background-color: #eeeeee;
+  }
+  a {
+
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+  .w-100{
+    width: 100%;
+  }
+
+  /*  CARD STYLES*/
+  .v-card:hover {
+    cursor: pointer;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12)
+  }
+
+  .tools-view-card{
+    min-height: 80vh;
+  }
+
+  .card-title {
+    color: var(--primary-color);;
+  }
+
+  /*GRID*/
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-gap: 1rem;
+
+  }
+
+  /*EXPANSION PANEL*/
+  .expansion-panel-content{
+    overflow: auto;
+    max-height: 400px;
+    word-wrap: break-word;
+  }
+
+</style>
