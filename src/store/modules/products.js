@@ -2,7 +2,8 @@ import axios from 'axios';
 
 function initialState() {
     return {
-        products: ''
+        products: [],
+        suggestProducts: []
     }
 }
 
@@ -12,10 +13,17 @@ export default {
         PRODUCTS: state => {
             return state.products
         },
+        SUGGEST_PRODUCTS: state => {
+            return state.suggestProducts
+        }
     },
     mutations: {
         SET_PRODUCTS(state, payload) {
             state.products = payload;
+        },
+        SET_SUGGEST_PRODUCTS(state, payload) {
+            state.suggestProducts = payload;
+            console.log('state', state);
         },
         RESET(state) {
             const s = initialState();
@@ -37,6 +45,14 @@ export default {
             try {
                 const {data} = await axios.get(`search/hornbach-de/search?q=${payload.form.query}`);
                 context.commit('SET_PRODUCTS', data.result.search.documents);
+            } catch (e) {
+                throw new Error(e);
+            }
+        },
+        GET_SUGGESTS_PRODUCTS: async (context, payload) => {
+            try {
+                const {data} = await axios.get(`search/suggest/hornbach-de/search?q=${payload.form.query}`);
+                context.commit('SET_SUGGEST_PRODUCTS', data.map((val) => val.suggest));
             } catch (e) {
                 throw new Error(e);
             }

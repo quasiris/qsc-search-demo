@@ -21,12 +21,16 @@
                             <v-col cols="12"
                                    sm="12"
                                    md="6">
-                                <v-text-field
+                                <v-autocomplete
                                         v-model="form.query"
-                                        name="Query"
+                                        :loading="loading"
+                                        :items="SUGGEST_PRODUCTS"
+                                        :search-input.sync="search"
+                                        label="Outlined"
                                         :rules="formOptions.query"
-                                        label="Search Products"
-                                />
+                                ></v-autocomplete>
+
+                                SUGGEST PRODUCTS: {{SUGGEST_PRODUCTS}}
                             </v-col>
                             <v-col cols="12"
                                    sm="12"
@@ -82,6 +86,7 @@
         computed: {
             ...mapGetters([
                 'PRODUCTS',
+                'SUGGEST_PRODUCTS'
             ]),
         },
         beforeMount() {
@@ -94,20 +99,37 @@
                 query: [
                     v => !!v || 'Query is required',
                 ],
-            }
+            },
+            loading: false,
+            items: [],
+            search: null,
         }),
+        watch: {
+            search(val) {
+                val && val !== this.select && this.querySelections(val)
+            },
+        },
         methods: {
             formSubmit() {
                 console.log('query', this.form);
                 this.$store.dispatch('GET_PRODUCTS_BY_QUERY', {form: this.form});
-            }
+            },
+            querySelections(query) {
+                this.loading = true;
+                this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {form: {query: query}})
+                    .then(()=>{
+                        this.loading = false;
+                    })
 
+                // Simulated ajax query
+
+            }
         }
     }
 </script>
 
 <style scoped>
-    .movies-list_card:hover{
+    .movies-list_card:hover {
         cursor: pointer;
     }
 </style>
