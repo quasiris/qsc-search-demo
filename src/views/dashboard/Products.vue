@@ -26,11 +26,12 @@
                                         :loading="loading"
                                         :items="SUGGEST_PRODUCTS"
                                         :search-input.sync="search"
-                                        label="Outlined"
                                         :rules="formOptions.query"
+                                        cache-items
+                                        hide-no-data
+                                        hide-details
+                                        label="What state are you from?"
                                 ></v-autocomplete>
-
-                                SUGGEST PRODUCTS: {{SUGGEST_PRODUCTS}}
                             </v-col>
                             <v-col cols="12"
                                    sm="12"
@@ -48,6 +49,9 @@
                     </v-form>
                 </article>
                 <article class="movies-list">
+                    <p class="font-weight-light">
+                        Total: {{TOTAL_PRODUCTS}} elements
+                    </p>
                     <v-row no-gutters>
                         <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
                             <v-card
@@ -86,11 +90,14 @@
         computed: {
             ...mapGetters([
                 'PRODUCTS',
-                'SUGGEST_PRODUCTS'
+                'SUGGEST_PRODUCTS',
+                'TOTAL_PRODUCTS'
             ]),
         },
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS');
+
+            console.log('products', this.PRODUCTS);
         },
         data: () => ({
             form: Object.assign({}, form),
@@ -117,12 +124,9 @@
             querySelections(query) {
                 this.loading = true;
                 this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {form: {query: query}})
-                    .then(()=>{
+                    .then(() => {
                         this.loading = false;
                     })
-
-                // Simulated ajax query
-
             }
         }
     }

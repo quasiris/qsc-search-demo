@@ -3,6 +3,7 @@ import axios from 'axios';
 function initialState() {
     return {
         products: [],
+        totalProducts: '',
         suggestProducts: []
     }
 }
@@ -13,6 +14,9 @@ export default {
         PRODUCTS: state => {
             return state.products
         },
+        TOTAL_PRODUCTS: state => {
+            return state.totalProducts
+        },
         SUGGEST_PRODUCTS: state => {
             return state.suggestProducts
         }
@@ -20,6 +24,9 @@ export default {
     mutations: {
         SET_PRODUCTS(state, payload) {
             state.products = payload;
+        },
+        SET_TOTAL_PRODUCTS(state, payload) {
+            state.totalProducts = payload;
         },
         SET_SUGGEST_PRODUCTS(state, payload) {
             state.suggestProducts = payload;
@@ -37,6 +44,7 @@ export default {
             try {
                 const {data} = await axios.get(`search/hornbach-de/search?q=*`);
                 context.commit('SET_PRODUCTS', data.result.search.documents);
+                context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
             } catch (e) {
                 throw new Error(e);
             }
@@ -45,6 +53,7 @@ export default {
             try {
                 const {data} = await axios.get(`search/hornbach-de/search?q=${payload.form.query}`);
                 context.commit('SET_PRODUCTS', data.result.search.documents);
+                context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
             } catch (e) {
                 throw new Error(e);
             }
