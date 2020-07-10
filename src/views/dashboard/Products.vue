@@ -45,19 +45,21 @@
                 </article>
                 <article class="movies-list">
                     <v-row no-gutters>
-                        <v-col v-for="(movie, index) in PRODUCTS" :key="index" class="grid">
+                        <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
                             <v-card
+                                    color="accent"
+                                    :href="product.document.url" target="_blank"
                                     class="movies-list_card ma-5"
                             >
                                 <v-img
-                                        :src="movie.document.image"
+                                        :src="product.document.image"
                                         height="200px"
                                 ></v-img>
-                                <v-card-subtitle>
-                                    {{movie.document.title}}
+                                <v-card-subtitle class="font-weight-bold">
+                                    {{product.document.title}}
                                 </v-card-subtitle>
-                                <v-card-subtitle>
-                                    {{movie.document.price}} $
+                                <v-card-subtitle class="font-weight-bold text-center">
+                                    {{product.document.price}} €
                                 </v-card-subtitle>
                             </v-card>
                         </v-col>
@@ -105,5 +107,7 @@
 </script>
 
 <style scoped>
-
+    .movies-list_card:hover{
+        cursor: pointer;
+    }
 </style>
