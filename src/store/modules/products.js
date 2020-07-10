@@ -28,7 +28,7 @@ export default {
         GET_PRODUCTS: async (context) => {
             try {
                 const {data} = await axios.get(`search/hornbach-de/search?q=*`);
-                context.commit('SET_PRODUCTS', data.result.search.documents.slice(0,18));
+                context.commit('SET_PRODUCTS', data.result.search.documents);
             } catch (e) {
                 throw new Error(e);
             }
@@ -36,7 +36,7 @@ export default {
         GET_PRODUCTS_BY_QUERY: async (context, payload) => {
             try {
                 const {data} = await axios.get(`search/hornbach-de/search?q=${payload.form.query}`);
-                context.commit('SET_PRODUCTS', data.result.search.documents.slice(0,18));
+                context.commit('SET_PRODUCTS', data.result.search.documents);
             } catch (e) {
                 throw new Error(e);
             }
