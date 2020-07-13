@@ -28,6 +28,7 @@
                                         :search-input.sync="search"
                                         :rules="formOptions.query"
                                         flat
+                                        v-on:keyup.enter="formSubmit"
                                         hide-no-data
                                         label="Search Query"
                                 ></v-combobox>
@@ -75,7 +76,6 @@
                         <v-pagination
                                 previous-aria-label="Previous"
                                 @input="productsPaginationChange"
-                                color="grey"
                                 v-model="PAGINATION_CURRENT_PAGE"
                                 :length="PAGINATION_LENGTH"
                                 :total-visible="10"
@@ -133,7 +133,6 @@
         },
         methods: {
             formSubmit() {
-                console.log('query', this.form);
                 this.$store.dispatch('GET_PRODUCTS_BY_QUERY', {form: this.form});
             },
             querySelections(query) {
@@ -144,8 +143,6 @@
                     })
             },
             productsPaginationChange(page) {
-                console.log('this.$store.state.products', this.$store.state.products);
-                console.log('page', page);
                 this.$store.dispatch('GET_PRODUCTS_BY_QUERY_AND_PAGINATION', {
                     form: {
                         query: this.form.query,

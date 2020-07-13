@@ -89,7 +89,6 @@ export default {
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
 
-                console.log('PAGING: ', data.result.search.paging);
 
             } catch (e) {
                 throw new Error(e);
