@@ -58,6 +58,15 @@ export default {
                 throw new Error(e);
             }
         },
+        GET_PRODUCTS_BY_QUERY_AND_PAGINATION: async (context, payload) => {
+            try {
+                const {data} = await axios.get(`search/hornbach-de/search?q=${payload.form.query}&page=${payload.form.page}`);
+                context.commit('SET_PRODUCTS', data.result.search.documents);
+                context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
+            } catch (e) {
+                throw new Error(e);
+            }
+        },
         GET_SUGGESTS_PRODUCTS: async (context, payload) => {
             try {
                 const {data} = await axios.get(`search/suggest/hornbach-de/search?q=${payload.form.query}`);

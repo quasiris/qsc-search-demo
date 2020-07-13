@@ -21,17 +21,16 @@
                             <v-col cols="12"
                                    sm="12"
                                    md="6">
-                                <v-autocomplete
+                                <v-combobox
                                         v-model="form.query"
                                         :loading="loading"
                                         :items="SUGGEST_PRODUCTS"
                                         :search-input.sync="search"
                                         :rules="formOptions.query"
-                                        cache-items
+                                        flat
                                         hide-no-data
-                                        hide-details
-                                        label="What state are you from?"
-                                ></v-autocomplete>
+                                        label="Search Query"
+                                ></v-combobox>
                             </v-col>
                             <v-col cols="12"
                                    sm="12"
@@ -48,16 +47,16 @@
                         </v-row>
                     </v-form>
                 </article>
-                <article class="movies-list">
-                    <p class="font-weight-light">
+                <article class="products">
+                    <p class="products_total font-weight-light">
                         Total: {{TOTAL_PRODUCTS}} elements
                     </p>
-                    <v-row no-gutters>
+                    <v-row no-gutters class="products_list_cards">
                         <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
                             <v-card
                                     color="accent"
                                     :href="product.document.url" target="_blank"
-                                    class="movies-list_card ma-5"
+                                    class="products_card ma-5"
                             >
                                 <v-img
                                         :src="product.document.image"
@@ -72,6 +71,12 @@
                             </v-card>
                         </v-col>
                     </v-row>
+                    <div class="products_pagination mt-6">
+                        <v-pagination
+                                v-model="page"
+                                :length="15"
+                        ></v-pagination>
+                    </div>
                 </article>
             </section>
         </v-container>
@@ -96,8 +101,6 @@
         },
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS');
-
-            console.log('products', this.PRODUCTS);
         },
         data: () => ({
             form: Object.assign({}, form),
@@ -108,13 +111,17 @@
                 ],
             },
             loading: false,
-            items: [],
             search: null,
+            page: 1,
         }),
         watch: {
             search(val) {
                 val && val !== this.select && this.querySelections(val)
             },
+            page(val){
+                console.log('val', val);
+                this.productsPaginationChange(val);
+            }
         },
         methods: {
             formSubmit() {
@@ -127,13 +134,23 @@
                     .then(() => {
                         this.loading = false;
                     })
+            },
+            productsPaginationChange(page) {
+                this.$store.dispatch('GET_PRODUCTS_BY_QUERY_AND_PAGINATION', {form: {query: this.form.query, page: page}});
             }
         }
     }
 </script>
 
 <style scoped>
-    .movies-list_card:hover {
+    .products-_card:hover {
         cursor: pointer;
     }
+
+    .products_list_cards {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+
 </style>
