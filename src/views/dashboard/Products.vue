@@ -73,8 +73,12 @@
                     </v-row>
                     <div class="products_pagination mt-6">
                         <v-pagination
-                                v-model="page"
-                                :length="15"
+                                previous-aria-label="Previous"
+                                @input="productsPaginationChange"
+                                color="grey"
+                                v-model="PAGINATION_CURRENT_PAGE"
+                                :length="PAGINATION_LENGTH"
+                                :total-visible="10"
                         ></v-pagination>
                     </div>
                 </article>
@@ -96,8 +100,17 @@
             ...mapGetters([
                 'PRODUCTS',
                 'SUGGEST_PRODUCTS',
-                'TOTAL_PRODUCTS'
+                'TOTAL_PRODUCTS',
+                'PAGINATION_LENGTH'
             ]),
+            PAGINATION_CURRENT_PAGE: {
+                get() {
+                    return this.$store.state.products.paginationCurrentPage;
+                },
+                set(value) {
+                    this.$store.commit('SET_PAGINATION_CURRENT_PAGE', value)
+                }
+            }
         },
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS');
@@ -111,17 +124,12 @@
                 ],
             },
             loading: false,
-            search: null,
-            page: 1,
+            search: null
         }),
         watch: {
             search(val) {
                 val && val !== this.select && this.querySelections(val)
             },
-            page(val){
-                console.log('val', val);
-                this.productsPaginationChange(val);
-            }
         },
         methods: {
             formSubmit() {
@@ -136,7 +144,14 @@
                     })
             },
             productsPaginationChange(page) {
-                this.$store.dispatch('GET_PRODUCTS_BY_QUERY_AND_PAGINATION', {form: {query: this.form.query, page: page}});
+                console.log('this.$store.state.products', this.$store.state.products);
+                console.log('page', page);
+                this.$store.dispatch('GET_PRODUCTS_BY_QUERY_AND_PAGINATION', {
+                    form: {
+                        query: this.form.query,
+                        page: page
+                    }
+                });
             }
         }
     }
