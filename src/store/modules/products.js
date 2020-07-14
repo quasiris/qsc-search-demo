@@ -8,7 +8,8 @@ function initialState() {
         totalProducts: '',
         suggestProducts: [],
         paginationLength: null,
-        paginationCurrentPage: null
+        paginationCurrentPage: null,
+        facets: []
     }
 }
 
@@ -17,6 +18,9 @@ export default {
     getters: {
         PRODUCTS: state => {
             return state.products;
+        },
+        PRODUCTS_FACETS: state => {
+          return state.facets;
         },
         TOTAL_PRODUCTS: state => {
             return state.totalProducts;
@@ -34,6 +38,9 @@ export default {
     mutations: {
         SET_PRODUCTS(state, payload) {
             state.products = payload;
+        },
+        SET_PRODUCTS_FACETS(state, payload) {
+          state.facets = payload;
         },
         SET_TOTAL_PRODUCTS(state, payload) {
             state.totalProducts = payload;
@@ -65,6 +72,7 @@ export default {
                 context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
+                context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
 
             } catch (e) {
                 throw new Error(e);
@@ -77,6 +85,7 @@ export default {
                 context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
+                context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
 
             } catch (e) {
                 throw new Error(e);
@@ -93,6 +102,8 @@ export default {
                 context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
+                context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
+
             } catch (e) {
                 if (e.response.status === 500) {
                     store.dispatch('RESET', {type: 'products'});

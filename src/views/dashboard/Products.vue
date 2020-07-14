@@ -12,7 +12,7 @@
         </v-toolbar>
         <v-container>
             <section class="ma-5">
-                <article class="movies-search-query ma-5">
+                <article class="products-search-query ma-5">
                     <v-form
                             v-model="formOptions.valid"
                             v-on:submit.prevent="formSubmit()"
@@ -47,6 +47,9 @@
                             </v-col>
                         </v-row>
                     </v-form>
+                </article>
+                <article class="products_facets" style="max-height: 300px; overflow:auto">
+                    FACETS: {{PRODUCTS_FACETS}}
                 </article>
                 <article class="products">
                     <p class="products_total font-weight-light">
@@ -101,7 +104,8 @@
                 'PRODUCTS',
                 'SUGGEST_PRODUCTS',
                 'TOTAL_PRODUCTS',
-                'PAGINATION_LENGTH'
+                'PAGINATION_LENGTH',
+                'PRODUCTS_FACETS'
             ]),
             PAGINATION_CURRENT_PAGE: {
                 get() {
@@ -135,11 +139,17 @@
         },
         methods: {
             formSubmit() {
-                this.$store.dispatch('GET_PRODUCTS_BY_QUERY', {form: this.form});
+                this.$store.dispatch('GET_PRODUCTS_BY_QUERY', {
+                    form: this.form
+                });
             },
             querySelections(query) {
                 this.pagination.loading = true;
-                this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {form: {query: query}})
+                this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {
+                    form: {
+                        query: query
+                    }
+                })
                     .then(() => {
                         this.pagination.loading = false;
                     })
