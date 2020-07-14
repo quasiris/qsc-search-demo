@@ -45,10 +45,7 @@
                 <v-spacer/>
             </v-app-bar>
             <v-content>
-                <v-container>
-
-                    <router-view/>
-                </v-container>
+                <router-view class="ma-5"/>
             </v-content>
             <Footer/>
         </v-app>

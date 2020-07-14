@@ -10,6 +10,10 @@
     };
 </script>
 <style type="text/css">
+    html, body {
+        height:100%;
+    }
+
     :root {
         --primary-color: #2f3033;
         --secondary-color: #fcfcfc;
@@ -21,7 +25,6 @@
     }
 
     a {
-
         text-decoration: none;
     }
 
@@ -34,11 +37,6 @@
     }
 
     /*  CARD STYLES*/
-    /*.v-card:hover {
-        cursor: pointer;
-        box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12)
-    }*/
-
     .tools-view-card {
         min-height: 80vh;
     }
@@ -64,7 +62,8 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        margin: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       grid-gap: 1rem;
     }
 

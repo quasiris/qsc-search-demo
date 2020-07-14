@@ -1,5 +1,5 @@
 <template>
-    <v-card class="base-64-encoder tools-view-card">
+    <v-card class="products-card">
         <v-toolbar dark color="grey lighten-5">
             <v-toolbar-title class="font-weight-light card-title">
                 Products
@@ -11,8 +11,8 @@
             </v-icon>
         </v-toolbar>
         <v-container>
-            <section class="ma-5">
-                <article class="products-search-query ma-5">
+            <header>
+                <article class="products-search-query">
                     <v-form
                             v-model="formOptions.valid"
                             v-on:submit.prevent="formSubmit()"
@@ -48,9 +48,8 @@
                         </v-row>
                     </v-form>
                 </article>
-                <article class="products_facets" style="max-height: 300px; overflow:auto">
-                    FACETS: {{PRODUCTS_FACETS}}
-                </article>
+            </header>
+            <section>
                 <article class="products">
                     <p class="products_total font-weight-light">
                         Total: {{TOTAL_PRODUCTS}} elements
@@ -86,6 +85,19 @@
                     </div>
                 </article>
             </section>
+            <aside>
+                <article class="products_facets">
+                    <p class="products_facets_name font-weight-light">
+                        Facets
+                    </p>
+                    <v-treeview
+                            class="products_facets_treeview"
+                            activatable
+                            :items="PRODUCTS_FACETS"
+                    ></v-treeview>
+
+                </article>
+            </aside>
         </v-container>
     </v-card>
 </template>
@@ -105,7 +117,6 @@
                 'SUGGEST_PRODUCTS',
                 'TOTAL_PRODUCTS',
                 'PAGINATION_LENGTH',
-                'PRODUCTS_FACETS'
             ]),
             PAGINATION_CURRENT_PAGE: {
                 get() {
@@ -114,7 +125,17 @@
                 set(value) {
                     this.$store.commit('SET_PAGINATION_CURRENT_PAGE', value)
                 }
+            },
+            PRODUCTS_FACETS: {
+                get() {
+                    return this.mappFacetsValue(this.$store.state.products.facets)
+
+                },
+                set() {
+
+                }
             }
+
         },
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS');
@@ -130,7 +151,8 @@
             pagination: {
                 loading: false,
                 search: null
-            }
+            },
+            items: ''
         }),
         watch: {
             'pagination.search': function (val) {
@@ -161,12 +183,30 @@
                         page: page
                     }
                 })
+            },
+            mappFacetsValue(value) {
+                const treeViewObject = [];
+
+                for (let i = 0; i < value.length; i++) {
+                    treeViewObject.push({
+                        id: value[i]['id'],
+                        name: value[i]['name'],
+                        children: value[i]['values'].map((val) => {
+                            return {name: val.value, filter: val.filter}
+                        })
+                    })
+
+                }
+                return treeViewObject;
             }
         }
     }
 </script>
 
 <style scoped>
+    .products-card{
+        min-height: 140vh;
+    }
     .products-_card:hover {
         cursor: pointer;
     }
@@ -176,5 +216,14 @@
         overflow-y: auto;
     }
 
+    aside {
+        float: left;
+        width: 20%;
+    }
+
+    section {
+        float: right;
+        width: 80%;
+    }
 
 </style>
