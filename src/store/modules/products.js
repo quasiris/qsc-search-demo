@@ -1,4 +1,6 @@
 import axios from 'axios';
+import store from '../index';
+
 
 function initialState() {
     return {
@@ -45,11 +47,14 @@ export default {
         SET_PAGINATION_CURRENT_PAGE(state, payload) {
             state.paginationCurrentPage = payload;
         },
-        RESET(state) {
+        RESET(state, type) {
             const s = initialState();
             Object.keys(s).forEach(key => {
-                state[key] = s[key]
-            })
+                 if(key === type){
+                     state[key] = s[key]
+                 }
+
+             })
         }
     },
     actions: {
@@ -88,9 +93,11 @@ export default {
                 context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
-
-
             } catch (e) {
+                if (e.response.status === 500) {
+                    store.dispatch('RESET', {type: 'products'});
+                }
+
                 throw new Error(e);
             }
         },
@@ -102,8 +109,8 @@ export default {
                 throw new Error(e);
             }
         },
-        RESET_PRODUCTS: (context) => {
-            context.commit('RESET', 'products');
+        RESET: (context, payload) => {
+            context.commit('RESET', payload.type);
         },
     }
 }

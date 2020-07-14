@@ -150,7 +150,7 @@
                         query: this.form.query,
                         page: page
                     }
-                });
+                })
             }
         }
     }
