@@ -23,9 +23,9 @@
                                    md="6">
                                 <v-combobox
                                         v-model="form.query"
-                                        :loading="loading"
+                                        :loading="pagination.loading"
                                         :items="SUGGEST_PRODUCTS"
-                                        :search-input.sync="search"
+                                        :search-input.sync="pagination.search"
                                         :rules="formOptions.query"
                                         flat
                                         v-on:keyup.enter="formSubmit"
@@ -75,7 +75,7 @@
                     <div class="products_pagination mt-6">
                         <v-pagination
                                 previous-aria-label="Previous"
-                                @input="productsPaginationChange"
+                                @input="changePagination"
                                 v-model="PAGINATION_CURRENT_PAGE"
                                 :length="PAGINATION_LENGTH"
                                 :total-visible="10"
@@ -123,11 +123,13 @@
                     v => !!v || 'Query is required',
                 ],
             },
-            loading: false,
-            search: null
+            pagination: {
+                loading: false,
+                search: null
+            }
         }),
         watch: {
-            search(val) {
+            'pagination.search': function (val) {
                 val && val !== this.select && this.querySelections(val)
             },
         },
@@ -136,13 +138,13 @@
                 this.$store.dispatch('GET_PRODUCTS_BY_QUERY', {form: this.form});
             },
             querySelections(query) {
-                this.loading = true;
+                this.pagination.loading = true;
                 this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {form: {query: query}})
                     .then(() => {
-                        this.loading = false;
+                        this.pagination.loading = false;
                     })
             },
-            productsPaginationChange(page) {
+            changePagination(page) {
                 this.$store.dispatch('GET_PRODUCTS_BY_QUERY_AND_PAGINATION', {
                     form: {
                         query: this.form.query,
