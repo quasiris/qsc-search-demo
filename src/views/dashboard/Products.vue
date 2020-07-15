@@ -51,7 +51,7 @@
             </header>
             <section class="products">
                 <aside>
-                    <article class="products-category">
+                    <article class="products-facets">
                         <p class="products-facets_name font-weight-light">
                             Facets
                         </p>
@@ -63,13 +63,28 @@
                                     :items="[...facet]"
                             ></v-treeview>
                             <v-treeview
-                                    v-if="facet.id === 'brand'"
-                                    selectable
+                                    :selectable="true"
+                                    color="secondary"
+                                    v-else
+                                    selected-color="primary"
                                     :dense="true"
                                     open-all
+                                    return-object
                                     selection-type="independent"
                                     :items="[...facet]"
                             ></v-treeview>
+                        </div>
+                    </article>
+                    <article class="products-sliders mt-10">
+                        <div v-for="(sliderValue, i) in PRODUCTS_SLIDERS" :key="i">
+                           <p class="font-weight-light">
+                               {{sliderValue.name}}:  {{slider[0]}} - {{slider[1]}} €
+                           </p>
+                            <v-range-slider
+                                    v-model="slider"
+                                    :max="sliderValue.maxRange"
+                                    :min="sliderValue.minRange"
+                            />
                         </div>
                     </article>
                 </aside>
@@ -118,8 +133,6 @@
     const form = {
         query: ''
     };
-
-
     export default {
         name: "Products",
         computed: {
@@ -128,6 +141,7 @@
                 'SUGGEST_PRODUCTS',
                 'TOTAL_PRODUCTS',
                 'PAGINATION_LENGTH',
+                'PRODUCTS_SLIDERS'
             ]),
             PAGINATION_CURRENT_PAGE: {
                 get() {
@@ -156,7 +170,9 @@
                 loading: false,
                 search: null
             },
-            items: ''
+            items: '',
+            slider: [0, 14000],
+            sorting: ['Prise', 'Marke Z-A', 'Bestseller', 'Relevanz', 'Title Z-A']
         }),
         watch: {
             'pagination.search': function (val) {
@@ -196,7 +212,11 @@
                         id: value[i]['id'],
                         name: value[i]['name'],
                         children: value[i]['values'].map((val) => {
-                            return {name: `${val.value} (${val.count})`, filter: val.filter}
+                            return {
+                                id:  val.filter,
+                                name: `${val.value} (${val.count})`,
+                                filter: val.filter
+                            }
                         })
                     })
 
@@ -219,7 +239,7 @@
     }
 
     .products {
-
+        word-wrap: break-word;
         width: 100%;
 
     }

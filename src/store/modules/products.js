@@ -9,7 +9,8 @@ function initialState() {
         suggestProducts: [],
         paginationLength: null,
         paginationCurrentPage: null,
-        facets: []
+        facets: [],
+        sliders: []
     }
 }
 
@@ -21,6 +22,9 @@ export default {
         },
         PRODUCTS_FACETS: state => {
           return state.facets;
+        },
+        PRODUCTS_SLIDERS: state => {
+          return state.sliders
         },
         TOTAL_PRODUCTS: state => {
             return state.totalProducts;
@@ -41,6 +45,9 @@ export default {
         },
         SET_PRODUCTS_FACETS(state, payload) {
           state.facets = payload;
+        },
+        SET_PRODUCTS_SLIDERS(state, payload){
+          state.sliders = payload;
         },
         SET_TOTAL_PRODUCTS(state, payload) {
             state.totalProducts = payload;
@@ -73,6 +80,7 @@ export default {
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
                 context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
+                context.commit('SET_PRODUCTS_SLIDERS', data.result.search.sliders);
 
             } catch (e) {
                 throw new Error(e);
@@ -86,6 +94,7 @@ export default {
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
                 context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
+                context.commit('SET_PRODUCTS_SLIDERS', data.result.search.sliders);
 
             } catch (e) {
                 throw new Error(e);
@@ -103,6 +112,8 @@ export default {
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
                 context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
+                context.commit('SET_PRODUCTS_SLIDERS', data.result.search.sliders);
+
 
             } catch (e) {
                 if (e.response.status === 500) {
