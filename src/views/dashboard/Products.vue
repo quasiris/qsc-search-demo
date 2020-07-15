@@ -10,7 +10,8 @@
                 mdi-close
             </v-icon>
         </v-toolbar>
-        <v-container>
+       <v-container>
+
             <header>
                 <article class="products-search-query">
                     <v-form
@@ -49,8 +50,20 @@
                     </v-form>
                 </article>
             </header>
-            <section>
-                <article class="products">
+            <section class="products">
+                <aside>
+                    <article class="products-facets">
+                        <p class="products-facets_name font-weight-light">
+                            Facets
+                        </p>
+                        <v-treeview
+                                open-all
+                                :items="PRODUCTS_FACETS"
+                        ></v-treeview>
+
+                    </article>
+                </aside>
+                <article>
                     <p class="products_total font-weight-light">
                         Total: {{TOTAL_PRODUCTS}} elements
                     </p>
@@ -84,21 +97,10 @@
                         ></v-pagination>
                     </div>
                 </article>
-            </section>
-            <aside>
-                <article class="products_facets">
-                    <p class="products_facets_name font-weight-light">
-                        Facets
-                    </p>
-                    <v-treeview
-                            class="products_facets_treeview"
-                            activatable
-                            :items="PRODUCTS_FACETS"
-                    ></v-treeview>
 
-                </article>
-            </aside>
-        </v-container>
+            </section>
+
+       </v-container>
     </v-card>
 </template>
 <script>
@@ -192,7 +194,7 @@
                         id: value[i]['id'],
                         name: value[i]['name'],
                         children: value[i]['values'].map((val) => {
-                            return {name: val.value, filter: val.filter}
+                            return {name: `${val.value} (${val.count})`, filter: val.filter}
                         })
                     })
 
@@ -205,25 +207,18 @@
 
 <style scoped>
     .products-card{
-        min-height: 140vh;
+        min-height: 100vh;
     }
     .products-_card:hover {
         cursor: pointer;
     }
-
-    .products_list_cards {
-        max-height: 90vh;
-        overflow-y: auto;
+    .products{
+        max-height: 70vh;
+        width: 100%;
+        overflow: auto;
     }
-
     aside {
         float: left;
         width: 20%;
     }
-
-    section {
-        float: right;
-        width: 80%;
-    }
-
 </style>

@@ -10,10 +10,6 @@
     };
 </script>
 <style type="text/css">
-    html, body {
-        height:100%;
-    }
-
     :root {
         --primary-color: #2f3033;
         --secondary-color: #fcfcfc;
