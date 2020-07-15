@@ -28,6 +28,7 @@
                                         :search-input.sync="pagination.search"
                                         :rules="formOptions.query"
                                         flat
+                                        @input="formSubmit"
                                         v-on:keyup.enter="formSubmit"
                                         hide-no-data
                                         label="Search Query"
@@ -77,9 +78,9 @@
                     </article>
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS_SLIDERS" :key="i">
-                           <p class="font-weight-light">
-                               {{sliderValue.name}}:  {{slider[0]}} - {{slider[1]}} €
-                           </p>
+                            <p class="font-weight-light">
+                                {{sliderValue.name}}: {{slider[0]}} - {{slider[1]}} €
+                            </p>
                             <v-range-slider
                                     v-model="slider"
                                     :max="sliderValue.maxRange"
@@ -101,7 +102,6 @@
                                     label="Sortierung"
                             ></v-select>
                         </v-col>
-
                     </v-row>
                     <v-row no-gutters class="products_list_cards">
                         <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
@@ -133,7 +133,6 @@
                         ></v-pagination>
                     </div>
                 </article>
-
             </section>
         </section>
     </v-card>
@@ -224,7 +223,7 @@
                         name: value[i]['name'],
                         children: value[i]['values'].map((val) => {
                             return {
-                                id:  val.filter,
+                                id: val.filter,
                                 name: `${val.value} (${val.count})`,
                                 filter: val.filter
                             }
@@ -233,9 +232,8 @@
 
                 }
 
-                console.log('treee view object', treeViewObjectArray);
                 return treeViewObjectArray;
-            }
+            },
         }
     }
 </script>
