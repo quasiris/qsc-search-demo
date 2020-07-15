@@ -162,7 +162,7 @@
                 }
             },
             PRODUCTS_FACETS() {
-                return this.mappFacetsValue(this.$store.state.products.facets)
+                return this.mappFacetsValueToTreeView(this.$store.state.products.facets)
             },
         },
         beforeMount() {
@@ -214,7 +214,7 @@
                     }
                 })
             },
-            mappFacetsValue(value) {
+            mappFacetsValueToTreeView(value) {
                 const treeViewObjectArray = [];
 
                 for (let i = 0; i < value.length; i++) {
@@ -250,11 +250,19 @@
     .products {
         word-wrap: break-word;
         width: 100%;
-
     }
 
     aside {
         float: left;
         width: 30%;
+        background-color: red;
     }
+
+    @media (max-width: 800px) {
+      aside{
+          width: 100%;
+          float: right;
+      }
+    }
+
 </style>
