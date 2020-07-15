@@ -55,10 +55,19 @@
                         <p class="products-facets_name font-weight-light">
                             Facets
                         </p>
-                        <div v-for="(facet, i) in PRODUCTS_FACETS" :key="i" >
+                        <div v-for="(facet, i) in PRODUCTS_FACETS" :key="i">
                             <v-treeview
                                     v-if="facet.id === 'category'"
                                     open-all
+                                    :dense="true"
+                                    :items="[...facet]"
+                            ></v-treeview>
+                            <v-treeview
+                                    v-if="facet.id === 'brand'"
+                                    selectable
+                                    :dense="true"
+                                    open-all
+                                    selection-type="independent"
                                     :items="[...facet]"
                             ></v-treeview>
                         </div>
@@ -131,16 +140,6 @@
             PRODUCTS_FACETS() {
                 return this.mappFacetsValue(this.$store.state.products.facets)
             },
-            /*PRODUCTS_CATEGORY: {
-                get() {
-                    return this.mappFacetsValue(this.$store.state.products.facets)
-
-                },
-                set() {
-
-                }
-            }*/
-
         },
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS');
@@ -190,10 +189,10 @@
                 })
             },
             mappFacetsValue(value) {
-                const treeViewObject = [];
+                const treeViewObjectArray = [];
 
                 for (let i = 0; i < value.length; i++) {
-                    treeViewObject.push({
+                    treeViewObjectArray.push({
                         id: value[i]['id'],
                         name: value[i]['name'],
                         children: value[i]['values'].map((val) => {
@@ -203,25 +202,28 @@
 
                 }
 
-                console.log('treee view object', treeViewObject);
-                return treeViewObject;
+                console.log('treee view object', treeViewObjectArray);
+                return treeViewObjectArray;
             }
         }
     }
 </script>
 
 <style scoped>
-    .products-card{
+    .products-card {
         min-height: 100vh;
     }
+
     .products-_card:hover {
         cursor: pointer;
     }
-    .products{
+
+    .products {
 
         width: 100%;
 
     }
+
     aside {
         float: left;
         width: 30%;
