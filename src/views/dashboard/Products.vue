@@ -89,9 +89,20 @@
                     </article>
                 </aside>
                 <article>
-                    <p class="products_total font-weight-light">
-                        Total: {{TOTAL_PRODUCTS}} elements
-                    </p>
+                    <v-row align="center">
+                        <v-col class="d-flex" cols="12" sm="6">
+                            <p class="font-weight-light">
+                                Total: {{TOTAL_PRODUCTS}} elements
+                            </p>
+                        </v-col>
+                        <v-col class="d-flex" cols="12" sm="6">
+                            <v-select
+                                    :items="sorting"
+                                    label="Sortierung"
+                            ></v-select>
+                        </v-col>
+
+                    </v-row>
                     <v-row no-gutters class="products_list_cards">
                         <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
                             <v-card
