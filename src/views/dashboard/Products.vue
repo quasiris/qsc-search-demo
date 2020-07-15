@@ -10,8 +10,7 @@
                 mdi-close
             </v-icon>
         </v-toolbar>
-       <v-container>
-
+        <section class="pa-5">
             <header>
                 <article class="products-search-query">
                     <v-form
@@ -52,15 +51,17 @@
             </header>
             <section class="products">
                 <aside>
-                    <article class="products-facets">
+                    <article class="products-category">
                         <p class="products-facets_name font-weight-light">
                             Facets
                         </p>
-                        <v-treeview
-                                open-all
-                                :items="PRODUCTS_FACETS"
-                        ></v-treeview>
-
+                        <div v-for="(facet, i) in PRODUCTS_FACETS" :key="i" >
+                            <v-treeview
+                                    v-if="facet.id === 'category'"
+                                    open-all
+                                    :items="[...facet]"
+                            ></v-treeview>
+                        </div>
                     </article>
                 </aside>
                 <article>
@@ -99,8 +100,7 @@
                 </article>
 
             </section>
-
-       </v-container>
+        </section>
     </v-card>
 </template>
 <script>
@@ -128,7 +128,10 @@
                     this.$store.commit('SET_PAGINATION_CURRENT_PAGE', value)
                 }
             },
-            PRODUCTS_FACETS: {
+            PRODUCTS_FACETS() {
+                return this.mappFacetsValue(this.$store.state.products.facets)
+            },
+            /*PRODUCTS_CATEGORY: {
                 get() {
                     return this.mappFacetsValue(this.$store.state.products.facets)
 
@@ -136,7 +139,7 @@
                 set() {
 
                 }
-            }
+            }*/
 
         },
         beforeMount() {
@@ -199,6 +202,8 @@
                     })
 
                 }
+
+                console.log('treee view object', treeViewObject);
                 return treeViewObject;
             }
         }
@@ -213,12 +218,12 @@
         cursor: pointer;
     }
     .products{
-        max-height: 70vh;
+
         width: 100%;
-        overflow: auto;
+
     }
     aside {
         float: left;
-        width: 20%;
+        width: 30%;
     }
 </style>
