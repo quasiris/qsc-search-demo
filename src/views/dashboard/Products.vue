@@ -53,25 +53,29 @@
             <section class="products">
                 <aside>
                     <article class="products-facets">
-                        <div v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
-                            <div v-if="filter.id === 'category'">
-                                <v-treeview
-                                        class="font-weight-light"
-                                        open-all
-                                        :dense="true"
-                                        :items="[...filter]"
-                                ></v-treeview>
-                            </div>
-                            <div v-else class="mt-5">
-                                <p class="font-weight-light">
-                                    {{filter.name}}
-                                </p>
-                                <FilterCheckbox v-for="(filterValue, i) in filter.children"
-                                                :key="i"
-                                                :filter-value="filterValue"
-                                />
-                            </div>
-                        </div>
+                        <v-expansion-panels
+                                v-model="panel"
+                                hover
+                        >
+                            <v-expansion-panel v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
+                                <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
+                                <v-expansion-panel-content v-if="filter.id === 'category'">
+                                    <v-treeview
+                                            class="font-weight-light"
+                                            open-all
+                                            :dense="true"
+                                            :items="[...filter]"
+                                    ></v-treeview>
+                                </v-expansion-panel-content>
+                                <v-expansion-panel-content v-else>
+                                    <FilterCheckbox v-for="(filterValue, i) in filter.children"
+                                                    :key="i"
+                                                    :filter-value="filterValue"
+                                    />
+
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+                        </v-expansion-panels>
                     </article>
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS_SLIDERS" :key="i">
@@ -174,7 +178,8 @@
                 search: null
             },
             slider: [0, 14000],
-            sorting: ['Prise', 'Marke Z-A', 'Bestseller', 'Relevanz', 'Title Z-A']
+            sorting: ['Prise', 'Marke Z-A', 'Bestseller', 'Relevanz', 'Title Z-A'],
+            panel: [0, 1],
         }),
         watch: {
             'pagination.search': function (val) {
@@ -264,7 +269,8 @@
 
     aside {
         float: left;
-        width: 30%;
+        width: 25%;
+        padding-right: 30px;
     }
 
     @media (max-width: 800px) {
