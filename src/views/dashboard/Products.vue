@@ -53,24 +53,24 @@
             <section class="products">
                 <aside>
                     <article class="products-facets">
-                        <div v-for="(filter, i) in PRODUCTS_FACETS" :key="i">
-                           <div  v-if="filter.id === 'category'">
-                               <v-treeview
+                        <div v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
+                            <div v-if="filter.id === 'category'">
+                                <v-treeview
                                         class="font-weight-light"
-                                       open-all
-                                       :dense="true"
-                                       :items="[...filter]"
-                               ></v-treeview>
-                           </div>
-                           <div v-else>
-                               <p class="font-weight-light">
-                                   {{filter.name}}
-                               </p>
-                               <FilterCheckbox  v-for="(filterValue, i) in filter.children"
+                                        open-all
+                                        :dense="true"
+                                        :items="[...filter]"
+                                ></v-treeview>
+                            </div>
+                            <div v-else class="mt-5">
+                                <p class="font-weight-light">
+                                    {{filter.name}}
+                                </p>
+                                <FilterCheckbox v-for="(filterValue, i) in filter.children"
                                                 :key="i"
                                                 :filter-value="filterValue"
-                                                />
-                           </div>
+                                />
+                            </div>
                         </div>
                     </article>
                     <article class="products-sliders mt-10">
@@ -138,6 +138,9 @@
     export default {
         name: "Products",
         components: {FilterCheckbox},
+        beforeMount() {
+            this.$store.dispatch('GET_PRODUCTS');
+        },
         computed: {
             ...mapGetters([
                 'PRODUCTS',
@@ -154,12 +157,9 @@
                     this.$store.commit('SET_PAGINATION_CURRENT_PAGE', value)
                 }
             },
-            PRODUCTS_FACETS() {
-                return this.mappFacetsValueToTreeView(this.$store.state.products.facets)
+            PRODUCTS_FILTERS() {
+                return this.mappFiltersFromEndpoint(this.$store.state.products.facets)
             },
-        },
-        beforeMount() {
-            this.$store.dispatch('GET_PRODUCTS');
         },
         data: () => ({
             form: Object.assign({}, form),
@@ -173,7 +173,6 @@
                 loading: false,
                 search: null
             },
-            items: '',
             slider: [0, 14000],
             sorting: ['Prise', 'Marke Z-A', 'Bestseller', 'Relevanz', 'Title Z-A']
         }),
@@ -207,11 +206,13 @@
                     }
                 })
             },
-            mappFacetsValueToTreeView(value) {
-                const treeViewObjectArray = [];
+            mappFiltersFromEndpoint(value) {
+
+                const filters = [];
+                var filterHaveCategory = false;
 
                 for (let i = 0; i < value.length; i++) {
-                    treeViewObjectArray.push({
+                    const filter = {
                         id: value[i]['id'],
                         name: value[i]['name'],
                         children: value[i]['values'].map((val) => {
@@ -221,13 +222,33 @@
                                 filter: val.filter
                             }
                         })
-                    })
+                    };
+
+                    if (value[i]['id'] === 'category') {
+                        filterHaveCategory = true;
+                    }
+
+                    filters.push(filter);
 
                 }
 
-
-                return treeViewObjectArray;
+                if (!filterHaveCategory) {
+                    return filters;
+                } else {
+                    return this.sortFiltersAndReturnCategoryOnFirstPlace(filters);
+                }
             },
+            sortFiltersAndReturnCategoryOnFirstPlace(filters) {
+                const sortFilters = [];
+                filters.map((filter, index) => {
+                    if (filter['id'] === 'category') {
+                        sortFilters.unshift(filters[index]);
+                        filters.splice(index, 1);
+                        sortFilters.push(...filters);
+                    }
+                });
+                return sortFilters;
+            }
         }
     }
 </script>
@@ -235,12 +256,12 @@
 <style scoped>
     .products {
         width: 100%;
-        overflow-wrap: break-word;
     }
 
-    .products-list_sorting{
+    .products-list_sorting {
         width: 300px;
     }
+
     aside {
         float: left;
         width: 30%;

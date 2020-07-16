@@ -1,8 +1,10 @@
 <template>
     <div>
-        <v-checkbox
+     <v-checkbox
+                dense
                 :label="filterValue.name"
                 :value="filterValue.filter"/>
+
     </div>
 </template>
 
@@ -12,7 +14,7 @@
         name: "FilterCheckbox",
         props: {
             filterValue: {
-                type: Array,
+                type: Object,
                 required: true
             }
         }
@@ -20,5 +22,7 @@
 </script>
 
 <style scoped>
-
+    .filter-checkbox{
+        max-height: 30px;
+    }
 </style>
