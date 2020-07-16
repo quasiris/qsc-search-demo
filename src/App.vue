@@ -10,6 +10,7 @@
     };
 </script>
 <style type="text/css">
+
     :root {
         --primary-color: #2f3033;
         --secondary-color: #fcfcfc;
@@ -33,10 +34,6 @@
     }
 
     /*  CARD STYLES*/
-    .tools-view-card {
-        min-height: 80vh;
-    }
-
     .card-title {
         color: var(--primary-color);;
     }
@@ -63,4 +60,7 @@
       grid-gap: 1rem;
     }
 
+    .v-treeview-node__label{
+        white-space: pre-wrap !important;
+    }
 </style>

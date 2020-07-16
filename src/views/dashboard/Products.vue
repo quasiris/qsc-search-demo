@@ -53,32 +53,29 @@
             <section class="products">
                 <aside>
                     <article class="products-facets">
-                        <p class="products-facets_name font-weight-light">
-                            Facets
-                        </p>
-                        <div v-for="(facet, i) in PRODUCTS_FACETS" :key="i">
-                            <v-treeview
-                                    v-if="facet.id === 'category'"
-                                    open-all
-                                    :dense="true"
-                                    :items="[...facet]"
-                            ></v-treeview>
-                            <v-treeview
-                                    :selectable="true"
-                                    color="secondary"
-                                    v-else
-                                    selected-color="primary"
-                                    :dense="true"
-                                    open-all
-                                    return-object
-                                    selection-type="independent"
-                                    :items="[...facet]"
-                            ></v-treeview>
+                        <div v-for="(filter, i) in PRODUCTS_FACETS" :key="i">
+                           <div  v-if="filter.id === 'category'">
+                               <v-treeview
+                                        class="font-weight-light"
+                                       open-all
+                                       :dense="true"
+                                       :items="[...filter]"
+                               ></v-treeview>
+                           </div>
+                           <div v-else>
+                               <p class="font-weight-light">
+                                   {{filter.name}}
+                               </p>
+                               <FilterCheckbox  v-for="(filterValue, i) in filter.children"
+                                                :key="i"
+                                                :filter-value="filterValue"
+                                                />
+                           </div>
                         </div>
                     </article>
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS_SLIDERS" :key="i">
-                            <p class="font-weight-light">
+                            <p class="products-sliders_title font-weight-light">
                                 {{sliderValue.name}}: {{slider[0]}} - {{slider[1]}} €
                             </p>
                             <v-range-slider
@@ -89,21 +86,16 @@
                         </div>
                     </article>
                 </aside>
-                <article>
-                    <v-row align="center">
-                        <v-col class="d-flex" cols="12" sm="6">
-                            <p class="font-weight-light">
-                                Total: {{TOTAL_PRODUCTS}} elements
-                            </p>
-                        </v-col>
-                        <v-col class="d-flex" cols="12" sm="6">
-                            <v-select
-                                    :items="sorting"
-                                    label="Sortierung"
-                            ></v-select>
-                        </v-col>
-                    </v-row>
-                    <v-row no-gutters class="products_list_cards">
+                <article class="products-list">
+                    <p class="products-list_total font-weight-light">
+                        Total: {{TOTAL_PRODUCTS}} elements
+                    </p>
+                    <v-select
+                            class="products-list_sorting"
+                            :items="sorting"
+                            label="Sortierung"
+                    ></v-select>
+                    <v-row no-gutters class="products-list_cards">
                         <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
                             <v-card
                                     color="accent"
@@ -123,15 +115,14 @@
                             </v-card>
                         </v-col>
                     </v-row>
-                    <div class="products_pagination mt-6">
-                        <v-pagination
-                                previous-aria-label="Previous"
-                                @input="changePagination"
-                                v-model="PAGINATION_CURRENT_PAGE"
-                                :length="PAGINATION_LENGTH"
-                                :total-visible="10"
-                        ></v-pagination>
-                    </div>
+                    <v-pagination
+                            class="products-list_pagination mt-6"
+                            previous-aria-label="Previous"
+                            @input="changePagination"
+                            v-model="PAGINATION_CURRENT_PAGE"
+                            :length="PAGINATION_LENGTH"
+                            :total-visible="10"
+                    ></v-pagination>
                 </article>
             </section>
         </section>
@@ -139,12 +130,14 @@
 </template>
 <script>
     import {mapGetters} from "vuex";
+    import FilterCheckbox from "../../components/FilterCheckbox";
 
     const form = {
         query: ''
     };
     export default {
         name: "Products",
+        components: {FilterCheckbox},
         computed: {
             ...mapGetters([
                 'PRODUCTS',
@@ -232,6 +225,7 @@
 
                 }
 
+
                 return treeViewObjectArray;
             },
         }
@@ -239,30 +233,24 @@
 </script>
 
 <style scoped>
-    .products-card {
-        min-height: 100vh;
-    }
-
-    .products-_card:hover {
-        cursor: pointer;
-    }
-
     .products {
-        word-wrap: break-word;
         width: 100%;
+        overflow-wrap: break-word;
     }
 
+    .products-list_sorting{
+        width: 300px;
+    }
     aside {
         float: left;
         width: 30%;
-        background-color: red;
     }
 
     @media (max-width: 800px) {
-      aside{
-          width: 100%;
-          float: right;
-      }
+        aside {
+            width: 100%;
+            float: right;
+        }
     }
 
 </style>
