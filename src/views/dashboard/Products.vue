@@ -1,15 +1,6 @@
 <template>
     <v-card class="products-card">
-        <v-toolbar dark color="grey lighten-5">
-            <v-toolbar-title class="font-weight-light card-title">
-                Products
-            </v-toolbar-title>
-            <v-spacer/>
-            <v-icon color="primary"
-                    @click="$router.push({name:'Dashboard'})">
-                mdi-close
-            </v-icon>
-        </v-toolbar>
+        <ToolbarHeader :name="'Product'"/>
         <section class="pa-5">
             <header>
                 <article class="products-search-query">
@@ -33,6 +24,8 @@
                                         hide-no-data
                                         label="Search Query"
                                 ></v-combobox>
+
+
                             </v-col>
                             <v-col cols="12"
                                    sm="12"
@@ -115,6 +108,7 @@
     import FilterCheckbox from "../../components/FilterCheckbox";
     import SearchButton from "../../components/SearchButton";
     import BasicCard from "../../components/BasicCard";
+    import ToolbarHeader from "../../components/ToolbarHeader";
 
     const form = {
         query: ''
@@ -122,7 +116,7 @@
 
     export default {
         name: "Products",
-        components: {BasicCard, SearchButton, FilterCheckbox},
+        components: {ToolbarHeader, BasicCard, SearchButton, FilterCheckbox},
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS')
                 .then(()=>{
