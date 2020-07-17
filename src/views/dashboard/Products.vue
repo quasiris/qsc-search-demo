@@ -37,14 +37,7 @@
                             <v-col cols="12"
                                    sm="12"
                                    md="2">
-                                <v-btn
-                                        :disabled="!formOptions.valid"
-                                        type="submit"
-                                        color="primary"
-                                        class="mt-3 w-100"
-                                >
-                                    Search
-                                </v-btn>
+                                <SearchButton :form-options="formOptions"/>
                             </v-col>
                         </v-row>
                     </v-form>
@@ -101,22 +94,7 @@
                     ></v-select>
                     <v-row no-gutters class="products-list_cards">
                         <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
-                            <v-card
-                                    color="accent"
-                                    :href="product.document.url" target="_blank"
-                                    class="products_card ma-5"
-                            >
-                                <v-img
-                                        :src="product.document.image"
-                                        height="200px"
-                                ></v-img>
-                                <v-card-subtitle class="font-weight-bold">
-                                    {{product.document.title}}
-                                </v-card-subtitle>
-                                <v-card-subtitle class="font-weight-bold text-center">
-                                    {{product.document.price}} €
-                                </v-card-subtitle>
-                            </v-card>
+                           <BasicCard :item="product"/>
                         </v-col>
                     </v-row>
                     <v-pagination
@@ -135,6 +113,8 @@
 <script>
     import {mapGetters} from "vuex";
     import FilterCheckbox from "../../components/FilterCheckbox";
+    import SearchButton from "../../components/SearchButton";
+    import BasicCard from "../../components/BasicCard";
 
     const form = {
         query: ''
@@ -142,7 +122,7 @@
 
     export default {
         name: "Products",
-        components: {FilterCheckbox},
+        components: {BasicCard, SearchButton, FilterCheckbox},
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS')
                 .then(()=>{
@@ -166,7 +146,6 @@
                 }
             },
             PRODUCTS_FILTERS() {
-                console.log('filterssssssssss',this.$store.state.products.filters);
                 return this.sortFiltersAndReturnCategoryOnFirstPlace(this.$store.state.products.filters)
             },
         },
@@ -192,10 +171,6 @@
         watch: {
             'pagination.search': function (val) {
                 val && val !== this.select && this.querySelections(val)
-            },
-            'slider': function (val) {
-                console.log('valueee', val);
-                console.log('PRODUCTS SLIDER', this.PRODUCTS_SLIDERS);
             }
         },
         methods: {
