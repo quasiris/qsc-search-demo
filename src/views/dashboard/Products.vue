@@ -24,8 +24,6 @@
                                         hide-no-data
                                         label="Search Query"
                                 ></v-combobox>
-
-
                             </v-col>
                             <v-col cols="12"
                                    sm="12"
@@ -40,28 +38,28 @@
                 <aside>
                     <article class="products-facets">
                         <v-expansion-panels
-                                 v-model="expansionPanels.panel"
-                                 hover
-                                 multiple
-                         >
-                             <v-expansion-panel   v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
-                                 <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
-                                 <v-expansion-panel-content v-if="filter.id === 'category'">
-                                     <ul>
-                                         <li v-for="(filterValue, i) in filter.values"
-                                             :key="i">
-                                             {{filterValue.value}}
-                                         </li>
-                                     </ul>
-                                 </v-expansion-panel-content>
-                                 <v-expansion-panel-content v-else>
-                                     <FilterCheckbox v-for="(filterValue, i) in filter.values"
-                                                     :key="i"
-                                                     :filter-value="filterValue"
-                                     />
-                                 </v-expansion-panel-content>
-                             </v-expansion-panel>
-                         </v-expansion-panels>
+                                v-model="expansionPanels.panel"
+                                hover
+                                multiple
+                        >
+                            <v-expansion-panel v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
+                                <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
+                                <v-expansion-panel-content v-if="filter.id === 'category'">
+                                    <ul>
+                                        <li v-for="(filterValue, i) in filter.values"
+                                            :key="i">
+                                            {{filterValue.value}}
+                                        </li>
+                                    </ul>
+                                </v-expansion-panel-content>
+                                <v-expansion-panel-content v-else>
+                                    <FilterCheckbox v-for="(filterValue, i) in filter.values"
+                                                    :key="i"
+                                                    :filter-value="filterValue"
+                                    />
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+                        </v-expansion-panels>
                     </article>
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS_SLIDERS" :key="i">
@@ -87,7 +85,7 @@
                     ></v-select>
                     <v-row no-gutters class="products-list_cards">
                         <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
-                           <BasicCard :item="product"/>
+                            <BasicCard :item="product"/>
                         </v-col>
                     </v-row>
                     <v-pagination
@@ -118,8 +116,11 @@
         name: "Products",
         components: {ToolbarHeader, BasicCard, SearchButton, FilterCheckbox},
         beforeMount() {
-            this.$store.dispatch('GET_PRODUCTS')
-                .then(()=>{
+            this.$store.dispatch('GET_PRODUCTS', {
+                query: '*',
+                page: 1
+            })
+                .then(() => {
                     this.setExpansionPanelsValue();
                 })
         },
@@ -169,29 +170,30 @@
         },
         methods: {
             formSubmit() {
-                this.$store.dispatch('GET_PRODUCTS_BY_QUERY', {
-                    form: this.form
+                this.$store.dispatch('GET_PRODUCTS', {
+                    query: this.form.query,
+                    page: 1
                 });
             },
             querySelections(query) {
                 this.pagination.loading = true;
+
                 this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {
-                    form: {
-                        query: query
-                    }
+                    query: query
                 })
                     .then(() => {
                         this.pagination.loading = false;
                     })
             },
             changePagination(page) {
-                this.$store.dispatch('GET_PRODUCTS_BY_QUERY_AND_PAGINATION', {
-                    form: {
-                        query: this.form.query,
-                        page: page
-                    }
+                this.$store.dispatch('GET_PRODUCTS', {
+                    query: this.form.query,
+                    page: page
                 });
-                this.$vuetify.goTo(0, {duration: 1300})
+
+                this.$vuetify.goTo(0, {
+                    duration: 1300
+                });
             },
             sortFiltersAndReturnCategoryOnFirstPlace(filters) {
                 const sortFilters = [];
