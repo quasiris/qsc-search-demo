@@ -54,27 +54,28 @@
                 <aside>
                     <article class="products-facets">
                         <v-expansion-panels
-                                v-model="expansionPanels.panel"
-                                hover
-                        >
-                            <v-expansion-panel v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
-                                <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
-                                <v-expansion-panel-content v-if="filter.id === 'category'">
-                                    <ul>
-                                        <li v-for="(filterValue, i) in filter.values"
-                                            :key="i">
-                                            {{filterValue.value}}
-                                        </li>
-                                    </ul>
-                                </v-expansion-panel-content>
-                                <v-expansion-panel-content v-else>
-                                    <FilterCheckbox v-for="(filterValue, i) in filter.values"
-                                                    :key="i"
-                                                    :filter-value="filterValue"
-                                    />
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                        </v-expansion-panels>
+                                 v-model="expansionPanels.panel"
+                                 hover
+                                 multiple
+                         >
+                             <v-expansion-panel   v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
+                                 <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
+                                 <v-expansion-panel-content v-if="filter.id === 'category'">
+                                     <ul>
+                                         <li v-for="(filterValue, i) in filter.values"
+                                             :key="i">
+                                             {{filterValue.value}}
+                                         </li>
+                                     </ul>
+                                 </v-expansion-panel-content>
+                                 <v-expansion-panel-content v-else>
+                                     <FilterCheckbox v-for="(filterValue, i) in filter.values"
+                                                     :key="i"
+                                                     :filter-value="filterValue"
+                                     />
+                                 </v-expansion-panel-content>
+                             </v-expansion-panel>
+                         </v-expansion-panels>
                     </article>
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS_SLIDERS" :key="i">
@@ -138,11 +139,15 @@
     const form = {
         query: ''
     };
+
     export default {
         name: "Products",
         components: {FilterCheckbox},
         beforeMount() {
-            this.$store.dispatch('GET_PRODUCTS');
+            this.$store.dispatch('GET_PRODUCTS')
+                .then(()=>{
+                    this.setExpansionPanelsValue();
+                })
         },
         computed: {
             ...mapGetters([
@@ -161,6 +166,7 @@
                 }
             },
             PRODUCTS_FILTERS() {
+                console.log('filterssssssssss',this.$store.state.products.filters);
                 return this.sortFiltersAndReturnCategoryOnFirstPlace(this.$store.state.products.filters)
             },
         },
@@ -179,7 +185,7 @@
             slider: [0, 14000],
             sorting: ['Prise', 'Marke Z-A', 'Bestseller', 'Relevanz', 'Title Z-A'],
             expansionPanels: {
-                panel: [0, 1, 2, 3, 4, 5],
+                panel: [],
                 items: null
             }
         }),
@@ -215,10 +221,8 @@
                         query: this.form.query,
                         page: page
                     }
-                })
-                .then(()=>{
-                    this.$vuetify.goTo(0, {duration: 1300})
-                })
+                });
+                this.$vuetify.goTo(0, {duration: 1300})
             },
             sortFiltersAndReturnCategoryOnFirstPlace(filters) {
                 const sortFilters = [];
@@ -231,15 +235,13 @@
                 });
                 return sortFilters;
             },
-            setExpansionPanelsValue(filters) {
-                this.expansionPanels.items = filters.length;
+            setExpansionPanelsValue() {
+                this.expansionPanels.items = this.$store.state.products.filters.length + 1;
                 if (this.expansionPanels.panel <= this.expansionPanels.items) {
                     for (let i = 0; i < this.expansionPanels.items; i++) {
                         this.expansionPanels.panel.push(i);
                     }
                 }
-
-                console.log('expansion panel', this.expansionPanels);
             }
         }
     }
@@ -260,7 +262,7 @@
         padding-right: 40px;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 1000px) {
         aside {
             width: 100%;
             float: right;
