@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import goTo from 'vuetify/es5/services/goto'
 
 Vue.use(VueRouter);
 
@@ -8,6 +9,17 @@ import Dashboard from "../views/dashboard/Dashboard";
 import Movies from "../views/dashboard/Movies";
 import Products from "../views/dashboard/Products";
 
+const  scrollBehavior =  (to, from, savedPosition) => {
+    let scrollTo = 0
+
+    if (to.hash) {
+    scrollTo = to.hash
+} else if (savedPosition) {
+    scrollTo = savedPosition.y
+}
+
+return goTo(scrollTo)
+};
 
 const routes = [
     {
@@ -34,7 +46,8 @@ const routes = [
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes
+    routes,
+    scrollBehavior
 });
 
 export default router
