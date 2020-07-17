@@ -178,7 +178,6 @@
             },
             slider: [0, 14000],
             sorting: ['Prise', 'Marke Z-A', 'Bestseller', 'Relevanz', 'Title Z-A'],
-            panel: [0, 1],
             expansionPanels: {
                 panel: [0, 1, 2, 3, 4, 5],
                 items: null
@@ -216,6 +215,9 @@
                         query: this.form.query,
                         page: page
                     }
+                })
+                .then(()=>{
+                    window.scrollTo(0,0);
                 })
             },
             sortFiltersAndReturnCategoryOnFirstPlace(filters) {
