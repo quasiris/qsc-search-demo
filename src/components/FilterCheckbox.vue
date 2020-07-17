@@ -2,9 +2,8 @@
     <div>
      <v-checkbox
                 dense
-                :label="filterValue.name"
+                :label="filterValue.value"
                 :value="filterValue.filter"/>
-
     </div>
 </template>
 

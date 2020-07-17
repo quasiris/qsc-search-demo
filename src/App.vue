@@ -59,15 +59,6 @@
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       grid-gap: 1rem;
     }
-
-    /*TREE VIEW STYLES*/
-    .v-treeview-node__label{
-        white-space: pre-wrap !important;
-    }
-    .v-treeview--dense .v-treeview-node__root{
-        min-height: 30px !important;
-    }
-
     /*PRODUCTS FILTER CHECKBOX*/
     .v-input--selection-controls{
         margin-top: 0 !important;

@@ -54,25 +54,24 @@
                 <aside>
                     <article class="products-facets">
                         <v-expansion-panels
-                                v-model="panel"
+                                v-model="expansionPanels.panel"
                                 hover
                         >
                             <v-expansion-panel v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
                                 <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
                                 <v-expansion-panel-content v-if="filter.id === 'category'">
-                                    <v-treeview
-                                            class="font-weight-light"
-                                            open-all
-                                            :dense="true"
-                                            :items="[...filter]"
-                                    ></v-treeview>
+                                    <ul>
+                                        <li v-for="(filterValue, i) in filter.values"
+                                            :key="i">
+                                            {{filterValue.value}}
+                                        </li>
+                                    </ul>
                                 </v-expansion-panel-content>
                                 <v-expansion-panel-content v-else>
-                                    <FilterCheckbox v-for="(filterValue, i) in filter.children"
+                                    <FilterCheckbox v-for="(filterValue, i) in filter.values"
                                                     :key="i"
                                                     :filter-value="filterValue"
                                     />
-
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
                         </v-expansion-panels>
@@ -151,7 +150,7 @@
                 'SUGGEST_PRODUCTS',
                 'TOTAL_PRODUCTS',
                 'PAGINATION_LENGTH',
-                'PRODUCTS_SLIDERS'
+                'PRODUCTS_SLIDERS',
             ]),
             PAGINATION_CURRENT_PAGE: {
                 get() {
@@ -162,7 +161,7 @@
                 }
             },
             PRODUCTS_FILTERS() {
-                return this.mappFiltersFromEndpoint(this.$store.state.products.facets)
+                return this.sortFiltersAndReturnCategoryOnFirstPlace(this.$store.state.products.filters)
             },
         },
         data: () => ({
@@ -180,11 +179,19 @@
             slider: [0, 14000],
             sorting: ['Prise', 'Marke Z-A', 'Bestseller', 'Relevanz', 'Title Z-A'],
             panel: [0, 1],
+            expansionPanels: {
+                panel: [0, 1, 2, 3, 4, 5],
+                items: null
+            }
         }),
         watch: {
             'pagination.search': function (val) {
                 val && val !== this.select && this.querySelections(val)
             },
+            'slider': function (val) {
+                console.log('valueee', val);
+                console.log('PRODUCTS SLIDER', this.PRODUCTS_SLIDERS);
+            }
         },
         methods: {
             formSubmit() {
@@ -211,38 +218,6 @@
                     }
                 })
             },
-            mappFiltersFromEndpoint(value) {
-
-                const filters = [];
-                var filterHaveCategory = false;
-
-                for (let i = 0; i < value.length; i++) {
-                    const filter = {
-                        id: value[i]['id'],
-                        name: value[i]['name'],
-                        children: value[i]['values'].map((val) => {
-                            return {
-                                id: val.filter,
-                                name: `${val.value} (${val.count})`,
-                                filter: val.filter
-                            }
-                        })
-                    };
-
-                    if (value[i]['id'] === 'category') {
-                        filterHaveCategory = true;
-                    }
-
-                    filters.push(filter);
-
-                }
-
-                if (!filterHaveCategory) {
-                    return filters;
-                } else {
-                    return this.sortFiltersAndReturnCategoryOnFirstPlace(filters);
-                }
-            },
             sortFiltersAndReturnCategoryOnFirstPlace(filters) {
                 const sortFilters = [];
                 filters.map((filter, index) => {
@@ -253,6 +228,16 @@
                     }
                 });
                 return sortFilters;
+            },
+            setExpansionPanelsValue(filters) {
+                this.expansionPanels.items = filters.length;
+                if (this.expansionPanels.panel <= this.expansionPanels.items) {
+                    for (let i = 0; i < this.expansionPanels.items; i++) {
+                        this.expansionPanels.panel.push(i);
+                    }
+                }
+
+                console.log('expansion panel', this.expansionPanels);
             }
         }
     }
@@ -269,14 +254,15 @@
 
     aside {
         float: left;
-        width: 25%;
-        padding-right: 30px;
+        width: 20%;
+        padding-right: 40px;
     }
 
     @media (max-width: 800px) {
         aside {
             width: 100%;
             float: right;
+            padding-right: 0;
         }
     }
 

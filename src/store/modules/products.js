@@ -9,7 +9,7 @@ function initialState() {
         suggestProducts: [],
         paginationLength: null,
         paginationCurrentPage: null,
-        facets: [],
+        filters: [],
         sliders: []
     }
 }
@@ -20,8 +20,8 @@ export default {
         PRODUCTS: state => {
             return state.products;
         },
-        PRODUCTS_FACETS: state => {
-          return state.facets;
+        PRODUCTS_FILTERS: state => {
+          return state.filters;
         },
         PRODUCTS_SLIDERS: state => {
           return state.sliders
@@ -43,8 +43,8 @@ export default {
         SET_PRODUCTS(state, payload) {
             state.products = payload;
         },
-        SET_PRODUCTS_FACETS(state, payload) {
-          state.facets = payload;
+        SET_PRODUCTS_FILTERS(state, payload) {
+          state.filters = payload;
         },
         SET_PRODUCTS_SLIDERS(state, payload){
           state.sliders = payload;
@@ -79,7 +79,7 @@ export default {
                 context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
-                context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
+                context.commit('SET_PRODUCTS_FILTERS', data.result.search.facets);
                 context.commit('SET_PRODUCTS_SLIDERS', data.result.search.sliders);
 
             } catch (e) {
@@ -93,7 +93,7 @@ export default {
                 context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
-                context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
+                context.commit('SET_PRODUCTS_FILTERS', data.result.search.facets);
                 context.commit('SET_PRODUCTS_SLIDERS', data.result.search.sliders);
 
             } catch (e) {
@@ -111,7 +111,7 @@ export default {
                 context.commit('SET_TOTAL_PRODUCTS', data.result.search.total);
                 context.commit('SET_PAGINATION_LENGTH', data.result.search.paging.pageCount);
                 context.commit('SET_PAGINATION_CURRENT_PAGE', data.result.search.paging.currentPage);
-                context.commit('SET_PRODUCTS_FACETS', data.result.search.facets);
+                context.commit('SET_PRODUCTS_FILTERS', data.result.search.facets);
                 context.commit('SET_PRODUCTS_SLIDERS', data.result.search.sliders);
 
 
