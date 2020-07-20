@@ -80,8 +80,9 @@
                     </p>
                     <v-select
                             class="products-list_sorting"
-                            :items="sorting"
-                            @change="changeProductsSort"
+                            :items="sortValues"
+                            item-text="name"
+                            @change="changeSort"
                             label="Sortierung"
                     ></v-select>
                     <v-row no-gutters class="products-list_cards">
@@ -109,6 +110,8 @@
     import BasicCard from "../../components/BasicCard";
     import ToolbarHeader from "../../components/ToolbarHeader";
 
+    import {productsConstants} from '../../constants/productsConstants';
+
     const form = {
         query: ''
     };
@@ -123,7 +126,10 @@
             })
                 .then(() => {
                     this.setExpansionPanelsValue();
-                })
+                });
+
+            //  this.$store.dispatch('GET_PRODUCT_DEPENDENCIES');
+
         },
         computed: {
             ...mapGetters([
@@ -156,11 +162,20 @@
                 search: null
             },
             slider: [0, 14000],
-            sorting: ['Prise', 'Marke Z-A', 'Bestseller', 'Relevanz', 'Title Z-A'],
+            sortValues: productsConstants.sortValues,
             expansionPanels: {
                 panel: [],
                 items: null
+            },
+            postProductDependencies: {
+                "page": 1,
+                "q": "*",
+                "searchFilters": [],
+                "sort": {
+                    "sort": ""
+                }
             }
+
         }),
         watch: {
             'pagination.search': function (val) {
@@ -194,6 +209,10 @@
                     duration: 1300
                 });
             },
+            changeSort(sortValue) {
+                this.postProductDependencies.sort.sort = sortValue;
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+            },
             setExpansionPanelsValue() {
                 this.expansionPanels.items = this.$store.state.products.filters.length + 1;
                 if (this.expansionPanels.panel <= this.expansionPanels.items) {
@@ -202,9 +221,7 @@
                     }
                 }
             },
-            changeProductsSort() {
 
-            }
         }
     }
 </script>

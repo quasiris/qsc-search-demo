@@ -103,6 +103,30 @@ export default {
                     throw new Error(error);
                 })
         },
+        POST_PRODUCT_DEPENDENCIES: async (contex, payload) => {
+
+            console.log('payload', payload);
+
+            return ProductService.postProductDependencies(payload)
+                .then((response) => {
+                    console.log('repsponse', response);
+                })
+                .catch((error) => {
+                    throw new Error(error);
+                })
+
+        },
+        GET_PRODUCT_DEPENDENCIES: async (context) => {
+            return ProductService.getProductDependencies()
+                .then((response) => {
+                    console.log(context);
+                    console.log('repsponse PRODUCT DEPENDIECIES', response);
+                })
+                .catch((error) => {
+                    throw new Error(error);
+                })
+
+        },
         RESET: (context, payload) => {
             context.commit('RESET', payload.type);
         },
