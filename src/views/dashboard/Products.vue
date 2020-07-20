@@ -185,14 +185,11 @@
         },
         methods: {
             formSubmit() {
-                this.$store.dispatch('GET_PRODUCTS', {
-                    query: this.form.query,
-                    page: 1
-                });
+                this.postProductDependencies.q = this.form.query;
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
             querySelections(query) {
                 this.pagination.loading = true;
-
                 this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {
                     query: query
                 })
@@ -201,10 +198,8 @@
                     })
             },
             changePagination(page) {
-                this.$store.dispatch('GET_PRODUCTS', {
-                    query: this.form.query,
-                    page: page
-                });
+                this.postProductDependencies.page = page;
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
 
                 this.$vuetify.goTo(0, {
                     duration: 1300
