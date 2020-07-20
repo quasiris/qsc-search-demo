@@ -81,6 +81,7 @@
                     <v-select
                             class="products-list_sorting"
                             :items="sorting"
+                            @change="changeProductsSort"
                             label="Sortierung"
                     ></v-select>
                     <v-row no-gutters class="products-list_cards">
@@ -131,6 +132,7 @@
                 'TOTAL_PRODUCTS',
                 'PAGINATION_LENGTH',
                 'PRODUCTS_SLIDERS',
+                'PRODUCTS_FILTERS'
             ]),
             PAGINATION_CURRENT_PAGE: {
                 get() {
@@ -139,9 +141,6 @@
                 set(value) {
                     this.$store.commit('SET_PAGINATION_CURRENT_PAGE', value)
                 }
-            },
-            PRODUCTS_FILTERS() {
-                return this.sortFiltersAndReturnCategoryOnFirstPlace(this.$store.state.products.filters)
             },
         },
         data: () => ({
@@ -195,17 +194,6 @@
                     duration: 1300
                 });
             },
-            sortFiltersAndReturnCategoryOnFirstPlace(filters) {
-                const sortFilters = [];
-                filters.map((filter, index) => {
-                    if (filter['id'] === 'category') {
-                        sortFilters.unshift(filters[index]);
-                        filters.splice(index, 1);
-                        sortFilters.push(...filters);
-                    }
-                });
-                return sortFilters;
-            },
             setExpansionPanelsValue() {
                 this.expansionPanels.items = this.$store.state.products.filters.length + 1;
                 if (this.expansionPanels.panel <= this.expansionPanels.items) {
@@ -213,6 +201,9 @@
                         this.expansionPanels.panel.push(i);
                     }
                 }
+            },
+            changeProductsSort() {
+
             }
         }
     }

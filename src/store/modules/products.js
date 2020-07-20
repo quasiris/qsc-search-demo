@@ -42,7 +42,17 @@ export default {
             state.products = payload;
         },
         SET_PRODUCTS_FILTERS(state, payload) {
-            state.filters = payload;
+            const sortFilters = [];
+
+            payload.map((filter, index) => {
+                if (filter['id'] === 'category') {
+                    sortFilters.unshift(payload[index]);
+                    payload.splice(index, 1);
+                    sortFilters.push(...payload);
+                }
+            });
+
+            state.filters = sortFilters;
         },
         SET_PRODUCTS_SLIDERS(state, payload) {
             state.sliders = payload;
