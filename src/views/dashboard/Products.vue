@@ -78,9 +78,9 @@
                     </article>
                 </aside>
                 <article class="products-list">
-                   <!-- <p class="products-list_total font-weight-light">
-                        Total: {{TOTAL_PRODUCTS}} elements
-                    </p>-->
+                   <p class="products-list_total font-weight-light">
+                         Total: {{PRODUCTS.total}} elements
+                     </p>
                     <v-select
                             class="products-list_sorting"
                             :items="sortValues"
@@ -158,8 +158,7 @@
             postProductDependencies: {
                 "page": 1,
                 "q": "*",
-                "searchFilters": [
-                ],
+                "searchFilters": [],
                 "sort": {
                     "sort": ""
                 }
@@ -200,16 +199,14 @@
             changeFilterCheckboxReceived(filterValue) {
                 this.postProductDependencies.searchFilters.push({
                     "id": filterValue.id,
-                    "values":[{
-                        ...filterValue.value
-                    }]
+                    "values": [filterValue.value]
                 });
 
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
 
             },
             setExpansionPanelsValue() {
-                this.expansionPanels.items = this.$store.state.products.filters.length + 1;
+                this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
                 if (this.expansionPanels.panel <= this.expansionPanels.items) {
                     for (let i = 0; i < this.expansionPanels.items; i++) {
                         this.expansionPanels.panel.push(i);

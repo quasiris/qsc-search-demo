@@ -4,7 +4,7 @@
                 @change="filterCheckboxChange"
                 dense
                 :label="filterValue.value"
-                :value="filterValue"/>
+                :value="filterValue.value"/>
     </div>
 </template>
 

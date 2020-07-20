@@ -67,9 +67,6 @@ export default {
                 })
         },
         POST_PRODUCT_DEPENDENCIES: async (context, payload) => {
-
-            console.log('payload', payload);
-
             return ProductService.postProductDependencies(payload)
                 .then((response) => {
                     context.commit('SET_PRODUCTS', response.data.result.search);
