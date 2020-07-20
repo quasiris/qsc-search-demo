@@ -53,9 +53,12 @@
                                     </ul>
                                 </v-expansion-panel-content>
                                 <v-expansion-panel-content v-else>
-                                    <FilterCheckbox v-for="(filterValue, i) in filter.values"
-                                                    :key="i"
-                                                    :filter-value="filterValue"
+                                    <FilterCheckbox
+                                            @filterCheckboxChange="changeFilterCheckboxReceived"
+                                            v-for="(filterValue, i) in filter.values"
+                                            :key="i"
+                                            :filter-id="filter.id"
+                                            :filter-value="filterValue"
                                     />
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
@@ -127,9 +130,6 @@
                 .then(() => {
                     this.setExpansionPanelsValue();
                 });
-
-            //  this.$store.dispatch('GET_PRODUCT_DEPENDENCIES');
-
         },
         computed: {
             ...mapGetters([
@@ -170,7 +170,8 @@
             postProductDependencies: {
                 "page": 1,
                 "q": "*",
-                "searchFilters": [],
+                "searchFilters": [
+                ],
                 "sort": {
                     "sort": ""
                 }
@@ -212,6 +213,17 @@
             changeSort(sortValue) {
                 this.postProductDependencies.sort.sort = sortValue;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+            },
+            changeFilterCheckboxReceived(filterValue) {
+                this.postProductDependencies.searchFilters.push({
+                    "id": filterValue.id,
+                    "values":[{
+                        ...filterValue.value
+                    }]
+                });
+
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+
             },
             setExpansionPanelsValue() {
                 this.expansionPanels.items = this.$store.state.products.filters.length + 1;

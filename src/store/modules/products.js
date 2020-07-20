@@ -103,13 +103,18 @@ export default {
                     throw new Error(error);
                 })
         },
-        POST_PRODUCT_DEPENDENCIES: async (contex, payload) => {
+        POST_PRODUCT_DEPENDENCIES: async (context, payload) => {
 
             console.log('payload', payload);
 
             return ProductService.postProductDependencies(payload)
                 .then((response) => {
-                    console.log('repsponse', response);
+                    context.commit('SET_PRODUCTS', response.data.result.search.documents);
+                    context.commit('SET_TOTAL_PRODUCTS', response.data.result.search.total);
+                    context.commit('SET_PAGINATION_LENGTH', response.data.result.search.paging.pageCount);
+                    context.commit('SET_PAGINATION_CURRENT_PAGE', response.data.result.search.paging.currentPage);
+                    context.commit('SET_PRODUCTS_FILTERS', response.data.result.search.facets);
+                    context.commit('SET_PRODUCTS_SLIDERS', response.data.result.search.sliders);
                 })
                 .catch((error) => {
                     throw new Error(error);
@@ -117,13 +122,10 @@ export default {
 
         },
         GET_PRODUCT_DEPENDENCIES: async (context) => {
+            console.log(context);
             return ProductService.getProductDependencies()
-                .then((response) => {
-                    console.log(context);
-                    console.log('repsponse PRODUCT DEPENDIECIES', response);
-                })
-                .catch((error) => {
-                    throw new Error(error);
+                .then((res)=>{
+                    console.log('GET PRODUCT DEPENDEEressss', res);
                 })
 
         },
