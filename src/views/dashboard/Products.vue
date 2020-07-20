@@ -42,7 +42,7 @@
                                 hover
                                 multiple
                         >
-                            <v-expansion-panel v-for="(filter, i) in PRODUCTS_FILTERS" :key="i">
+                            <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
                                 <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
                                 <v-expansion-panel-content v-if="filter.id === 'category'">
                                     <ul>
@@ -65,7 +65,7 @@
                         </v-expansion-panels>
                     </article>
                     <article class="products-sliders mt-10">
-                        <div v-for="(sliderValue, i) in PRODUCTS_SLIDERS" :key="i">
+                        <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
                             <p class="products-sliders_title font-weight-light">
                                 {{sliderValue.name}}: {{slider[0]}} - {{slider[1]}} €
                             </p>
@@ -78,9 +78,9 @@
                     </article>
                 </aside>
                 <article class="products-list">
-                    <p class="products-list_total font-weight-light">
+                   <!-- <p class="products-list_total font-weight-light">
                         Total: {{TOTAL_PRODUCTS}} elements
-                    </p>
+                    </p>-->
                     <v-select
                             class="products-list_sorting"
                             :items="sortValues"
@@ -89,7 +89,7 @@
                             label="Sortierung"
                     ></v-select>
                     <v-row no-gutters class="products-list_cards">
-                        <v-col v-for="(product, index) in PRODUCTS" :key="index" class="grid">
+                        <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
                             <BasicCard :item="product"/>
                         </v-col>
                     </v-row>
@@ -97,8 +97,8 @@
                             class="products-list_pagination mt-6"
                             previous-aria-label="Previous"
                             @input="changePagination"
-                            v-model="PAGINATION_CURRENT_PAGE"
-                            :length="PAGINATION_LENGTH"
+                            v-model="PRODUCTS.paging.currentPage"
+                            :length="PRODUCTS.paging.pageCount"
                             :total-visible="10"
                     ></v-pagination>
                 </article>
@@ -134,20 +134,8 @@
         computed: {
             ...mapGetters([
                 'PRODUCTS',
-                'SUGGEST_PRODUCTS',
-                'TOTAL_PRODUCTS',
-                'PAGINATION_LENGTH',
-                'PRODUCTS_SLIDERS',
-                'PRODUCTS_FILTERS'
+                'SUGGEST_PRODUCTS'
             ]),
-            PAGINATION_CURRENT_PAGE: {
-                get() {
-                    return this.$store.state.products.paginationCurrentPage;
-                },
-                set(value) {
-                    this.$store.commit('SET_PAGINATION_CURRENT_PAGE', value)
-                }
-            },
         },
         data: () => ({
             form: Object.assign({}, form),
