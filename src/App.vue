@@ -54,13 +54,14 @@
     }
 
     .grid {
-      display: grid;
+        display: grid;
         margin: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      grid-gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-gap: 1rem;
     }
+
     /*PRODUCTS FILTER CHECKBOX*/
-    .v-input--selection-controls{
+    .v-input--selection-controls {
         margin-top: 0 !important;
         padding-top: 0 !important;
 

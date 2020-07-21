@@ -14,9 +14,9 @@
                                    md="6">
                                 <v-combobox
                                         v-model="form.query"
-                                        :loading="pagination.loading"
+                                        :loading="autosuggest.loading"
                                         :items="SUGGEST_PRODUCTS"
-                                        :search-input.sync="pagination.search"
+                                        :search-input.sync="autosuggest.search"
                                         :rules="formOptions.query"
                                         flat
                                         @input="formSubmit"
@@ -78,9 +78,9 @@
                     </article>
                 </aside>
                 <article class="products-list">
-                   <p class="products-list_total font-weight-light">
-                         Total: {{PRODUCTS.total}} elements
-                     </p>
+                    <p class="products-list_total font-weight-light">
+                        Total: {{PRODUCTS.total}} elements
+                    </p>
                     <v-select
                             class="products-list_sorting"
                             :items="sortValues"
@@ -94,6 +94,7 @@
                         </v-col>
                     </v-row>
                     <v-pagination
+                            v-if="pagination"
                             class="products-list_pagination mt-6"
                             previous-aria-label="Previous"
                             @input="changePagination"
@@ -129,6 +130,7 @@
             })
                 .then(() => {
                     this.setExpansionPanelsValue();
+                    this.pagination = true;
                 });
         },
         computed: {
@@ -138,6 +140,7 @@
             ]),
         },
         data: () => ({
+
             form: Object.assign({}, form),
             formOptions: {
                 valid: false,
@@ -145,11 +148,12 @@
                     v => !!v || 'Query is required',
                 ],
             },
-            pagination: {
+            autosuggest: {
                 loading: false,
                 search: null
             },
             slider: [0, 14000],
+            pagination: false,
             sortValues: productsConstants.sortValues,
             expansionPanels: {
                 panel: [],
@@ -166,7 +170,7 @@
 
         }),
         watch: {
-            'pagination.search': function (val) {
+            'autosuggest.search': function (val) {
                 val && val !== this.select && this.querySelections(val)
             }
         },
@@ -176,12 +180,12 @@
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
             querySelections(query) {
-                this.pagination.loading = true;
+                this.autosuggest.loading = true;
                 this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {
                     query: query
                 })
                     .then(() => {
-                        this.pagination.loading = false;
+                        this.autosuggest.loading = false;
                     })
             },
             changePagination(page) {

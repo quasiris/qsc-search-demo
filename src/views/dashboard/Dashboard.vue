@@ -5,7 +5,7 @@
                     v-model="drawer"
                     app
             >
-               <v-list dense>
+                <v-list dense>
                     <v-list-item
                             v-for="(item, i) in list"
                             :key="i"
@@ -47,6 +47,7 @@
             <v-content>
                 <router-view class="ma-5"/>
             </v-content>
+            <NotificationSnackbar/>
             <Footer/>
         </v-app>
     </div>
@@ -55,11 +56,12 @@
 <script>
     import Footer from "../../components/Footer";
     import {toolsListConstants} from '../../constants/toolsListConstants';
+    import NotificationSnackbar from "../../components/NotificationSnackbar";
 
 
     export default {
         name: 'Dashboard',
-        components: {Footer},
+        components: {NotificationSnackbar, Footer},
         data: () => ({
             drawer: false,
             list: toolsListConstants

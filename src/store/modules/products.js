@@ -1,4 +1,6 @@
 import ProductService from "../../services/ProductService";
+import errorParser from "../../utils/errorParser";
+
 
 function initialState() {
     return {
@@ -54,6 +56,7 @@ export default {
                     context.commit('SET_PRODUCTS', response.data.result.search);
                 })
                 .catch((error) => {
+                    errorParser.parse(error);
                     throw new Error(error);
                 })
         },
@@ -63,6 +66,7 @@ export default {
                     context.commit('SET_SUGGEST_PRODUCTS', response.data.map((val) => val.suggest));
                 })
                 .catch((error) => {
+                    errorParser.parse(error);
                     throw new Error(error);
                 })
         },
@@ -72,6 +76,7 @@ export default {
                     context.commit('SET_PRODUCTS', response.data.result.search);
                 })
                 .catch((error) => {
+                    errorParser.parse(error);
                     throw new Error(error);
                 })
 
