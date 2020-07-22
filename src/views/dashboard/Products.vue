@@ -216,7 +216,44 @@
                 this.postProductDependencies.sort.sort = sortValue;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
+            changeFilterCheckboxReceived(filterValue) {
+                if (this.postProductDependencies.searchFilters.length <= 0) {
+                    this.postProductDependencies.searchFilters.push({
+                        "id": filterValue.id,
+                        "values": [filterValue.value]
+                    });
 
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+
+                    return;
+                }
+
+
+                var filterIsAlreadyAvailable = false;
+                this.postProductDependencies.searchFilters
+                    .map((val, i) => {
+                        if (val.id === filterValue.id) {
+                            this.postProductDependencies.searchFilters[i]['values'].push(filterValue.value);
+                            filterIsAlreadyAvailable = true;
+                        }
+                    });
+
+
+                if (filterIsAlreadyAvailable) {
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+                    return;
+                }
+
+                this.postProductDependencies.searchFilters.push({
+                    "id": filterValue.id,
+                    "values": [filterValue.value]
+                });
+
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+
+                console.log('post products dependiecies', this.postProductDependencies.searchFilters);
+
+            },
             changeSlider(sliderName) {
                 console.log('nameeee', sliderName);
                 console.log('slideeeer', this.priceSliderValue);
