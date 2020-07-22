@@ -63,6 +63,8 @@
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
                         </v-expansion-panels>
+
+
                     </article>
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
@@ -90,6 +92,9 @@
                             label="Sortierung"
                     ></v-select>
                     <v-row no-gutters class="products-list_cards">
+                        <!--<pre>
+                            {{PRODUCTS.facets}}
+                        </pre>-->
                         <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
                             <BasicCard :item="product"/>
                         </v-col>
@@ -145,7 +150,7 @@
                     return [this.$store.state.products.products.sliders[0].minRange, this.$store.state.products.products.sliders[0].maxRange]
                 },
                 set(value) {
-                  this.priceSliderValue = value;
+                    this.priceSliderValue = value;
                 }
             }
         },
@@ -211,15 +216,7 @@
                 this.postProductDependencies.sort.sort = sortValue;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
-            changeFilterCheckboxReceived(filterValue) {
-                this.postProductDependencies.searchFilters.push({
-                    "id": filterValue.id,
-                    "values": [filterValue.value]
-                });
 
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
-
-            },
             changeSlider(sliderName) {
                 console.log('nameeee', sliderName);
                 console.log('slideeeer', this.priceSliderValue);
