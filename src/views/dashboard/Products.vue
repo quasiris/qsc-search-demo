@@ -67,10 +67,11 @@
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
                             <p class="products-sliders_title font-weight-light">
-                                {{sliderValue.name}}: {{slider[0]}} - {{slider[1]}} €
+                                {{sliderValue.name}}: {{priceSlider[0]}} - {{priceSlider[1]}} €
                             </p>
                             <v-range-slider
-                                    v-model="slider"
+                                    @change="changeSlider(sliderValue)"
+                                    v-model="priceSlider"
                                     :max="sliderValue.maxRange"
                                     :min="sliderValue.minRange"
                             />
@@ -132,12 +133,21 @@
                     this.setExpansionPanelsValue();
                     this.pagination = true;
                 });
+
         },
         computed: {
             ...mapGetters([
                 'PRODUCTS',
                 'SUGGEST_PRODUCTS'
             ]),
+            priceSlider: {
+                get() {
+                    return [this.$store.state.products.products.sliders[0].minRange, this.$store.state.products.products.sliders[0].maxRange]
+                },
+                set(value) {
+                  this.priceSliderValue = value;
+                }
+            }
         },
         data: () => ({
 
@@ -152,7 +162,7 @@
                 loading: false,
                 search: null
             },
-            slider: [0, 14000],
+            priceSliderValue: [],
             pagination: false,
             sortValues: productsConstants.sortValues,
             expansionPanels: {
@@ -165,7 +175,8 @@
                 "searchFilters": [],
                 "sort": {
                     "sort": ""
-                }
+                },
+                "sliders": []
             }
 
         }),
@@ -208,6 +219,10 @@
 
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
 
+            },
+            changeSlider(sliderName) {
+                console.log('nameeee', sliderName);
+                console.log('slideeeer', this.priceSliderValue);
             },
             setExpansionPanelsValue() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
