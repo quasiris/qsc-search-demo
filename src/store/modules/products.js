@@ -71,8 +71,11 @@ export default {
                 })
         },
         POST_PRODUCT_DEPENDENCIES: async (context, payload) => {
+            console.log('post payload', payload.searchFilters);
             return ProductService.postProductDependencies(payload)
                 .then((response) => {
+                    console.log('facets', response.data.result.search.facets);
+
                     context.commit('SET_PRODUCTS', response.data.result.search);
                 })
                 .catch((error) => {

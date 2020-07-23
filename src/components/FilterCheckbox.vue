@@ -1,10 +1,15 @@
 <template>
     <div>
         <v-checkbox
-                @change="filterCheckboxChange"
+                @change="filterCheckboxChange(filterValue.value)"
                 dense
+                v-model="selected"
                 :label="`${filterValue.value} (${filterValue.count})`"
                 :value="filterValue.value"/>
+
+      <!--  <pre>
+            {{filterValue}}
+        </pre>-->
     </div>
 </template>
 
@@ -17,19 +22,24 @@
                 type: Object,
                 required: true
             },
-            filterCount: {
-                type: Number,
-                required: true
-            },
             filterId: {
                 type: String,
                 required: true
             }
         },
+        data: () => (
+            {
+                selected: []
+            }
+        ),
+        watch:{
+            selected(val){
+                console.log('val', val);
+            }
+        },
         methods: {
             filterCheckboxChange(value) {
-                console.log('valueeeee', value);
-                this.$emit('filterCheckboxChange', {
+                 this.$emit('filterCheckboxChange', {
                     value: value,
                     id: this.filterId
                 });

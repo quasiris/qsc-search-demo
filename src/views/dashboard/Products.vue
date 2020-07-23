@@ -6,7 +6,7 @@
                 <article class="products-search-query">
                     <v-form
                             v-model="formOptions.valid"
-                            v-on:submit.prevent="formSubmit()"
+                            v-on:submit.prevent="searchQueryformSubmit()"
                     >
                         <v-row justify="center">
                             <v-col cols="12"
@@ -19,8 +19,8 @@
                                         :search-input.sync="autosuggest.search"
                                         :rules="formOptions.query"
                                         flat
-                                        @input="formSubmit"
-                                        v-on:keyup.enter="formSubmit"
+                                        @input="searchQueryformSubmit"
+                                        v-on:keyup.enter="searchQueryformSubmit"
                                         hide-no-data
                                         label="Search Query"
                                 ></v-combobox>
@@ -191,9 +191,12 @@
             }
         },
         methods: {
-            formSubmit() {
+            searchQueryformSubmit() {
                 this.postProductDependencies.q = this.form.query;
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies)
+                    .then(() => {
+                        this.resetProductDependencies();
+                    })
             },
             querySelections(query) {
                 this.autosuggest.loading = true;
@@ -217,6 +220,9 @@
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
             changeFilterCheckboxReceived(filterValue) {
+                console.log('filter value', filterValue);
+
+
                 if (this.postProductDependencies.searchFilters.length <= 0) {
                     this.postProductDependencies.searchFilters.push({
                         "id": filterValue.id,
@@ -251,7 +257,6 @@
 
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
 
-                console.log('post products dependiecies', this.postProductDependencies.searchFilters);
 
             },
             changeSlider(sliderName) {
@@ -266,6 +271,22 @@
                     }
                 }
             },
+            resetProductDependencies() {
+                const defaultProductDependencies = {
+                    "page": 1,
+                    "q": "*",
+                    "searchFilters": [],
+                    "sort": {
+                        "sort": ""
+                    },
+                    "sliders": []
+                };
+
+                this.postProductDependencies = {...defaultProductDependencies};
+                /*this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+*/
+                console.log('post product dependeicies', this.postProductDependencies);
+            }
 
         }
     }
