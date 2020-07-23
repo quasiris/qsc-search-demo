@@ -1,15 +1,15 @@
 <template>
     <div class="filter-checkbox">
-         <form  v-for="(filter, i) in filterValues"
-                :key="i">
-             <input type="checkbox"
-                    @change="filterCheckboxChange(filter.value)"
-                    :value="filter.value"
-                    v-model="selected">
-             <label>
-                 {{filter.value}}
-             </label>
-         </form>
+        <form v-for="(filter, i) in filterValues"
+              :key="i">
+            <input type="checkbox"
+                   @change="filterCheckboxChange(filter.value)"
+                   :value="filter.value"
+                   v-model="selected">
+            <label>
+                {{filter.value}}
+            </label>
+        </form>
     </div>
 </template>
 <script>
@@ -30,27 +30,22 @@
                 selected: []
             }
         ),
-        computed: {
-
-        },
-        watch: {
-            selected(val) {
-                console.log('selected array: ', val);
-            }
-        },
+        computed: {},
+        watch: {},
         methods: {
             filterCheckboxChange(value) {
                 this.$emit('filterCheckboxChange', {
-                   value: value,
-                   id: this.filterId
-               });
+                    value: value,
+                    id: this.filterId,
+                    selected: this.selected
+                });
             }
         }
     }
 </script>
 
 <style scoped>
-    .filter-checkbox input{
+    .filter-checkbox input {
         margin-right: 15px;
     }
 </style>
