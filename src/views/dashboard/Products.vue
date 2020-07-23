@@ -42,7 +42,7 @@
                                 hover
                                 multiple
                         >
-                            <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
+                            <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i" >
                                 <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
                                 <v-expansion-panel-content v-if="filter.id === 'category'">
                                     <ul>
@@ -229,17 +229,17 @@
                     return;
                 }
 
-                var filterIsAlreadyAvailable = false;
+                var filterIdIsAlreadyAvailable = false;
                 this.postProductDependencies.searchFilters
                     .map((val, i) => {
                         if (val.id === filterValue.id) {
                             this.postProductDependencies.searchFilters[i]['values'] = [...filterValue.selected];
-                            filterIsAlreadyAvailable = true;
+                            filterIdIsAlreadyAvailable = true;
                         }
                     });
 
 
-                if (filterIsAlreadyAvailable) {
+                if (filterIdIsAlreadyAvailable) {
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
                     return;
                 }

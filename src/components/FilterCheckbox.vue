@@ -7,7 +7,7 @@
                    :value="filter.value"
                    v-model="selected">
             <label>
-                {{filter.value}}
+                {{filter.value}} ({{filter.count}})
             </label>
         </form>
     </div>
