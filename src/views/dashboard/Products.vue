@@ -42,7 +42,7 @@
                                 hover
                                 multiple
                         >
-                            <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i" >
+                            <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
                                 <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
                                 <v-expansion-panel-content v-if="filter.id === 'category'">
                                     <ul>
@@ -54,7 +54,7 @@
                                 </v-expansion-panel-content>
                                 <v-expansion-panel-content v-else>
                                     <FilterCheckbox
-                                            @filterCheckboxChange="changeFilterCheckboxReceived"
+                                            @filterCheckboxChange="setFilterCheckbox"
                                             :key="i"
                                             :filter-id="filter.id"
                                             :filter-values="filter.values"
@@ -215,44 +215,41 @@
                 this.postProductDependencies.sort.sort = sortValue;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
-            changeFilterCheckboxReceived(filterValue) {
-                console.log('filter value', filterValue);
-
-               if (this.postProductDependencies.searchFilters.length <= 0) {
-                    this.postProductDependencies.searchFilters.push({
-                        "id": filterValue.id,
-                        "values": [filterValue.value]
-                    });
-
-                   this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
-
+            setFilterCheckbox(filterValue) {
+                if (this.postProductDependencies.searchFilters.length <= 0) {
+                    this.addNewFilterValue(filterValue);
                     return;
                 }
 
-                var filterIdIsAlreadyAvailable = false;
-                this.postProductDependencies.searchFilters
-                    .map((val, i) => {
-                        if (val.id === filterValue.id) {
-                            this.postProductDependencies.searchFilters[i]['values'] = [...filterValue.selected];
-                            filterIdIsAlreadyAvailable = true;
-                        }
-                    });
-
-
-                if (filterIdIsAlreadyAvailable) {
+                if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
                     return;
                 }
 
+                this.addNewFilterValue(filterValue);
+
+            },
+            checkIfFilterValueIsAlreadyExist(filterValue) {
+                var filterAvailableStatus = false;
+                this.postProductDependencies.searchFilters
+                    .map((val, i) => {
+                        if (val.id === filterValue.id) {
+                            this.setFilterValueIfIsAlreadyExist(i, filterValue.selected);
+                            filterAvailableStatus = true;
+                        }
+                    });
+
+                return filterAvailableStatus;
+            },
+            setFilterValueIfIsAlreadyExist(index, filterValue) {
+                this.postProductDependencies.searchFilters[index]['values'] = [...filterValue];
+            },
+            addNewFilterValue(filterValue) {
                 this.postProductDependencies.searchFilters.push({
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
-
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
-                console.log('.searchFilters', this.postProductDependencies.searchFilters);
-
-
             },
             changeSlider(sliderName) {
                 console.log('nameeee', sliderName);
