@@ -254,26 +254,6 @@
 
 
             },
-           /* checkIfFilterValueIsAlreadyChecked(filterValue) {
-                for (let i = 0; i < this.postProductDependencies.searchFilters.length; i++) {
-                    if (this.postProductDependencies.searchFilters[i].id === filterValue.id) {
-
-                        console.log(this.postProductDependencies.searchFilters[i]['values']);
-                        const index = this.postProductDependencies.searchFilters[i]['values'].indexOf(filterValue.value);
-
-                        console.log('index: ', index)
-                       /!* this.postProductDependencies.searchFilters[i]['values']
-                            .map((val, index) => {
-                                console.log('valueee', val);
-                                if(val === filterValue.value){
-                                    console.log('indexxx', index);
-                                }
-                            })*!/
-                    }
-
-                }
-            },*/
-
             changeSlider(sliderName) {
                 console.log('nameeee', sliderName);
                 console.log('slideeeer', this.priceSliderValue);
@@ -289,7 +269,7 @@
             resetProductDependencies() {
                 const defaultProductDependencies = {
                     "page": 1,
-                    "q": "*",
+                    "q": this.form.query,
                     "searchFilters": [],
                     "sort": {
                         "sort": ""
@@ -298,9 +278,7 @@
                 };
 
                 this.postProductDependencies = {...defaultProductDependencies};
-                /*this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
-*/
-                //console.log('post product dependeicies', this.postProductDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             }
 
         }
