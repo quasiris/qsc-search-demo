@@ -55,10 +55,9 @@
                                 <v-expansion-panel-content v-else>
                                     <FilterCheckbox
                                             @filterCheckboxChange="changeFilterCheckboxReceived"
-                                            v-for="(filterValue, i) in filter.values"
                                             :key="i"
                                             :filter-id="filter.id"
-                                            :filter-value="filterValue"
+                                            :filter-values="filter.values"
                                     />
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
@@ -285,7 +284,7 @@
                 this.postProductDependencies = {...defaultProductDependencies};
                 /*this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
 */
-                console.log('post product dependeicies', this.postProductDependencies);
+                //console.log('post product dependeicies', this.postProductDependencies);
             }
 
         }

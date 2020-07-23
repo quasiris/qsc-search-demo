@@ -1,25 +1,23 @@
 <template>
-    <div>
-        <v-checkbox
-                @change="filterCheckboxChange(filterValue.value)"
-                dense
-                v-model="selected"
-                :label="`${filterValue.value} (${filterValue.count})`"
-                :value="filterValue.value"/>
-
-      <!--  <pre>
-            {{filterValue}}
-        </pre>-->
+    <div class="filter-checkbox">
+         <form  v-for="(filter, i) in filterValues"
+                :key="i">
+             <input type="checkbox"
+                    @change="filterCheckboxChange(filter.value)"
+                    :value="filter.value"
+                    v-model="selected">
+             <label>
+                 {{filter.value}}
+             </label>
+         </form>
     </div>
 </template>
-
-
 <script>
     export default {
         name: "FilterCheckbox",
         props: {
-            filterValue: {
-                type: Object,
+            filterValues: {
+                type: Array,
                 required: true
             },
             filterId: {
@@ -32,24 +30,27 @@
                 selected: []
             }
         ),
-        watch:{
-            selected(val){
-                console.log('val', val);
+        computed: {
+
+        },
+        watch: {
+            selected(val) {
+                console.log('selected array: ', val);
             }
         },
         methods: {
             filterCheckboxChange(value) {
-                 this.$emit('filterCheckboxChange', {
-                    value: value,
-                    id: this.filterId
-                });
+                this.$emit('filterCheckboxChange', {
+                   value: value,
+                   id: this.filterId
+               });
             }
         }
     }
 </script>
 
 <style scoped>
-    .filter-checkbox {
-        max-height: 30px;
+    .filter-checkbox input{
+        margin-right: 15px;
     }
 </style>

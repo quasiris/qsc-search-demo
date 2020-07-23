@@ -41,9 +41,9 @@
     /*GRID*/
     .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         grid-gap: 1rem;
-
+        margin: 10px;
     }
 
     /*EXPANSION PANEL*/
@@ -53,17 +53,5 @@
         word-wrap: break-word;
     }
 
-    .grid {
-        display: grid;
-        margin: 10px;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        grid-gap: 1rem;
-    }
 
-    /*PRODUCTS FILTER CHECKBOX*/
-    .v-input--selection-controls {
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-
-    }
 </style>
