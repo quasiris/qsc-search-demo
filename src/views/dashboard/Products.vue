@@ -91,11 +91,8 @@
                             label="Sortierung"
                     ></v-select>
                     <v-row no-gutters class="products-list_cards">
-                        <!--<pre>
-                            {{PRODUCTS.facets}}
-                        </pre>-->
                         <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
-                            <BasicCard :item="product"/>
+                            <BasicProductCard :item="product"/>
                         </v-col>
                     </v-row>
                     <v-pagination
@@ -116,7 +113,7 @@
     import {mapGetters} from "vuex";
     import FilterCheckbox from "../../components/FilterCheckbox";
     import SearchButton from "../../components/SearchButton";
-    import BasicCard from "../../components/BasicCard";
+    import BasicProductCard from "../../components/BasicProductCard";
     import ToolbarHeader from "../../components/ToolbarHeader";
 
     import {productsConstants} from '../../constants/productsConstants';
@@ -127,7 +124,7 @@
 
     export default {
         name: "Products",
-        components: {ToolbarHeader, BasicCard, SearchButton, FilterCheckbox},
+        components: {BasicProductCard, ToolbarHeader, SearchButton, FilterCheckbox},
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS', {
                 query: '*',
