@@ -62,13 +62,11 @@
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
                         </v-expansion-panels>
-
-
                     </article>
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
                             <p class="products-sliders_title font-weight-light">
-                                {{sliderValue.name}}: {{priceSlider[0]}} - {{priceSlider[1]}} €
+                                {{sliderValue.name}}: {{priceSliderValue[0]}} € - {{priceSliderValue[1]}} €
                             </p>
                             <v-range-slider
                                     @change="changeSlider(sliderValue)"
@@ -136,7 +134,8 @@
                 page: 1
             })
                 .then(() => {
-                    this.setExpansionPanelsValue();
+                    this.setExpansionPanelsValueInFirstTouch();
+                    this.setSlidersInFirstTouch();
                     this.pagination = true;
                 });
 
@@ -186,6 +185,9 @@
 
         }),
         watch: {
+            'priceSliderValue': function (val) {
+                console.log('value', val);
+            },
             'autosuggest.search': function (val) {
                 val && val && this.getSuggestProducts(val)
             }
@@ -223,6 +225,9 @@
             changeSlider({id}) {
                 this.setSliderValues(id, this.priceSliderValue);
             },
+            setSlidersInFirstTouch() {
+                this.priceSliderValue = [...this.priceSlider];
+            },
             setSliderValues(id, sliderValues) {
 
                 this.productDependencies.searchFilters.push({
@@ -232,8 +237,8 @@
                     "maxValue": sliderValues[1]
                 });
 
-                console.log('dependiencies', this.productDependencies);
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                // console.log('dependiencies', this.productDependencies);
+                // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             setFilterValues(filterValue) {
                 if (this.postProductDependencies.searchFilters.length <= 0) {
@@ -271,7 +276,7 @@
                 });
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
-            setExpansionPanelsValue() {
+            setExpansionPanelsValueInFirstTouch() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
                 if (this.expansionPanels.panel <= this.expansionPanels.items) {
                     for (let i = 0; i < this.expansionPanels.items; i++) {
