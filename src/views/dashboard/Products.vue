@@ -124,7 +124,12 @@
 
     export default {
         name: "Products",
-        components: {BasicProductCard, ToolbarHeader, SearchButton, FilterCheckbox},
+        components: {
+            BasicProductCard,
+            ToolbarHeader,
+            SearchButton,
+            FilterCheckbox
+        },
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS', {
                 query: '*',
@@ -206,6 +211,7 @@
                 this.postProductDependencies.page = page;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
 
+
                 this.$vuetify.goTo(0, {
                     duration: 1300
                 });
@@ -214,6 +220,21 @@
                 this.postProductDependencies.sort.sort = sortValue;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
+            changeSlider({id}) {
+                this.setSliderValues(id, this.priceSliderValue);
+            },
+            setSliderValues(id, sliderValues) {
+
+                this.productDependencies.searchFilters.push({
+                    "filterType": "range",
+                    "id": id,
+                    "minValue": sliderValues[0],
+                    "maxValue": sliderValues[1]
+                });
+
+                console.log('dependiencies', this.productDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+            },
             setFilterValues(filterValue) {
                 if (this.postProductDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
@@ -221,7 +242,7 @@
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
 
@@ -249,10 +270,6 @@
                     "values": [filterValue.value]
                 });
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
-            },
-            changeSlider(sliderName) {
-                console.log('nameeee', sliderName);
-                console.log('slideeeer', this.priceSliderValue);
             },
             setExpansionPanelsValue() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
