@@ -66,7 +66,7 @@
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
                             <p class="products-sliders_title font-weight-light">
-                                {{sliderValue.name}}: {{priceSliderValue[0]}} € - {{priceSliderValue[1]}} €
+                                {{sliderValue.name}}: {{priceSliderValue[0] | price}} - {{priceSliderValue[1] | price}}
                             </p>
                             <v-range-slider
                                     @change="changeSlider(sliderValue)"
@@ -210,8 +210,8 @@
                     })
             },
             changePagination(page) {
-                this.postProductDependencies.page = page;
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+                this.productDependencies.page = page;
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
 
 
                 this.$vuetify.goTo(0, {
@@ -219,8 +219,8 @@
                 });
             },
             changeSort(sortValue) {
-                this.postProductDependencies.sort.sort = sortValue;
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+                this.productDependencies.sort.sort = sortValue;
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             changeSlider({id}) {
                 this.setSliderValues(id, this.priceSliderValue);
@@ -241,7 +241,7 @@
                 // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             setFilterValues(filterValue) {
-                if (this.postProductDependencies.searchFilters.length <= 0) {
+                if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
                 }
@@ -256,7 +256,7 @@
             },
             checkIfFilterValueIsAlreadyExist(filterValue) {
                 var filterAvailableStatus = false;
-                this.postProductDependencies.searchFilters
+                this.productDependencies.searchFilters
                     .map((val, index) => {
                         if (val.id === filterValue.id) {
                             this.setFilterValueIfIsAlreadyExist(index, filterValue.selected);
@@ -267,14 +267,14 @@
                 return filterAvailableStatus;
             },
             setFilterValueIfIsAlreadyExist(index, filterValue) {
-                this.postProductDependencies.searchFilters[index]['values'] = [...filterValue];
+                this.productDependencies.searchFilters[index]['values'] = [...filterValue];
             },
             addNewFilterValue(filterValue) {
-                this.postProductDependencies.searchFilters.push({
+                this.productDependencies.searchFilters.push({
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             setExpansionPanelsValueInFirstTouch() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
@@ -295,8 +295,8 @@
                     "sliders": []
                 };
 
-                this.postProductDependencies = {...defaultProductDependencies};
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
+                this.productDependencies = {...defaultProductDependencies};
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             }
         }
     }
