@@ -44,9 +44,11 @@
                 </v-avatar>
                 <v-spacer/>
             </v-app-bar>
-            <v-content>
-                <router-view class="ma-5"/>
-            </v-content>
+            <v-main>
+                <v-container fluid>
+                    <router-view/>
+                </v-container>
+            </v-main>
             <NotificationSnackbar/>
             <Footer/>
         </v-app>

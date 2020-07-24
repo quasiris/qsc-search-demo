@@ -13,7 +13,7 @@
         data() {
             return {
                 show: false,
-                time: 0,
+                time: -1,
                 message: '',
                 color: ''
             }

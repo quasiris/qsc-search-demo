@@ -65,9 +65,24 @@
                     </article>
                     <article class="products-sliders mt-10">
                         <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                            <p class="products-sliders_title font-weight-light">
-                                {{sliderValue.name}}: {{priceSliderValue[0] | price}} - {{priceSliderValue[1] | price}}
-                            </p>
+                            <v-row>
+                                <v-col>
+                                    <v-text-field
+                                            type="number"
+                                            v-model="priceSliderValue[0]"
+                                            label="Minimum price"
+                                            required
+                                    />
+                                </v-col>
+                                <v-col>
+                                    <v-text-field
+                                            type="number"
+                                            v-model="priceSliderValue[1]"
+                                            label="Maximum price"
+                                            required
+                                    />
+                                </v-col>
+                            </v-row>
                             <v-range-slider
                                     @change="changeSlider(sliderValue)"
                                     v-model="priceSlider"
@@ -150,6 +165,7 @@
                     return [this.$store.state.products.products.sliders[0].minRange, this.$store.state.products.products.sliders[0].maxRange]
                 },
                 set(value) {
+                    console.log('value 123', value);
                     this.priceSliderValue = value;
                 }
             }
@@ -186,7 +202,7 @@
         }),
         watch: {
             'priceSliderValue': function (val) {
-                console.log('value', val);
+                console.log('priceeeeeeeeeeeeeeeeeeeee', val);
             },
             'autosuggest.search': function (val) {
                 val && val && this.getSuggestProducts(val)
@@ -233,11 +249,11 @@
                 this.productDependencies.searchFilters.push({
                     "filterType": "range",
                     "id": id,
-                    "minValue": sliderValues[0],
-                    "maxValue": sliderValues[1]
+                    "minValue": parseFloat(sliderValues[0]),
+                    "maxValue": parseFloat(sliderValues[1])
                 });
 
-                // console.log('dependiencies', this.productDependencies);
+                console.log('dependiencies', this.productDependencies);
                 // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             setFilterValues(filterValue) {
