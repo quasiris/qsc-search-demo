@@ -6,7 +6,7 @@
                 <article class="products-search-query">
                     <v-form
                             v-model="formOptions.valid"
-                            v-on:submit.prevent="searchQueryformSubmit()"
+                            v-on:submit.prevent="searchQueryFormSubmit()"
                     >
                         <v-row justify="center">
                             <v-col cols="12"
@@ -19,8 +19,8 @@
                                         :search-input.sync="autosuggest.search"
                                         :rules="formOptions.query"
                                         flat
-                                        @input="searchQueryformSubmit"
-                                        v-on:keyup.enter="searchQueryformSubmit"
+                                        @input="searchQueryFormSubmit"
+                                        v-on:keyup.enter="searchQueryFormSubmit"
                                         hide-no-data
                                         label="Search Query"
                                 ></v-combobox>
@@ -54,7 +54,7 @@
                                 </v-expansion-panel-content>
                                 <v-expansion-panel-content v-else>
                                     <FilterCheckbox
-                                            @filterCheckboxChange="setFilterCheckbox"
+                                            @filterCheckboxChange="setFilterValues"
                                             :key="i"
                                             :filter-id="filter.id"
                                             :filter-values="filter.values"
@@ -151,7 +151,6 @@
             }
         },
         data: () => ({
-
             form: Object.assign({}, form),
             formOptions: {
                 valid: false,
@@ -170,7 +169,7 @@
                 panel: [],
                 items: null
             },
-            postProductDependencies: {
+            productDependencies: {
                 "page": 1,
                 "q": "*",
                 "searchFilters": [],
@@ -183,18 +182,18 @@
         }),
         watch: {
             'autosuggest.search': function (val) {
-                val && val !== this.select && this.querySelections(val)
+                val && val && this.getSuggestProducts(val)
             }
         },
         methods: {
-            searchQueryformSubmit() {
-                this.postProductDependencies.q = this.form.query;
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies)
+            searchQueryFormSubmit() {
+                this.productDependencies.q = this.form.query;
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
                     .then(() => {
                         this.resetProductDependencies();
                     })
             },
-            querySelections(query) {
+            getSuggestProducts(query) {
                 this.autosuggest.loading = true;
                 this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {
                     query: query
@@ -215,7 +214,7 @@
                 this.postProductDependencies.sort.sort = sortValue;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             },
-            setFilterCheckbox(filterValue) {
+            setFilterValues(filterValue) {
                 if (this.postProductDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
@@ -232,9 +231,9 @@
             checkIfFilterValueIsAlreadyExist(filterValue) {
                 var filterAvailableStatus = false;
                 this.postProductDependencies.searchFilters
-                    .map((val, i) => {
+                    .map((val, index) => {
                         if (val.id === filterValue.id) {
-                            this.setFilterValueIfIsAlreadyExist(i, filterValue.selected);
+                            this.setFilterValueIfIsAlreadyExist(index, filterValue.selected);
                             filterAvailableStatus = true;
                         }
                     });
@@ -277,7 +276,6 @@
                 this.postProductDependencies = {...defaultProductDependencies};
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.postProductDependencies);
             }
-
         }
     }
 </script>
