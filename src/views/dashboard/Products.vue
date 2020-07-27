@@ -28,8 +28,7 @@
                             </v-col>
                             <v-col cols="12"
                                    sm="12"
-                                   md="2"
-                                   type="button">
+                                   md="2">
                                 <SearchButton :form-options="formOptions"/>
                             </v-col>
                         </v-row>
@@ -249,15 +248,16 @@
             },
         }),
         watch: {
-            'priceSliderValue': function () {
-                //console.log('priceeeeeeeeeeeeeeeeeeeee', val);
-            },
             'autosuggest.search': function (val) {
                 val && val && this.getSuggestProducts(val)
             }
         },
         methods: {
             searchQueryFormSubmit() {
+
+                if (!this.form.query) {
+                    return;
+                }
                 this.productDependencies.q = this.form.query;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
                     .then(() => {
