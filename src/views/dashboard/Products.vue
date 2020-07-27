@@ -68,6 +68,8 @@
                             <v-row>
                                 <v-col>
                                     <v-text-field
+                                            @change="changeSlider(sliderValue)"
+                                            class="products-sliders_input"
                                             type="number"
                                             v-model="priceSliderValue[0]"
                                             label="Minimum price"
@@ -76,6 +78,8 @@
                                 </v-col>
                                 <v-col>
                                     <v-text-field
+                                            @change="changeSlider(sliderValue)"
+                                            class="products-sliders_input"
                                             type="number"
                                             v-model="priceSliderValue[1]"
                                             label="Maximum price"
@@ -85,7 +89,7 @@
                             </v-row>
                             <v-range-slider
                                     @change="changeSlider(sliderValue)"
-                                    v-model="priceSlider"
+                                    v-model="PRICE_SLIDER"
                                     :max="sliderValue.maxRange"
                                     :min="sliderValue.minRange"
                             />
@@ -116,7 +120,7 @@
                             v-model="PRODUCTS.paging.currentPage"
                             :length="PRODUCTS.paging.pageCount"
                             :total-visible="10"
-                    ></v-pagination>
+                    />
                 </article>
             </section>
         </section>
@@ -160,12 +164,11 @@
                 'PRODUCTS',
                 'SUGGEST_PRODUCTS'
             ]),
-            priceSlider: {
+            PRICE_SLIDER: {
                 get() {
                     return [this.$store.state.products.products.sliders[0].minRange, this.$store.state.products.products.sliders[0].maxRange]
                 },
                 set(value) {
-                    console.log('value 123', value);
                     this.priceSliderValue = value;
                 }
             }
@@ -201,8 +204,8 @@
 
         }),
         watch: {
-            'priceSliderValue': function (val) {
-                console.log('priceeeeeeeeeeeeeeeeeeeee', val);
+            'priceSliderValue': function () {
+                //console.log('priceeeeeeeeeeeeeeeeeeeee', val);
             },
             'autosuggest.search': function (val) {
                 val && val && this.getSuggestProducts(val)
@@ -227,8 +230,8 @@
             },
             changePagination(page) {
                 this.productDependencies.page = page;
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
 
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
 
                 this.$vuetify.goTo(0, {
                     duration: 1300
@@ -242,19 +245,44 @@
                 this.setSliderValues(id, this.priceSliderValue);
             },
             setSlidersInFirstTouch() {
-                this.priceSliderValue = [...this.priceSlider];
+                this.priceSliderValue = [...this.PRICE_SLIDER];
             },
             setSliderValues(id, sliderValues) {
+                if (this.productDependencies.searchFilters.length <= 0) {
+                    this.addNewSliderValue(id, sliderValues);
+                    return;
+                }
 
+                if (this.checkIfSliderValueIsAlreadyExist(id, sliderValues)) {
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    return;
+                }
+
+                this.addNewSliderValue(id, sliderValues);
+            },
+            addNewSliderValue(id, sliderValues) {
                 this.productDependencies.searchFilters.push({
                     "filterType": "range",
                     "id": id,
                     "minValue": parseFloat(sliderValues[0]),
                     "maxValue": parseFloat(sliderValues[1])
                 });
-
-                console.log('dependiencies', this.productDependencies);
-                // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+            },
+            checkIfSliderValueIsAlreadyExist(id, sliderValues) {
+                var filterAvailableStatus = false;
+                this.productDependencies.searchFilters
+                    .map((val, index) => {
+                        if (val.filterType === "range" && val.id === id) {
+                            this.setSliderValueIfIsAlreadyExist(index, sliderValues);
+                            filterAvailableStatus = true;
+                        }
+                    });
+                return filterAvailableStatus;
+            },
+            setSliderValueIfIsAlreadyExist(index, sliderValues) {
+                this.productDependencies.searchFilters[index]['minValue'] = sliderValues[0];
+                this.productDependencies.searchFilters[index]['maxValue'] = sliderValues[1];
             },
             setFilterValues(filterValue) {
                 if (this.productDependencies.searchFilters.length <= 0) {
