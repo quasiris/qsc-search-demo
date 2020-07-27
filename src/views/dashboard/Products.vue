@@ -84,8 +84,8 @@
                         <v-skeleton-loader
                                 :loading="skeletonLoader.loading"
                                 type="article"
-                                :transition="skeletonLoader.transition"
                         >
+                            <div></div>
                             <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
                                 <v-row>
                                     <v-col>
