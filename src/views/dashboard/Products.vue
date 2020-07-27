@@ -136,9 +136,11 @@
                         ></v-select>
                     </v-skeleton-loader>
                     <v-skeleton-loader
+                            class="products-list_skeleton_loader"
                             :loading="skeletonLoader.loading"
                             :transition="skeletonLoader.transition"
                             type="card"
+                            :style="skeletonLoader.style"
                     >
                         <v-row no-gutters class="products-list_cards">
                             <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
@@ -191,6 +193,7 @@
                     this.setSlidersInFirstTouch();
                     this.pagination = true;
                     this.skeletonLoader.loading = false;
+                    this.resetSkeletonStyle();
                 });
 
         },
@@ -240,8 +243,10 @@
             skeletonLoader: {
                 loading: true,
                 transition: 'scale-transition',
-            }
-
+                style: {
+                    'marginTop': `${60}px`
+                }
+            },
         }),
         watch: {
             'priceSliderValue': function () {
@@ -387,6 +392,9 @@
 
                 this.productDependencies = {...defaultProductDependencies};
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+            },
+            resetSkeletonStyle() {
+                this.skeletonLoader.style = '';
             }
         }
     }
@@ -404,6 +412,7 @@
     .products-list_sorting {
         width: 300px;
     }
+
 
     aside {
         float: left;
