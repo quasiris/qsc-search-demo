@@ -2,11 +2,11 @@
     <v-card class="products-card">
         <ToolbarHeader :name="'Product'"/>
         <section class="pa-5">
-
-            <header>
-                <!--    <v-skeleton-loader
+            <header  :loading="skeletonLoader.loading">
+                  <!-- <v-skeleton-loader
                             :loading="skeletonLoader.loading"
-                            type="heading"
+                            :transition="skeletonLoader.transition"
+                            type="text"
                     >-->
                 <article class="products-search-query">
 
@@ -19,6 +19,7 @@
                                    sm="12"
                                    md="6">
                                 <v-combobox
+                                        :disabled="skeletonLoader.loading"
                                         v-model="form.query"
                                         :loading="autosuggest.loading"
                                         :items="SUGGEST_PRODUCTS"
@@ -42,16 +43,15 @@
 
 
                 </article>
-                <!-- </v-skeleton-loader>-->
+               <!-- </v-skeleton-loader>-->
             </header>
-
             <section class="products">
                 <aside>
                     <article class="products-facets">
                         <v-skeleton-loader
                                 :loading="skeletonLoader.loading"
-                                type="article"
                                 :transition="skeletonLoader.transition"
+                                type="article"
                         >
                             <v-expansion-panels
                                     v-model="expansionPanels.panel"
@@ -83,6 +83,7 @@
                     <article class="products-sliders mt-10">
                         <v-skeleton-loader
                                 :loading="skeletonLoader.loading"
+                                :transition="skeletonLoader.transition"
                                 type="article"
                         >
                             <div></div>
@@ -122,9 +123,9 @@
                 <article class="products-list">
                     <v-skeleton-loader
                             :loading="skeletonLoader.loading"
+                            :transition="skeletonLoader.transition"
                             type="text"
                             max-width="300"
-                            :transition="skeletonLoader.transition"
                     >
                         <p class="products-list_total font-weight-light">
                             Total: {{PRODUCTS.total}} elements
@@ -132,6 +133,7 @@
                     </v-skeleton-loader>
                     <v-skeleton-loader
                             :loading="skeletonLoader.loading"
+                            :transition="skeletonLoader.transition"
                             type="text"
                             max-width="300"
                     >
