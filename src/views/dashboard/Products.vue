@@ -2,14 +2,8 @@
     <v-card class="products-card">
         <ToolbarHeader :name="'Product'"/>
         <section class="pa-5">
-            <header  :loading="skeletonLoader.loading">
-                  <!-- <v-skeleton-loader
-                            :loading="skeletonLoader.loading"
-                            :transition="skeletonLoader.transition"
-                            type="text"
-                    >-->
+            <header>
                 <article class="products-search-query">
-
                     <v-form
                             v-model="formOptions.valid"
                             v-on:submit.prevent="searchQueryFormSubmit()"
@@ -40,19 +34,16 @@
                             </v-col>
                         </v-row>
                     </v-form>
-
-
                 </article>
-               <!-- </v-skeleton-loader>-->
             </header>
             <section class="products">
                 <aside>
-                    <article class="products-facets">
-                        <v-skeleton-loader
-                                :loading="skeletonLoader.loading"
-                                :transition="skeletonLoader.transition"
-                                type="article"
-                        >
+                    <v-skeleton-loader
+                            :loading="skeletonLoader.loading"
+                            :transition="skeletonLoader.transition"
+                            type="article"
+                    >
+                        <article class="products-facets">
                             <v-expansion-panels
                                     v-model="expansionPanels.panel"
                                     hover
@@ -78,15 +69,14 @@
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
                             </v-expansion-panels>
-                        </v-skeleton-loader>
-                    </article>
-                    <article class="products-sliders mt-10">
-                        <v-skeleton-loader
-                                :loading="skeletonLoader.loading"
-                                :transition="skeletonLoader.transition"
-                                type="article"
-                        >
-                            <div></div>
+                        </article>
+                    </v-skeleton-loader>
+                    <v-skeleton-loader
+                            :loading="skeletonLoader.loading"
+                            :transition="skeletonLoader.transition"
+                            type="article"
+                    >
+                        <article class="products-sliders mt-10">
                             <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
                                 <v-row>
                                     <v-col>
@@ -117,8 +107,8 @@
                                         :min="sliderValue.minRange"
                                 />
                             </div>
-                        </v-skeleton-loader>
-                    </article>
+                        </article>
+                    </v-skeleton-loader>
                 </aside>
                 <article class="products-list">
                     <v-skeleton-loader
@@ -157,14 +147,14 @@
                         </v-row>
                     </v-skeleton-loader>
                     <v-pagination
-                                v-if="pagination"
-                                class="products-list_pagination mt-6"
-                                previous-aria-label="Previous"
-                                @input="changePagination"
-                                v-model="PRODUCTS.paging.currentPage"
-                                :length="PRODUCTS.paging.pageCount"
-                                :total-visible="10"
-                        />
+                            v-if="pagination"
+                            class="products-list_pagination mt-6"
+                            previous-aria-label="Previous"
+                            @input="changePagination"
+                            v-model="PRODUCTS.paging.currentPage"
+                            :length="PRODUCTS.paging.pageCount"
+                            :total-visible="10"
+                    />
                 </article>
             </section>
         </section>
@@ -270,6 +260,10 @@
                     })
             },
             getSuggestProducts(query) {
+                if (!query) {
+                    return;
+                }
+
                 this.autosuggest.loading = true;
                 this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {
                     query: query
