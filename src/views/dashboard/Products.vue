@@ -2,8 +2,14 @@
     <v-card class="products-card">
         <ToolbarHeader :name="'Product'"/>
         <section class="pa-5">
+
             <header>
+                <!--    <v-skeleton-loader
+                            :loading="skeletonLoader.loading"
+                            type="heading"
+                    >-->
                 <article class="products-search-query">
+
                     <v-form
                             v-model="formOptions.valid"
                             v-on:submit.prevent="searchQueryFormSubmit()"
@@ -27,100 +33,136 @@
                             </v-col>
                             <v-col cols="12"
                                    sm="12"
-                                   md="2">
+                                   md="2"
+                                   type="button">
                                 <SearchButton :form-options="formOptions"/>
                             </v-col>
                         </v-row>
                     </v-form>
+
+
                 </article>
+                <!-- </v-skeleton-loader>-->
             </header>
+
             <section class="products">
                 <aside>
                     <article class="products-facets">
-                        <v-expansion-panels
-                                v-model="expansionPanels.panel"
-                                hover
-                                multiple
+                        <v-skeleton-loader
+                                :loading="skeletonLoader.loading"
+                                type="article"
+                                :transition="skeletonLoader.transition"
                         >
-                            <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
-                                <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
-                                <v-expansion-panel-content v-if="filter.id === 'category'">
-                                    <ul>
-                                        <li v-for="(filterValue, i) in filter.values"
-                                            :key="i">
-                                            {{filterValue.value}}
-                                        </li>
-                                    </ul>
-                                </v-expansion-panel-content>
-                                <v-expansion-panel-content v-else>
-                                    <FilterCheckbox
-                                            @filterCheckboxChange="setFilterValues"
-                                            :key="i"
-                                            :filter-id="filter.id"
-                                            :filter-values="filter.values"
-                                    />
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                        </v-expansion-panels>
+                            <v-expansion-panels
+                                    v-model="expansionPanels.panel"
+                                    hover
+                                    multiple
+                            >
+                                <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
+                                    <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
+                                    <v-expansion-panel-content v-if="filter.id === 'category'">
+                                        <ul>
+                                            <li v-for="(filterValue, i) in filter.values"
+                                                :key="i">
+                                                {{filterValue.value}}
+                                            </li>
+                                        </ul>
+                                    </v-expansion-panel-content>
+                                    <v-expansion-panel-content v-else>
+                                        <FilterCheckbox
+                                                @filterCheckboxChange="setFilterValues"
+                                                :key="i"
+                                                :filter-id="filter.id"
+                                                :filter-values="filter.values"
+                                        />
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                            </v-expansion-panels>
+                        </v-skeleton-loader>
                     </article>
                     <article class="products-sliders mt-10">
-                        <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                            <v-row>
-                                <v-col>
-                                    <v-text-field
-                                            @change="changeSlider(sliderValue)"
-                                            class="products-sliders_input"
-                                            type="number"
-                                            v-model="priceSliderValue[0]"
-                                            label="Minimum price"
-                                            required
-                                    />
-                                </v-col>
-                                <v-col>
-                                    <v-text-field
-                                            @change="changeSlider(sliderValue)"
-                                            class="products-sliders_input"
-                                            type="number"
-                                            v-model="priceSliderValue[1]"
-                                            label="Maximum price"
-                                            required
-                                    />
-                                </v-col>
-                            </v-row>
-                            <v-range-slider
-                                    @change="changeSlider(sliderValue)"
-                                    v-model="PRICE_SLIDER"
-                                    :max="sliderValue.maxRange"
-                                    :min="sliderValue.minRange"
-                            />
-                        </div>
+                        <v-skeleton-loader
+                                :loading="skeletonLoader.loading"
+                                type="article"
+                                :transition="skeletonLoader.transition"
+                        >
+                            <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
+                                <v-row>
+                                    <v-col>
+                                        <v-text-field
+                                                @change="changeSlider(sliderValue)"
+                                                class="products-sliders_input"
+                                                type="number"
+                                                v-model="priceSliderValue[0]"
+                                                label="Minimum price"
+                                                required
+                                        />
+                                    </v-col>
+                                    <v-col>
+                                        <v-text-field
+                                                @change="changeSlider(sliderValue)"
+                                                class="products-sliders_input"
+                                                type="number"
+                                                v-model="priceSliderValue[1]"
+                                                label="Maximum price"
+                                                required
+                                        />
+                                    </v-col>
+                                </v-row>
+                                <v-range-slider
+                                        @change="changeSlider(sliderValue)"
+                                        v-model="PRICE_SLIDER"
+                                        :max="sliderValue.maxRange"
+                                        :min="sliderValue.minRange"
+                                />
+                            </div>
+                        </v-skeleton-loader>
                     </article>
                 </aside>
                 <article class="products-list">
-                    <p class="products-list_total font-weight-light">
-                        Total: {{PRODUCTS.total}} elements
-                    </p>
-                    <v-select
-                            class="products-list_sorting"
-                            :items="sortValues"
-                            item-text="name"
-                            @change="changeSort"
-                            label="Sortierung"
-                    ></v-select>
-                    <v-row no-gutters class="products-list_cards">
-                        <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
-                            <BasicProductCard :item="product"/>
-                        </v-col>
-                    </v-row>
+                    <v-skeleton-loader
+                            :loading="skeletonLoader.loading"
+                            type="text"
+                            max-width="300"
+                            :transition="skeletonLoader.transition"
+                    >
+                        <p class="products-list_total font-weight-light">
+                            Total: {{PRODUCTS.total}} elements
+                        </p>
+                    </v-skeleton-loader>
+                    <v-skeleton-loader
+                            :loading="skeletonLoader.loading"
+                            type="text"
+                            max-width="300"
+                    >
+                        <v-select
+                                class="products-list_sorting"
+                                :items="sortValues"
+                                item-text="name"
+                                @change="changeSort"
+                                label="Sortierung"
+                        ></v-select>
+                    </v-skeleton-loader>
+                    <v-skeleton-loader
+                            :loading="skeletonLoader.loading"
+                            :transition="skeletonLoader.transition"
+                            type="card"
+                    >
+                        <v-row no-gutters class="products-list_cards">
+                            <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
+                                <BasicProductCard :item="product"/>
+                            </v-col>
+                        </v-row>
+                    </v-skeleton-loader>
                     <v-pagination
-                            v-if="pagination"
-                            class="products-list_pagination mt-6"
-                            previous-aria-label="Previous"
-                            @input="changePagination"
-                            v-model="PRODUCTS.paging.currentPage"
-                            :length="PRODUCTS.paging.pageCount"
-                            :total-visible="10"
-                    />
+                                v-if="pagination"
+                                class="products-list_pagination mt-6"
+                                previous-aria-label="Previous"
+                                @input="changePagination"
+                                v-model="PRODUCTS.paging.currentPage"
+                                :length="PRODUCTS.paging.pageCount"
+                                :total-visible="10"
+                        />
                 </article>
             </section>
         </section>
@@ -156,6 +198,7 @@
                     this.setExpansionPanelsValueInFirstTouch();
                     this.setSlidersInFirstTouch();
                     this.pagination = true;
+                    this.skeletonLoader.loading = false;
                 });
 
         },
@@ -200,6 +243,11 @@
                     "sort": ""
                 },
                 "sliders": []
+            },
+            arrayTest: ['card', 'card'],
+            skeletonLoader: {
+                loading: true,
+                transition: 'scale-transition',
             }
 
         }),
@@ -258,7 +306,8 @@
                     return;
                 }
 
-                this.addNewSliderValue(id, sliderValues);
+
+                console.log('dependiencies', this.productDependencies);
             },
             addNewSliderValue(id, sliderValues) {
                 this.productDependencies.searchFilters.push({
@@ -267,7 +316,8 @@
                     "minValue": parseFloat(sliderValues[0]),
                     "maxValue": parseFloat(sliderValues[1])
                 });
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                console.log('this.productDependencies.searchFilters', this.productDependencies.searchFilters)
+                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             checkIfSliderValueIsAlreadyExist(id, sliderValues) {
                 var filterAvailableStatus = false;
@@ -349,6 +399,10 @@
 <style scoped>
     .products {
         width: 100%;
+    }
+
+    .products-card {
+        min-height: 90vh;
     }
 
     .products-list_sorting {
