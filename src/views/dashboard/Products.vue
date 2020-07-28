@@ -19,7 +19,7 @@
                                         :items="SUGGEST_PRODUCTS"
                                         :search-input.sync="autosuggest.search"
                                         :rules="formOptions.query"
-                                        flat
+                                        ref="combobox"
                                         @input="searchQueryFormSubmit"
                                         v-on:keyup.enter="searchQueryFormSubmit"
                                         hide-no-data
@@ -259,6 +259,7 @@
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
                     .then(() => {
                         this.resetProductDependencies();
+                        this.$refs.combobox.isMenuActive = false;
                     })
             },
             getSuggestProducts(query) {
