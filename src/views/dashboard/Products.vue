@@ -148,7 +148,7 @@
                         </v-row>
                     </v-skeleton-loader>
                     <v-pagination
-                            v-if="pagination"
+                            v-if="!skeletonLoader.loading"
                             class="products-list_pagination mt-6"
                             previous-aria-label="Previous"
                             @input="changePagination"
@@ -190,9 +190,8 @@
                 .then(() => {
                     this.setExpansionPanelsValueInFirstTouch();
                     this.setSlidersInFirstTouch();
-                    this.pagination = true;
-                    this.skeletonLoader.loading = false;
                     this.resetSkeletonStyle();
+                    this.skeletonLoader.loading = false;
                 });
 
         },
@@ -223,7 +222,6 @@
                 search: null
             },
             priceSliderValue: [],
-            pagination: false,
             sortValues: productsConstants.sortValues,
             expansionPanels: {
                 panel: [],
@@ -238,7 +236,6 @@
                 },
                 "sliders": []
             },
-            arrayTest: ['card', 'card'],
             skeletonLoader: {
                 loading: true,
                 transition: 'scale-transition',
