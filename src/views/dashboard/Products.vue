@@ -47,10 +47,14 @@
                                     v-model="expansionPanels.panel"
                                     hover
                                     multiple
+                                    class="products-facets_expansion-panel"
                             >
                                 <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
-                                    <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
-                                    <v-expansion-panel-content v-if="filter.id === 'category'">
+                                    <v-expansion-panel-header class="products-facets_expansion-panel_header">
+                                        {{filter.name}}
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content class="products-facets_expansion-panel_content"
+                                            v-if="filter.id === 'category'">
                                         <v-treeview
                                                 open-all
                                                 return-object
@@ -58,7 +62,7 @@
                                                 :items="categoryTreeItems"
                                         />
                                     </v-expansion-panel-content>
-                                    <v-expansion-panel-content v-else>
+                                    <v-expansion-panel-content v-else class="products-facets_expansion-panel_content">
                                         <FilterCheckbox
                                                 @filterCheckboxChange="setFilterValues"
                                                 :key="i"
