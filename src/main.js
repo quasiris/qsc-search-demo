@@ -12,9 +12,14 @@ axios.defaults.baseURL = globalConfig.api_url;
 /*
 import SearchDataPicker from "@quasiris/search-data-picker/src";
 
-const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
-SearchDataPicker.initPicker.fromUrl(url);
+
+setTimeout(() => {
+    alert('now!');
+    const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
+    SearchDataPicker.initPicker.fromUrl(url);
+}, 2000);
 */
+
 
 
 Vue.filter('price', Price);
