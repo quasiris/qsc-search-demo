@@ -3,11 +3,13 @@
         <form v-for="(filter, i) in filterValues"
               :key="i">
             <input type="checkbox"
-                  :class="`filter-checkbox_input_${filterId.toLowerCase()}`"
-                   @change="filterCheckboxChange(filter.value)"
+                   :class="`filter-checkbox_input_${filterId.toLowerCase()}`"
+                   :id="`filter-checkbox_input_${filter.value.toLowerCase()}`"
+                   @change="handleFilterCheckboxChange(filter.value)"
                    :value="filter.value"
-                   v-model="selected">
+                   v-model="selected"/>
             <label
+                    :for="`filter-checkbox_input_${filter.value.toLowerCase()}`"
                     :class="`filter-checkbox_label_${filterId.toLowerCase()}`">
                 {{filter.value}} ({{filter.count}})
             </label>
@@ -35,13 +37,13 @@
         computed: {},
         watch: {},
         methods: {
-            filterCheckboxChange(value) {
+            handleFilterCheckboxChange(value) {
                 this.$emit('filterCheckboxChange', {
                     value: value,
                     id: this.filterId,
                     selected: this.selected
                 });
-            }
+            },
         }
     }
 </script>
@@ -49,5 +51,9 @@
 <style scoped>
     .filter-checkbox input {
         margin-right: 15px;
+    }
+
+    .filter-checkbox label:hover {
+        cursor: pointer;
     }
 </style>
