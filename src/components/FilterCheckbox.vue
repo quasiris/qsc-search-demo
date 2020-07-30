@@ -27,6 +27,10 @@
             filterId: {
                 type: String,
                 required: true
+            },
+            filterName:{
+                type: String,
+                required: true
             }
         },
         data: () => (
@@ -39,8 +43,9 @@
         methods: {
             handleFilterCheckboxChange(value) {
                 this.$emit('filterCheckboxChange', {
-                    value: value,
+                    name: this.filterName,
                     id: this.filterId,
+                    value: value,
                     selected: this.selected
                 });
             },

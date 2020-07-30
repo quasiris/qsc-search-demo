@@ -70,6 +70,7 @@
                                                 @filterCheckboxChange="setFilterValues"
                                                 :key="i"
                                                 :filter-id="filter.id"
+                                                :filter-name="filter.name"
                                                 :filter-values="filter.values"
                                         />
                                     </v-expansion-panel-content>
@@ -153,7 +154,7 @@
                                     value: value
                                 })"
                         >
-                            {{value}}
+                            {{select.name}} : {{value}}
                             <v-icon right>mdi-close</v-icon>
                         </v-chip>
                     </div>
@@ -337,6 +338,8 @@
                 this.priceSliderValue = [...this.PRICE_SLIDER];
             },
             setSliderValues(id, sliderValues) {
+
+
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewSliderValue(id, sliderValues);
                     return;
@@ -376,6 +379,9 @@
                 this.productDependencies.searchFilters[index]['maxValue'] = sliderValues[1];
             },
             setFilterValues(filterValue) {
+                console.log('slider values: ', filterValue);
+
+
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
@@ -425,6 +431,7 @@
             addNewSelectedFiltersValues(filterValue) {
                 this.filters.selected.push({
                     id: filterValue.id,
+                    name: filterValue.name,
                     value: [...filterValue.selected]
                 });
             },
