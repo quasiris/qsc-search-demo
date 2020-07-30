@@ -142,22 +142,48 @@
                                 label="Sortierung"
                         />
                     </v-skeleton-loader>
-                    <div class="products-list_filter_chips" v-for="(select, i) in filters.selected" :key="i">
-                        <v-chip
-                                v-for="(value, i) in select.value"
-                                :key="i"
-                                class="mr-3"
-                                color="teal darken-3"
-                                text-color="white"
-                                @click="deleteSelectedFiltersValues({
-                                    id: select.id,
-                                    value: value
-                                })"
-                        >
-                            {{select.name}} : {{value}}
-                            <v-icon right>mdi-close</v-icon>
-                        </v-chip>
-                    </div>
+                    <article class="products-list_filter_chips">
+                        <!-- <v-chip
+                                 class="mr-3"
+                                 color="teal darken-3"
+                                 text-color="white"
+                                 @click="deleteSelectedFiltersValues({
+                                     id: 'attr_anwendung',
+                                     value: 'Sonnenschutz'
+                                 })"
+                         >
+                             Anwendung Sonnenschutz
+                             <v-icon right>mdi-close</v-icon>
+                         </v-chip>-->
+
+                        <div v-for="(select, filterIndex) in filters.selected" :key=" filterIndex">
+                            <v-chip
+                                    v-for="(value, selectIndex) in select.value"
+                                    :key="selectIndex"
+                                    class="mr-3"
+                                    color="teal darken-3"
+                                    text-color="white"
+                                    @click="deleteSelectedFiltersValues({
+                                                            filterIndex: filterIndex,
+                                                            selectIndex: selectIndex,
+                                                            id: select.id,
+                                                            value: value
+                                                        })"
+                            >
+                                {{select.name}} : {{value}}
+                                <v-icon right>mdi-close</v-icon>
+                            </v-chip>
+                        </div>
+
+                        <!-- <v-chip
+                                 class="mr-3"
+                                 color="red darken-4"
+                                 text-color="white"
+                                 @click="resetProductDependencies"
+                         >
+                            Reset
+                         </v-chip>-->
+                    </article>
                     <v-skeleton-loader
                             id="products-list_skeleton_loader"
                             :loading="skeletonLoader.loading"
@@ -191,8 +217,8 @@
     import SearchButton from "../../components/SearchButton";
     import BasicProductCard from "../../components/BasicProductCard";
     import ToolbarHeader from "../../components/ToolbarHeader";
-
     import {productsConstants} from '../../constants/productsConstants';
+
 
     const form = {
         query: ''
@@ -361,7 +387,7 @@
                     "maxValue": parseFloat(sliderValues[1])
                 });
                 console.log('this.productDependencies.searchFilters', this.productDependencies.searchFilters)
-                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             checkIfSliderValueIsAlreadyExist(id, sliderValues) {
                 let filterAvailableStatus = false;
@@ -379,16 +405,13 @@
                 this.productDependencies.searchFilters[index]['maxValue'] = sliderValues[1];
             },
             setFilterValues(filterValue) {
-                console.log('slider values: ', filterValue);
-
-
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                    //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     this.setSelectedFiltersValues(filterValue);
                     return;
                 }
@@ -417,7 +440,7 @@
                     "values": [filterValue.value]
                 });
                 this.setSelectedFiltersValues(filterValue);
-                // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             setSelectedFiltersValues(filterValue) {
                 if (this.filters.selected.length <= 0) {
@@ -448,9 +471,30 @@
 
                 return filterAvailableStatus;
             },
-            deleteSelectedFiltersValues({id, value}) {
-                console.log(id);
-                console.log(value);
+            async deleteSelectedFiltersValues({filterIndex, selectIndex, id, value}) {
+                try {
+                    await this.deleteSelectedFiltersValuesFromProductDependencies(id, value);
+                    this.filters.selected[filterIndex]['value'].splice(selectIndex, 1);
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                } catch (e) {
+                    this.$store
+                        .dispatch('SHOW_NOTIFICATION',
+                            {
+                                time: 3000,
+                                content: 'Error with deleting filters. Please try again later',
+                                color: 'error'
+                            });
+                    throw new Error(e);
+                }
+            },
+            deleteSelectedFiltersValuesFromProductDependencies(id, value) {
+                this.productDependencies.searchFilters
+                    .map((filter, index) => {
+                        if (filter.id === id) {
+                            const valueIndex = this.productDependencies.searchFilters[index]['values'].indexOf(value);
+                            this.productDependencies.searchFilters[index]['values'].splice(valueIndex, 1)
+                        }
+                    });
             },
             setExpansionPanelsValueInFirstTouch() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
