@@ -3,7 +3,7 @@
         <ToolbarHeader :name="'Product'"/>
         <section class="pa-5">
             <header>
-                <article class="products-search-query">
+                <article id="products-search-query">
                     <v-form
                             v-model="formOptions.valid"
                             v-on:submit.prevent="searchQueryFormSubmit()"
@@ -13,6 +13,7 @@
                                    sm="12"
                                    md="6">
                                 <v-combobox
+                                        id="products-search-query_input"
                                         :disabled="skeletonLoader.loading"
                                         v-model="form.query"
                                         :loading="autosuggest.loading"
@@ -29,31 +30,33 @@
                             <v-col cols="12"
                                    sm="12"
                                    md="2">
-                                <SearchButton :form-options="formOptions"/>
+                                <SearchButton :form-options="formOptions"
+                                              id="products-search-query_button"
+                                />
                             </v-col>
                         </v-row>
                     </v-form>
                 </article>
             </header>
-            <section class="products">
+            <section id="products">
                 <aside>
                     <v-skeleton-loader
                             :loading="skeletonLoader.loading"
                             :transition="skeletonLoader.transition"
                             type="article"
                     >
-                        <article class="products-facets">
+                        <article id="products-facets">
                             <v-expansion-panels
                                     v-model="expansionPanels.panel"
                                     hover
                                     multiple
-                                    class="products-facets_expansion-panel"
+                                    id="products-facets_expansion-panel"
                             >
                                 <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
-                                    <v-expansion-panel-header class="products-facets_expansion-panel_header">
+                                    <v-expansion-panel-header id="products-facets_expansion-panel_header">
                                         {{filter.name}}
                                     </v-expansion-panel-header>
-                                    <v-expansion-panel-content class="products-facets_expansion-panel_content"
+                                    <v-expansion-panel-content id="products-facets_expansion-panel_content"
                                             v-if="filter.id === 'category'">
                                         <v-treeview
                                                 open-all
@@ -131,7 +134,7 @@
                             max-width="300"
                     >
                         <v-select
-                                class="products-list_sorting"
+                                id="products-list_sorting"
                                 :items="sortValues"
                                 item-text="name"
                                 @change="changeSort"
@@ -139,7 +142,7 @@
                         ></v-select>
                     </v-skeleton-loader>
                     <v-skeleton-loader
-                            class="products-list_skeleton_loader"
+                            id="products-list_skeleton_loader"
                             :loading="skeletonLoader.loading"
                             :transition="skeletonLoader.transition"
                             type="card"
@@ -153,7 +156,7 @@
                     </v-skeleton-loader>
                     <v-pagination
                             v-if="!skeletonLoader.loading"
-                            class="products-list_pagination mt-6"
+                            id="products-list_pagination mt-6"
                             previous-aria-label="Previous"
                             @input="changePagination"
                             v-model="PRODUCTS.paging.currentPage"

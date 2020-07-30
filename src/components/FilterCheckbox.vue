@@ -3,11 +3,12 @@
         <form v-for="(filter, i) in filterValues"
               :key="i">
             <input type="checkbox"
-                   class="filter-checkbox_input"
+                  :class="`filter-checkbox_input_${filterId.toLowerCase()}`"
                    @change="filterCheckboxChange(filter.value)"
                    :value="filter.value"
                    v-model="selected">
-            <label class="filter-checkbox_label">
+            <label
+                    :class="`filter-checkbox_label_${filterId.toLowerCase()}`">
                 {{filter.value}} ({{filter.count}})
             </label>
         </form>
