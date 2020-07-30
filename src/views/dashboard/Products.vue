@@ -57,7 +57,7 @@
                                         {{filter.name}}
                                     </v-expansion-panel-header>
                                     <v-expansion-panel-content id="products-facets_expansion-panel_content"
-                                            v-if="filter.id === 'category'">
+                                                               v-if="filter.id === 'category'">
                                         <v-treeview
                                                 open-all
                                                 return-object
@@ -134,13 +134,18 @@
                             max-width="300"
                     >
                         <v-select
-                                id="products-list_sorting"
+                                class="products-list_sorting"
                                 :items="sortValues"
                                 item-text="name"
                                 @change="changeSort"
                                 label="Sortierung"
-                        ></v-select>
+                        />
                     </v-skeleton-loader>
+                    <ul class="products-list_filter_chips">
+                        <li v-for="(select, i) in filters.selected" :key="i">
+                            {{select}}
+                        </li>
+                    </ul>
                     <v-skeleton-loader
                             id="products-list_skeleton_loader"
                             :loading="skeletonLoader.loading"
@@ -233,78 +238,6 @@
 
         },
         data: () => ({
-            items: [
-                {
-                    id: 1,
-                    name: 'Applications :',
-                    children: [
-                        {id: 2, name: 'Calendar : app',},
-                        {id: 3, name: 'Chrome : app'},
-                        {id: 4, name: 'Webstorm : app'},
-                    ],
-                },
-                {
-                    id: 5,
-                    name: 'Documents :',
-                    children: [
-                        {
-                            id: 6,
-                            name: 'vuetify :',
-                            children: [
-                                {
-                                    id: 7,
-                                    name: 'src :',
-                                    children: [
-                                        {id: 8, name: 'index : ts'},
-                                        {id: 9, name: 'bootstrap : ts'},
-                                    ],
-                                },
-                            ],
-                        },
-                        {
-                            id: 10,
-                            name: 'material2 :',
-                            children: [
-                                {
-                                    id: 11,
-                                    name: 'src :',
-                                    children: [
-                                        {id: 12, name: 'v-btn : ts'},
-                                        {id: 13, name: 'v-card : ts'},
-                                        {id: 14, name: 'v-window : ts'},
-                                    ],
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    id: 15,
-                    name: 'Downloads :',
-                    children: [
-                        {id: 16, name: 'October : pdf'},
-                        {id: 17, name: 'November : pdf'},
-                        {id: 18, name: 'Tutorial : html'},
-                    ],
-                },
-                {
-                    id: 19,
-                    name: 'Videos :',
-                    children: [
-                        {
-                            id: 20,
-                            name: 'Tutorials :',
-                            children: [
-                                {id: 21, name: 'Basic layouts : mp4'},
-                                {id: 22, name: 'Advanced techniques : mp4'},
-                                {id: 23, name: 'All about app : dir'},
-                            ],
-                        },
-                        {id: 24, name: 'Intro : mov'},
-                        {id: 25, name: 'Conference introduction : avi'},
-                    ],
-                },
-            ],
             form: Object.assign({}, form),
             formOptions: {
                 valid: false,
@@ -321,6 +254,9 @@
             expansionPanels: {
                 panel: [],
                 items: null
+            },
+            filters: {
+                selected: []
             },
             productDependencies: {
                 "page": 1,
@@ -429,6 +365,8 @@
                 this.productDependencies.searchFilters[index]['maxValue'] = sliderValues[1];
             },
             setFilterValues(filterValue) {
+                console.log('filter value', filterValue);
+
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
@@ -436,6 +374,7 @@
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    this.assignSelectedFilter(filterValue);
                     return;
                 }
 
@@ -462,7 +401,18 @@
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
+                this.assignSelectedFilter(filterValue);
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+            },
+            assignSelectedFilter(filterValue) {
+                if (filterValue.selected.length <= 0) {
+                    return;
+                }
+
+                this.filters.selected.push({
+                    id: filterValue.id,
+                    selected: [...filterValue.selected]
+                })
             },
             setExpansionPanelsValueInFirstTouch() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
@@ -494,10 +444,6 @@
 </script>
 
 <style scoped>
-    .products {
-        width: 100%;
-    }
-
     .products-card {
         min-height: 90vh;
     }
@@ -505,7 +451,6 @@
     .products-list_sorting {
         width: 300px;
     }
-
 
     aside {
         float: left;
