@@ -141,13 +141,22 @@
                                 label="Sortierung"
                         />
                     </v-skeleton-loader>
-                    <ul class="products-list_filter_chips">
-                        <li v-for="(select, i) in filters.selected" :key="i">
-                            <p v-if="select.value.length > 0">
-                                {{select.value}}
-                            </p>
-                        </li>
-                    </ul>
+                    <div class="products-list_filter_chips" v-for="(select, i) in filters.selected" :key="i">
+                        <v-chip
+                                v-for="(value, i) in select.value"
+                                :key="i"
+                                class="mr-3"
+                                color="teal darken-3"
+                                text-color="white"
+                                @click="deleteSelectedFiltersValues({
+                                    id: select.id,
+                                    value: value
+                                })"
+                        >
+                            {{value}}
+                            <v-icon right>mdi-close</v-icon>
+                        </v-chip>
+                    </div>
                     <v-skeleton-loader
                             id="products-list_skeleton_loader"
                             :loading="skeletonLoader.loading"
@@ -373,7 +382,7 @@
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     this.setSelectedFiltersValues(filterValue);
                     return;
                 }
@@ -402,7 +411,7 @@
                     "values": [filterValue.value]
                 });
                 this.setSelectedFiltersValues(filterValue);
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             setSelectedFiltersValues(filterValue) {
                 if (this.filters.selected.length <= 0) {
@@ -431,6 +440,10 @@
                     });
 
                 return filterAvailableStatus;
+            },
+            deleteSelectedFiltersValues({id, value}) {
+                console.log(id);
+                console.log(value);
             },
             setExpansionPanelsValueInFirstTouch() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
