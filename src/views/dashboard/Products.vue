@@ -143,7 +143,9 @@
                     </v-skeleton-loader>
                     <ul class="products-list_filter_chips">
                         <li v-for="(select, i) in filters.selected" :key="i">
-                            {{select}}
+                            <p v-if="select.value.length > 0">
+                                {{select.value}}
+                            </p>
                         </li>
                     </ul>
                     <v-skeleton-loader
@@ -350,7 +352,7 @@
                 //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             checkIfSliderValueIsAlreadyExist(id, sliderValues) {
-                var filterAvailableStatus = false;
+                let filterAvailableStatus = false;
                 this.productDependencies.searchFilters
                     .map((val, index) => {
                         if (val.filterType === "range" && val.id === id) {
@@ -365,8 +367,6 @@
                 this.productDependencies.searchFilters[index]['maxValue'] = sliderValues[1];
             },
             setFilterValues(filterValue) {
-                console.log('filter value', filterValue);
-
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
@@ -374,7 +374,7 @@
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
-                    this.assignSelectedFilter(filterValue);
+                    this.setSelectedFiltersValues(filterValue);
                     return;
                 }
 
@@ -382,7 +382,7 @@
 
             },
             checkIfFilterValueIsAlreadyExist(filterValue) {
-                var filterAvailableStatus = false;
+                let filterAvailableStatus = false;
                 this.productDependencies.searchFilters
                     .map((val, index) => {
                         if (val.id === filterValue.id) {
@@ -401,18 +401,36 @@
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
-                this.assignSelectedFilter(filterValue);
+                this.setSelectedFiltersValues(filterValue);
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
-            assignSelectedFilter(filterValue) {
-                if (filterValue.selected.length <= 0) {
+            setSelectedFiltersValues(filterValue) {
+                if (this.filters.selected.length <= 0) {
+                    this.addNewSelectedFiltersValues(filterValue);
                     return;
                 }
-
+                if (!this.checkIfSelectedFiltersValuesIsAlreadyExist(filterValue)) {
+                    this.addNewSelectedFiltersValues(filterValue);
+                }
+            },
+            addNewSelectedFiltersValues(filterValue) {
                 this.filters.selected.push({
                     id: filterValue.id,
-                    selected: [...filterValue.selected]
-                })
+                    value: [...filterValue.selected]
+                });
+            },
+            checkIfSelectedFiltersValuesIsAlreadyExist(filterValue) {
+                let filterAvailableStatus = false;
+
+                this.filters.selected
+                    .map((val, index) => {
+                        if (val.id === filterValue.id) {
+                            this.filters.selected[index]['value'] = [...filterValue.selected];
+                            filterAvailableStatus = true;
+                        }
+                    });
+
+                return filterAvailableStatus;
             },
             setExpansionPanelsValueInFirstTouch() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
