@@ -137,38 +137,41 @@
                         />
                     </v-skeleton-loader>
                     <article class="products-list_filter_chips">
-                        <!-- <v-chip
-                                 class="mr-3"
-                                 color="teal darken-3"
-                                 text-color="white"
-                                 @click="deleteSelectedFiltersValues({
-                                     id: 'attr_anwendung',
-                                     value: 'Sonnenschutz'
-                                 })"
-                         >
-                             Anwendung Sonnenschutz
-                             <v-icon right>mdi-close</v-icon>
-                         </v-chip>-->
-
                         <div v-for="(select, filterIndex) in productDependencies.searchFilters" :key=" filterIndex">
-                            {{select}}
+                            <div v-if="select.filterType === 'range'">
+                                <v-chip
+                                        class="mr-3 mt-3"
+                                        color="teal darken-3"
+                                        text-color="white"
+                                        @click="deleteSelectedFiltersValues({
+                                                     id: select.id
+                                         })"
+                                >
+                                    {{select.id}}: {{select.minValue | price}} - {{select.maxValue | price}}
+                                    <v-icon right>mdi-close</v-icon>
+                                </v-chip>
+                            </div>
+                            <div v-else>
+                                <v-chip
 
-                            <!-- <v-chip
-                                    v-for="(value, selectIndex) in select.value"
-                                    :key="selectIndex"
-                                    class="mr-3"
-                                    color="teal darken-3"
-                                    text-color="white"
-                                    @click="deleteSelectedFiltersValues({
+                                        v-for="(value, selectIndex) in select.values"
+                                        :key="selectIndex"
+                                        class="mr-3 mt-3"
+                                        color="teal darken-3"
+                                        text-color="white"
+                                        @click="deleteSelectedFiltersValues({
                                                             filterIndex: filterIndex,
                                                             selectIndex: selectIndex,
                                                             id: select.id,
                                                             value: value
                                                         })"
-                            >
-                                {{select.name}} : {{value}}
-                                <v-icon right>mdi-close</v-icon>
-                            </v-chip>-->
+                                >
+                                    {{select.id}}: {{value}}
+                                    <v-icon right>
+                                        mdi-close
+                                    </v-icon>
+                                </v-chip>
+                            </div>
                         </div>
 
                         <!-- <v-chip
@@ -315,7 +318,6 @@
         },
         methods: {
             searchQueryFormSubmit() {
-
                 if (!this.form.query) {
                     return;
                 }
@@ -341,9 +343,7 @@
             },
             changePagination(page) {
                 this.productDependencies.page = page;
-
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
-
                 this.$vuetify.goTo(0, {
                     duration: 1300
                 });
@@ -403,7 +403,7 @@
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     this.setSelectedFiltersValues(filterValue);
                     return;
                 }
@@ -432,7 +432,7 @@
                     "values": [filterValue.value]
                 });
                 this.setSelectedFiltersValues(filterValue);
-               this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             setSelectedFiltersValues(filterValue) {
                 if (this.filters.selected.length <= 0) {
