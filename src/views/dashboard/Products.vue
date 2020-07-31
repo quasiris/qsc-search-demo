@@ -136,59 +136,62 @@
                                 label="Sortierung"
                         />
                     </v-skeleton-loader>
-                    <article class="products-list_filter_chips"
-                             v-for="(select, filterIndex) in productDependencies.searchFilters"
-                             :key=" filterIndex">
-                        <div v-if="select.filterType === 'range'">
-                            <v-chip
-                                    class="mr-3 mt-3"
-                                    color="teal darken-3"
-                                    text-color="white"
-                                    @click="deleteSelectedFiltersValues({
+                    <article class="products-list_filter_chips w-100">
+                        <div  v-for="(select, filterIndex) in productDependencies.searchFilters"
+                              :key=" filterIndex">
+                            <div v-if="select.filterType === 'range'">
+                                <v-chip
+                                        class="mr-3 mt-3"
+                                        color="teal darken-3"
+                                        text-color="white"
+                                        @click="deleteSelectedFiltersValues({
                                                     filterType: select.filterType,
                                                     filterIndex: filterIndex,
                                                     selectIndex: null,
                                                      id: select.id,
 
                                })"
-                            >
-                                {{select.id}}: {{select.minValue | price}} - {{select.maxValue | price}}
-                                <v-icon right>mdi-close</v-icon>
-                            </v-chip>
-                        </div>
-                        <div v-else>
-                            <v-chip
-
-                                    v-for="(value, valueIndex) in select.values"
-                                    :key="valueIndex"
-                                    class="mr-3 mt-3"
-                                    color="teal darken-3"
-                                    text-color="white"
-                                    @click="deleteSelectedFiltersValues({
+                                >
+                                    {{select.id}}: {{select.minValue | price}} - {{select.maxValue | price}}
+                                    <v-icon right>mdi-close</v-icon>
+                                </v-chip>
+                            </div>
+                            <div v-else>
+                                <v-chip
+                                        v-for="(value, valueIndex) in select.values"
+                                        :key="valueIndex"
+                                        class="mr-3 mt-3"
+                                        color="teal darken-3"
+                                        text-color="white"
+                                        @click="deleteSelectedFiltersValues({
                                                              filterType: null,
                                                             filterIndex: filterIndex,
                                                             selectedValueIndex: valueIndex,
                                                             id: select.id,
 
                                                         })"
+                                >
+                                    {{select.id}}: {{value}}
+                                    <v-icon right>
+                                        mdi-close
+                                    </v-icon>
+                                </v-chip>
+                            </div>
+                        </div>
+                        <div v-if="productDependencies.searchFilters.length >= 1">
+                            <v-chip
+                                    class="mr-3 mt-3"
+                                    color="teal"
+                                    text-color="white"
+                                    @click="resetProductDependencies"
                             >
-                                {{select.id}}: {{value}}
+                                Reset All Filters
                                 <v-icon right>
                                     mdi-close
                                 </v-icon>
                             </v-chip>
                         </div>
                     </article>
-
-                    <!-- <v-chip
-                             class="mr-3"
-                             color="red darken-4"
-                             text-color="white"
-                             @click="resetProductDependencies"
-                     >
-                        Reset
-                     </v-chip>-->
-
                     <!-- TODO QSC-331 BUG!-->
                     <!-- <v-skeleton-loader
                              :loading="skeletonLoader.loading"
@@ -406,7 +409,7 @@
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                   // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
 
@@ -433,7 +436,7 @@
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id}) {
                 try {
