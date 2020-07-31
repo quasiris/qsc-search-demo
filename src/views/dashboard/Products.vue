@@ -20,6 +20,7 @@
                                         :search-input.sync="autosuggest.search"
                                         :rules="formOptions.query"
                                         flat
+                                        ref="combobox"
                                         @input="searchQueryFormSubmit"
                                         v-on:keyup.enter="searchQueryFormSubmit"
                                         hide-no-data
@@ -137,8 +138,8 @@
                         />
                     </v-skeleton-loader>
                     <article class="products-list_filter_chips w-100">
-                        <div  v-for="(select, filterIndex) in productDependencies.searchFilters"
-                              :key=" filterIndex">
+                        <div v-for="(select, filterIndex) in productDependencies.searchFilters"
+                             :key=" filterIndex">
                             <div v-if="select.filterType === 'range'">
                                 <v-chip
                                         class="mr-3 mt-3"
@@ -152,8 +153,10 @@
 
                                })"
                                 >
-                                    {{select.id}}: {{select.minValue | price}} - {{select.maxValue | price}}
-                                    <v-icon right>mdi-close</v-icon>
+                                    {{select.name}}: {{select.minValue | price}} - {{select.maxValue | price}}
+                                    <v-icon right>
+                                        mdi-close
+                                    </v-icon>
                                 </v-chip>
                             </div>
                             <div v-else>
@@ -171,7 +174,7 @@
 
                                                         })"
                                 >
-                                    {{select.id}}: {{value}}
+                                    {{select.name}}: {{value}}
                                     <v-icon right>
                                         mdi-close
                                     </v-icon>
@@ -358,15 +361,15 @@
                 this.productDependencies.sort.sort = sortValue;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
-            changeSlider({id}) {
-                this.setSliderValues(id, this.priceSliderValue);
+            changeSlider({id, name}) {
+                this.setSliderValues(id, name, this.priceSliderValue);
             },
             setSlidersInFirstTouch() {
                 this.priceSliderValue = [...this.PRICE_SLIDER];
             },
-            setSliderValues(id, sliderValues) {
+            setSliderValues(id, name, sliderValues) {
                 if (this.productDependencies.searchFilters.length <= 0) {
-                    this.addNewSliderValue(id, sliderValues);
+                    this.addNewSliderValue(id, name, sliderValues);
                     return;
                 }
 
@@ -375,12 +378,13 @@
                     return;
                 }
 
-                this.addNewSliderValue(id, sliderValues);
+                this.addNewSliderValue(id, name, sliderValues);
             },
-            addNewSliderValue(id, sliderValues) {
+            addNewSliderValue(id, name, sliderValues) {
                 this.productDependencies.searchFilters.push({
                     "filterType": "range",
                     "id": id,
+                    name: name,
                     "minValue": parseFloat(sliderValues[0]),
                     "maxValue": parseFloat(sliderValues[1])
                 });
@@ -409,7 +413,7 @@
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                   // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
 
@@ -433,10 +437,11 @@
             },
             addNewFilterValue(filterValue) {
                 this.productDependencies.searchFilters.push({
+                    "name": filterValue.name,
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
-                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id}) {
                 try {
@@ -470,16 +475,6 @@
                             });
                     throw new Error(e);
                 }
-                console.log(this.productDependencies.searchFilters);
-            },
-            deleteSelectedFiltersValuesFromProductDependencies(id, value) {
-                this.productDependencies.searchFilters
-                    .map((filter, index) => {
-                        if (filter.id === id) {
-                            const valueIndex = this.productDependencies.searchFilters[index]['values'].indexOf(value);
-                            this.productDependencies.searchFilters[index]['values'].splice(valueIndex, 1)
-                        }
-                    });
             },
             setExpansionPanelsValueInFirstTouch() {
                 this.expansionPanels.items = this.$store.state.products.products.facets.length + 1;
@@ -500,8 +495,14 @@
                     "sliders": []
                 };
 
-                this.productDependencies = {...defaultProductDependencies};
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                console.log('product  dependiec', this.productDependencies);
+
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', defaultProductDependencies)
+                    .then(() => {
+                        this.productDependencies = {...defaultProductDependencies};
+                    })
+
+
             },
             resetSkeletonStyle() {
                 this.skeletonLoader.style = '';
