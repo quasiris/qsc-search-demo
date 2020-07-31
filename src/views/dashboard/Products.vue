@@ -3,7 +3,7 @@
         <ToolbarHeader :name="'Product'"/>
         <section class="pa-5">
             <header>
-                <article id="products-search-query">
+                <article class="products-search-query">
                     <v-form
                             v-model="formOptions.valid"
                             v-on:submit.prevent="searchQueryFormSubmit()"
@@ -13,14 +13,13 @@
                                    sm="12"
                                    md="6">
                                 <v-combobox
-                                        id="products-search-query_input"
                                         :disabled="skeletonLoader.loading"
                                         v-model="form.query"
                                         :loading="autosuggest.loading"
                                         :items="SUGGEST_PRODUCTS"
                                         :search-input.sync="autosuggest.search"
                                         :rules="formOptions.query"
-                                        ref="combobox"
+                                        flat
                                         @input="searchQueryFormSubmit"
                                         v-on:keyup.enter="searchQueryFormSubmit"
                                         hide-no-data
@@ -30,42 +29,36 @@
                             <v-col cols="12"
                                    sm="12"
                                    md="2">
-                                <SearchButton :form-options="formOptions"
-                                              id="products-search-query_button"
-                                />
+                                <SearchButton :form-options="formOptions"/>
                             </v-col>
                         </v-row>
                     </v-form>
                 </article>
             </header>
-            <section id="products">
+            <section class="products">
                 <aside>
                     <v-skeleton-loader
                             :loading="skeletonLoader.loading"
                             :transition="skeletonLoader.transition"
                             type="article"
                     >
-                        <article id="products-facets">
+                        <article class="products-facets">
                             <v-expansion-panels
                                     v-model="expansionPanels.panel"
                                     hover
                                     multiple
-                                    id="products-facets_expansion-panel"
                             >
                                 <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
-                                    <v-expansion-panel-header id="products-facets_expansion-panel_header">
-                                        {{filter.name}}
-                                    </v-expansion-panel-header>
-                                    <v-expansion-panel-content id="products-facets_expansion-panel_content"
-                                                               v-if="filter.id === 'category'">
-                                        <v-treeview
-                                                open-all
-                                                return-object
-                                                dense
-                                                :items="categoryTreeItems"
-                                        />
+                                    <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
+                                    <v-expansion-panel-content v-if="filter.id === 'category'">
+                                        <ul>
+                                            <li v-for="(filterValue, i) in filter.values"
+                                                :key="i">
+                                                {{filterValue.value}}
+                                            </li>
+                                        </ul>
                                     </v-expansion-panel-content>
-                                    <v-expansion-panel-content v-else class="products-facets_expansion-panel_content">
+                                    <v-expansion-panel-content v-else>
                                         <FilterCheckbox
                                                 @filterCheckboxChange="setFilterValues"
                                                 :key="i"
@@ -78,56 +71,57 @@
                             </v-expansion-panels>
                         </article>
                     </v-skeleton-loader>
-                    <v-skeleton-loader
-                            :loading="skeletonLoader.loading"
-                            :transition="skeletonLoader.transition"
-                            type="article"
-                    >
-                        <article class="products-sliders mt-10">
-                            <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                                <v-row>
-                                    <v-col>
-                                        <v-text-field
-                                                @change="changeSlider(sliderValue)"
-                                                class="products-sliders_input"
-                                                type="number"
-                                                v-model="priceSliderValue[0]"
-                                                label="Minimum price"
-                                                required
-                                        />
-                                    </v-col>
-                                    <v-col>
-                                        <v-text-field
-                                                @change="changeSlider(sliderValue)"
-                                                class="products-sliders_input"
-                                                type="number"
-                                                v-model="priceSliderValue[1]"
-                                                label="Maximum price"
-                                                required
-                                        />
-                                    </v-col>
-                                </v-row>
-                                <v-range-slider
-                                        @change="changeSlider(sliderValue)"
-                                        v-model="PRICE_SLIDER"
-                                        :max="sliderValue.maxRange"
-                                        :min="sliderValue.minRange"
-                                />
-                            </div>
-                        </article>
-                    </v-skeleton-loader>
+                    <!-- <v-skeleton-loader
+                             :loading="skeletonLoader.loading"
+                             :transition="skeletonLoader.transition"
+                             type="article"
+                     >-->
+                    <article class="products-sliders mt-10">
+                        <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
+                            <v-row>
+                                <v-col>
+                                    <v-text-field
+                                            @change="changeSlider(sliderValue)"
+                                            class="products-sliders_input"
+                                            type="number"
+                                            v-model="priceSliderValue[0]"
+                                            label="Minimum price"
+                                            required
+                                    />
+                                </v-col>
+                                <v-col>
+                                    <v-text-field
+                                            @change="changeSlider(sliderValue)"
+                                            class="products-sliders_input"
+                                            type="number"
+                                            v-model="priceSliderValue[1]"
+                                            label="Maximum price"
+                                            required
+                                    />
+                                </v-col>
+                            </v-row>
+                            <v-range-slider
+                                    @change="changeSlider(sliderValue)"
+                                    v-model="PRICE_SLIDER"
+                                    :max="sliderValue.maxRange"
+                                    :min="sliderValue.minRange"
+                            />
+                        </div>
+                    </article>
+                    <!--</v-skeleton-loader>-->
                 </aside>
                 <article class="products-list">
-                    <v-skeleton-loader
-                            :loading="skeletonLoader.loading"
-                            :transition="skeletonLoader.transition"
-                            type="text"
-                            max-width="300"
-                    >
-                        <p class="products-list_total font-weight-light">
-                            Total: {{PRODUCTS.total}} elements
-                        </p>
-                    </v-skeleton-loader>
+                    <!-- TODO QSC-331 BUG!-->
+                    <!-- <v-skeleton-loader
+                             :loading="skeletonLoader.loading"
+                             :transition="skeletonLoader.transition"
+                             type="text"
+                             max-width="300"
+                     >-->
+                    <p class="products-list_total font-weight-light">
+                        Total: {{PRODUCTS.total}} elements
+                    </p>
+                    <!--  </v-skeleton-loader>-->
                     <v-skeleton-loader
                             :loading="skeletonLoader.loading"
                             :transition="skeletonLoader.transition"
@@ -156,8 +150,10 @@
                              <v-icon right>mdi-close</v-icon>
                          </v-chip>-->
 
-                        <div v-for="(select, filterIndex) in filters.selected" :key=" filterIndex">
-                            <v-chip
+                        <div v-for="(select, filterIndex) in productDependencies.searchFilters" :key=" filterIndex">
+                            {{select}}
+
+                            <!-- <v-chip
                                     v-for="(value, selectIndex) in select.value"
                                     :key="selectIndex"
                                     class="mr-3"
@@ -172,7 +168,7 @@
                             >
                                 {{select.name}} : {{value}}
                                 <v-icon right>mdi-close</v-icon>
-                            </v-chip>
+                            </v-chip>-->
                         </div>
 
                         <!-- <v-chip
@@ -184,22 +180,22 @@
                             Reset
                          </v-chip>-->
                     </article>
-                    <v-skeleton-loader
-                            id="products-list_skeleton_loader"
-                            :loading="skeletonLoader.loading"
-                            :transition="skeletonLoader.transition"
-                            type="card"
-                            :style="skeletonLoader.style"
-                    >
-                        <v-row no-gutters class="products-list_cards">
-                            <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
-                                <BasicProductCard :item="product"/>
-                            </v-col>
-                        </v-row>
-                    </v-skeleton-loader>
+                    <!-- TODO QSC-331 BUG!-->
+                    <!-- <v-skeleton-loader
+                             :loading="skeletonLoader.loading"
+                             :transition="skeletonLoader.transition"
+                             type="card"
+                             :style="skeletonLoader.style"
+                     >-->
+                    <v-row no-gutters>
+                        <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
+                            <BasicProductCard :item="product"/>
+                        </v-col>
+                    </v-row>
+                    <!-- </v-skeleton-loader>-->
                     <v-pagination
                             v-if="!skeletonLoader.loading"
-                            id="products-list_pagination mt-6"
+                            class="products-list_pagination mt-6"
                             previous-aria-label="Previous"
                             @input="changePagination"
                             v-model="PRODUCTS.paging.currentPage"
@@ -218,7 +214,6 @@
     import BasicProductCard from "../../components/BasicProductCard";
     import ToolbarHeader from "../../components/ToolbarHeader";
     import {productsConstants} from '../../constants/productsConstants';
-
 
     const form = {
         query: ''
@@ -364,8 +359,6 @@
                 this.priceSliderValue = [...this.PRICE_SLIDER];
             },
             setSliderValues(id, sliderValues) {
-
-
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewSliderValue(id, sliderValues);
                     return;
@@ -376,8 +369,7 @@
                     return;
                 }
 
-
-                console.log('dependiencies', this.productDependencies);
+                this.addNewSliderValue(id, sliderValues);
             },
             addNewSliderValue(id, sliderValues) {
                 this.productDependencies.searchFilters.push({
@@ -386,7 +378,7 @@
                     "minValue": parseFloat(sliderValues[0]),
                     "maxValue": parseFloat(sliderValues[1])
                 });
-                console.log('this.productDependencies.searchFilters', this.productDependencies.searchFilters)
+                console.log('this.productDependencies.searchFilters', this.productDependencies.searchFilters);
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             checkIfSliderValueIsAlreadyExist(id, sliderValues) {
@@ -440,7 +432,7 @@
                     "values": [filterValue.value]
                 });
                 this.setSelectedFiltersValues(filterValue);
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+               this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             setSelectedFiltersValues(filterValue) {
                 if (this.filters.selected.length <= 0) {
