@@ -136,53 +136,59 @@
                                 label="Sortierung"
                         />
                     </v-skeleton-loader>
-                    <article class="products-list_filter_chips">
-                        <div v-for="(select, filterIndex) in productDependencies.searchFilters" :key=" filterIndex">
-                            <div v-if="select.filterType === 'range'">
-                                <v-chip
-                                        class="mr-3 mt-3"
-                                        color="teal darken-3"
-                                        text-color="white"
-                                        @click="deleteSelectedFiltersValues({
-                                                     id: select.id
-                                         })"
-                                >
-                                    {{select.id}}: {{select.minValue | price}} - {{select.maxValue | price}}
-                                    <v-icon right>mdi-close</v-icon>
-                                </v-chip>
-                            </div>
-                            <div v-else>
-                                <v-chip
+                    <article class="products-list_filter_chips"
+                             v-for="(select, filterIndex) in productDependencies.searchFilters"
+                             :key=" filterIndex">
+                        <div v-if="select.filterType === 'range'">
+                            <v-chip
+                                    class="mr-3 mt-3"
+                                    color="teal darken-3"
+                                    text-color="white"
+                                    @click="deleteSelectedFiltersValues({
+                                                    filterType: select.filterType,
+                                                    filterIndex: filterIndex,
+                                                    selectIndex: null,
+                                                     id: select.id,
 
-                                        v-for="(value, selectIndex) in select.values"
-                                        :key="selectIndex"
-                                        class="mr-3 mt-3"
-                                        color="teal darken-3"
-                                        text-color="white"
-                                        @click="deleteSelectedFiltersValues({
-                                                            filterIndex: filterIndex,
-                                                            selectIndex: selectIndex,
-                                                            id: select.id,
-                                                            value: value
-                                                        })"
-                                >
-                                    {{select.id}}: {{value}}
-                                    <v-icon right>
-                                        mdi-close
-                                    </v-icon>
-                                </v-chip>
-                            </div>
+                               })"
+                            >
+                                {{select.id}}: {{select.minValue | price}} - {{select.maxValue | price}}
+                                <v-icon right>mdi-close</v-icon>
+                            </v-chip>
                         </div>
+                        <div v-else>
+                            <v-chip
 
-                        <!-- <v-chip
-                                 class="mr-3"
-                                 color="red darken-4"
-                                 text-color="white"
-                                 @click="resetProductDependencies"
-                         >
-                            Reset
-                         </v-chip>-->
+                                    v-for="(value, valueIndex) in select.values"
+                                    :key="valueIndex"
+                                    class="mr-3 mt-3"
+                                    color="teal darken-3"
+                                    text-color="white"
+                                    @click="deleteSelectedFiltersValues({
+                                                             filterType: null,
+                                                            filterIndex: filterIndex,
+                                                            selectedValueIndex: valueIndex,
+                                                            id: select.id,
+
+                                                        })"
+                            >
+                                {{select.id}}: {{value}}
+                                <v-icon right>
+                                    mdi-close
+                                </v-icon>
+                            </v-chip>
+                        </div>
                     </article>
+
+                    <!-- <v-chip
+                             class="mr-3"
+                             color="red darken-4"
+                             text-color="white"
+                             @click="resetProductDependencies"
+                     >
+                        Reset
+                     </v-chip>-->
+
                     <!-- TODO QSC-331 BUG!-->
                     <!-- <v-skeleton-loader
                              :loading="skeletonLoader.loading"
@@ -291,9 +297,6 @@
                 panel: [],
                 items: null
             },
-            filters: {
-                selected: []
-            },
             productDependencies: {
                 "page": 1,
                 "q": "*",
@@ -365,7 +368,7 @@
                 }
 
                 if (this.checkIfSliderValueIsAlreadyExist(id, sliderValues)) {
-                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
 
@@ -379,7 +382,7 @@
                     "maxValue": parseFloat(sliderValues[1])
                 });
                 console.log('this.productDependencies.searchFilters', this.productDependencies.searchFilters);
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             checkIfSliderValueIsAlreadyExist(id, sliderValues) {
                 let filterAvailableStatus = false;
@@ -403,8 +406,7 @@
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                    //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
-                    this.setSelectedFiltersValues(filterValue);
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
 
@@ -431,43 +433,30 @@
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
-                this.setSelectedFiltersValues(filterValue);
-                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
-            setSelectedFiltersValues(filterValue) {
-                if (this.filters.selected.length <= 0) {
-                    this.addNewSelectedFiltersValues(filterValue);
-                    return;
-                }
-                if (!this.checkIfSelectedFiltersValuesIsAlreadyExist(filterValue)) {
-                    this.addNewSelectedFiltersValues(filterValue);
-                }
-            },
-            addNewSelectedFiltersValues(filterValue) {
-                this.filters.selected.push({
-                    id: filterValue.id,
-                    name: filterValue.name,
-                    value: [...filterValue.selected]
-                });
-            },
-            checkIfSelectedFiltersValuesIsAlreadyExist(filterValue) {
-                let filterAvailableStatus = false;
-
-                this.filters.selected
-                    .map((val, index) => {
-                        if (val.id === filterValue.id) {
-                            this.filters.selected[index]['value'] = [...filterValue.selected];
-                            filterAvailableStatus = true;
-                        }
-                    });
-
-                return filterAvailableStatus;
-            },
-            async deleteSelectedFiltersValues({filterIndex, selectIndex, id, value}) {
+            deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id}) {
                 try {
-                    await this.deleteSelectedFiltersValuesFromProductDependencies(id, value);
-                    this.filters.selected[filterIndex]['value'].splice(selectIndex, 1);
+
+                    if (filterType && filterType === 'range') {
+                        this.productDependencies.searchFilters.splice(filterIndex, 1);
+                        return;
+                    }
+
+                    this.productDependencies.searchFilters
+                        .map((filter, index) => {
+                            if (filter.id === id) {
+                                const searchFiltersArrayLength = this.productDependencies.searchFilters[index]['values'].length;
+                                if (searchFiltersArrayLength <= 1) {
+                                    this.productDependencies.searchFilters.splice(filterIndex, 1);
+                                } else {
+                                    this.productDependencies.searchFilters[index]['values'].splice(selectValueIndex, 1)
+                                }
+                            }
+                        });
+
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+
                 } catch (e) {
                     this.$store
                         .dispatch('SHOW_NOTIFICATION',
@@ -478,6 +467,7 @@
                             });
                     throw new Error(e);
                 }
+                console.log(this.productDependencies.searchFilters);
             },
             deleteSelectedFiltersValuesFromProductDependencies(id, value) {
                 this.productDependencies.searchFilters
