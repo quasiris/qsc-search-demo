@@ -374,7 +374,7 @@
                 }
 
                 if (this.checkIfSliderValueIsAlreadyExist(id, sliderValues)) {
-                    //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
 
@@ -389,7 +389,7 @@
                     "maxValue": parseFloat(sliderValues[1])
                 });
                 console.log('this.productDependencies.searchFilters', this.productDependencies.searchFilters);
-                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             checkIfSliderValueIsAlreadyExist(id, sliderValues) {
                 let filterAvailableStatus = false;
@@ -487,7 +487,7 @@
             resetProductDependencies() {
                 const defaultProductDependencies = {
                     "page": 1,
-                    "q": this.form.query,
+                    "q": this.form.query || '*',
                     "searchFilters": [],
                     "sort": {
                         "sort": ""
@@ -495,11 +495,12 @@
                     "sliders": []
                 };
 
-                console.log('product  dependiec', this.productDependencies);
-
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', defaultProductDependencies)
                     .then(() => {
-                        this.productDependencies = {...defaultProductDependencies};
+                        this.productDependencies = {
+                            ...defaultProductDependencies
+                        };
+                        this.setSlidersInFirstTouch();
                     })
 
 
