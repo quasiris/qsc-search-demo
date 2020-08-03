@@ -50,7 +50,7 @@
                 set(value) {
                     /*this.priceSliderValue = value;*/
                     console.log('valueee', value)
-                    this.filterSelected.push(value);
+                    this.filterSelected = value;
                 }
             },
 

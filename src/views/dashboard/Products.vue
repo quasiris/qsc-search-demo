@@ -60,19 +60,35 @@
                                         </ul>
                                     </v-expansion-panel-content>
                                     <v-expansion-panel-content v-else>
-                                        <FilterCheckbox
+                                        <form v-for="(filterValue, i) in filter.values"
+                                              :key="i">
+                                            <input type="checkbox"
+                                                   :value="filterValue.value"
+                                                   @change="handleFilterCheckboxChange(filterValue, filter)"
+                                                   v-model="filter.selected"/>
+                                            <label>
+                                                {{filterValue.value}} ({{filterValue.count}})
+                                            </label>
+                                        </form>
+                                      <!--  <pre>
+                                            {{filter}}
+                                        </pre>-->
+                                        <!--<FilterCheckbox
                                                 @filterCheckboxChange="setFilterValues"
                                                 :key="i"
                                                 :filter-id="filter.id"
                                                 :filter-name="filter.name"
                                                 :filter-values="filter.values"
-                                                :filter-selected="filterSelected"
-                                        />
+                                                :filter-selected="filter.selected"
+                                        />-->
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
                             </v-expansion-panels>
                         </article>
                     </v-skeleton-loader>
+                    <!-- <pre>
+                         {{PRODUCTS.facets}}
+                     </pre>-->
                     <v-skeleton-loader
                             :loading="skeletonLoader.loading"
                             :transition="skeletonLoader.transition"
@@ -287,7 +303,7 @@
 </template>
 <script>
     import {mapGetters} from "vuex";
-    import FilterCheckbox from "../../components/FilterCheckbox";
+    /*import FilterCheckbox from "../../components/FilterCheckbox";*/
     import SearchButton from "../../components/SearchButton";
     import BasicProductCard from "../../components/BasicProductCard";
     import ToolbarHeader from "../../components/ToolbarHeader";
@@ -303,7 +319,7 @@
             BasicProductCard,
             ToolbarHeader,
             SearchButton,
-            FilterCheckbox
+            /*FilterCheckbox*/
         },
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS', {
@@ -393,6 +409,7 @@
             }
         },
         methods: {
+
             searchQueryFormSubmit() {
                 if (!this.form.query) {
                     return;
@@ -473,14 +490,26 @@
                 this.productDependencies.searchFilters[index]['minValue'] = sliderValues[0];
                 this.productDependencies.searchFilters[index]['maxValue'] = sliderValues[1];
             },
+            handleFilterCheckboxChange(filterValue, filter){
+                const newFilter = {
+                    name: filter.name,
+                    id: filter.id,
+                    value: filterValue.value,
+                    selected: filter.selected
+                };
+                console.log('new filter', newFilter);
+                this.setFilterValues(newFilter);
+            },
             setFilterValues(filterValue) {
+                console.log('filter valueee', filterValue);
+
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
 
@@ -508,7 +537,7 @@
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
-                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id}) {
                 try {
@@ -530,7 +559,7 @@
                             }
                         });
 
-                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                   // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
 
                 } catch (e) {
                     this.$store
