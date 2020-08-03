@@ -129,17 +129,10 @@
                     </v-skeleton-loader>
                 </aside>
                 <article class="products-list">
-                    <!-- TODO QSC-331 BUG!-->
-                    <!-- <v-skeleton-loader
-                             :loading="skeletonLoader.loading"
-                             :transition="skeletonLoader.transition"
-                             type="text"
-                             max-width="300"
-                     >-->
-                    <p class="products-list_total font-weight-light">
+                    <p class="products-list_total font-weight-light"
+                       v-if="!skeletonLoader.loading">
                         Total: {{PRODUCTS.total}} elements
                     </p>
-                    <!--  </v-skeleton-loader>-->
                     <v-skeleton-loader
                             :loading="skeletonLoader.loading"
                             :transition="skeletonLoader.transition"
@@ -218,62 +211,6 @@
                                 </v-chip>
                             </li>
                         </ul>
-                        <!-- <div v-for="(select, filterIndex) in productDependencies.searchFilters"
-                              :key=" filterIndex">
-                             <div v-if="select.filterType === 'range'">
-                                 <v-chip
-                                         class="mr-3 mt-3"
-                                         color="teal darken-3"
-                                         text-color="white"
-                                         @click="deleteSelectedFiltersValues({
-                                                     filterType: select.filterType,
-                                                     filterIndex: filterIndex,
-                                                     selectIndex: null,
-                                                      id: select.id,
-
-                                })"
-                                 >
-                                     {{select.name}}: {{select.minValue | price}} - {{select.maxValue | price}}
-                                     <v-icon right>
-                                         mdi-close
-                                     </v-icon>
-                                 </v-chip>
-                             </div>
-                             <div v-else>
-                                 <v-chip
-                                         v-for="(value, valueIndex) in select.values"
-                                         :key="valueIndex"
-                                         class="mr-3 mt-3"
-                                         color="teal darken-3"
-                                         text-color="white"
-                                         @click="deleteSelectedFiltersValues({
-                                                              filterType: null,
-                                                             filterIndex: filterIndex,
-                                                             selectedValueIndex: valueIndex,
-                                                             id: select.id,
-
-                                                         })"
-                                 >
-                                     {{select.name}}: {{value}}
-                                     <v-icon right>
-                                         mdi-close
-                                     </v-icon>
-                                 </v-chip>
-                             </div>
-                         </div>
-                         <div v-if="productDependencies.searchFilters.length >= 1">
-                             <v-chip
-                                     class="mr-3 mt-3"
-                                     color="teal"
-                                     text-color="white"
-                                     @click="resetProductDependencies"
-                             >
-                                 Reset All Filters
-                                 <v-icon right>
-                                     mdi-close
-                                 </v-icon>
-                             </v-chip>
-                         </div>-->
                     </article>
                     <!-- TODO QSC-331 BUG!-->
                     <v-skeleton-loader
@@ -322,6 +259,7 @@
             SearchButton,
             /*FilterCheckbox*/
         },
+
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS', {
                 query: '*',
@@ -509,7 +447,7 @@
                 }
 
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
-                    //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
 
@@ -537,7 +475,7 @@
                     "id": filterValue.id,
                     "values": [filterValue.value]
                 });
-                //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id, value}) {
                 try {
@@ -559,12 +497,14 @@
                         });
 
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+
+                    //TODO finish this deleting QSC-333
                     this.PRODUCTS.facets.map((val, i) => {
                         if (val.id === id) {
                             const index = val['selected'].indexOf(value);
                             this.PRODUCTS.facets[i]['selected'].splice(index, 1);
                         }
-                    })
+                    });
 
 
                 } catch (e) {
