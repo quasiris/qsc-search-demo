@@ -66,50 +66,51 @@
                                                 :filter-id="filter.id"
                                                 :filter-name="filter.name"
                                                 :filter-values="filter.values"
+                                                :filter-selected="filterSelected"
                                         />
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
                             </v-expansion-panels>
                         </article>
                     </v-skeleton-loader>
-                    <!-- <v-skeleton-loader
-                             :loading="skeletonLoader.loading"
-                             :transition="skeletonLoader.transition"
-                             type="article"
-                     >-->
-                    <article class="products-sliders mt-10">
-                        <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                            <v-row>
-                                <v-col>
-                                    <v-text-field
-                                            @change="changeSlider(sliderValue)"
-                                            class="products-sliders_input"
-                                            type="number"
-                                            v-model="priceSliderValue[0]"
-                                            label="Minimum price"
-                                            required
-                                    />
-                                </v-col>
-                                <v-col>
-                                    <v-text-field
-                                            @change="changeSlider(sliderValue)"
-                                            class="products-sliders_input"
-                                            type="number"
-                                            v-model="priceSliderValue[1]"
-                                            label="Maximum price"
-                                            required
-                                    />
-                                </v-col>
-                            </v-row>
-                            <v-range-slider
-                                    @change="changeSlider(sliderValue)"
-                                    v-model="PRICE_SLIDER"
-                                    :max="sliderValue.maxRange"
-                                    :min="sliderValue.minRange"
-                            />
-                        </div>
-                    </article>
-                    <!--</v-skeleton-loader>-->
+                    <v-skeleton-loader
+                            :loading="skeletonLoader.loading"
+                            :transition="skeletonLoader.transition"
+                            type="article"
+                    >
+                        <article class="products-sliders mt-10">
+                            <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
+                                <v-row>
+                                    <v-col>
+                                        <v-text-field
+                                                @change="changeSlider(sliderValue)"
+                                                class="products-sliders_input"
+                                                type="number"
+                                                v-model="priceSliderValue[0]"
+                                                label="Minimum price"
+                                                required
+                                        />
+                                    </v-col>
+                                    <v-col>
+                                        <v-text-field
+                                                @change="changeSlider(sliderValue)"
+                                                class="products-sliders_input"
+                                                type="number"
+                                                v-model="priceSliderValue[1]"
+                                                label="Maximum price"
+                                                required
+                                        />
+                                    </v-col>
+                                </v-row>
+                                <v-range-slider
+                                        @change="changeSlider(sliderValue)"
+                                        v-model="PRICE_SLIDER"
+                                        :max="sliderValue.maxRange"
+                                        :min="sliderValue.minRange"
+                                />
+                            </div>
+                        </article>
+                    </v-skeleton-loader>
                 </aside>
                 <article class="products-list">
                     <!-- TODO QSC-331 BUG!-->
@@ -138,76 +139,138 @@
                         />
                     </v-skeleton-loader>
                     <article class="products-list_filter_chips w-100">
-                        <div v-for="(select, filterIndex) in productDependencies.searchFilters"
-                             :key=" filterIndex">
-                            <div v-if="select.filterType === 'range'">
-                                <v-chip
-                                        class="mr-3 mt-3"
-                                        color="teal darken-3"
-                                        text-color="white"
-                                        @click="deleteSelectedFiltersValues({
+                        <ul>
+                            <li v-for="(select, filterIndex) in productDependencies.searchFilters" :key=" filterIndex">
+                                <div v-if="select.filterType === 'range'">
+                                    <v-chip
+                                            class="mr-3 mt-3"
+                                            color="teal darken-3"
+                                            text-color="white"
+                                            @click="deleteSelectedFiltersValues({
                                                     filterType: select.filterType,
                                                     filterIndex: filterIndex,
                                                     selectIndex: null,
                                                      id: select.id,
 
                                })"
-                                >
-                                    {{select.name}}: {{select.minValue | price}} - {{select.maxValue | price}}
-                                    <v-icon right>
-                                        mdi-close
-                                    </v-icon>
-                                </v-chip>
-                            </div>
-                            <div v-else>
-                                <v-chip
-                                        v-for="(value, valueIndex) in select.values"
-                                        :key="valueIndex"
-                                        class="mr-3 mt-3"
-                                        color="teal darken-3"
-                                        text-color="white"
-                                        @click="deleteSelectedFiltersValues({
+                                    >
+                                        {{select.name}}: {{select.minValue | price}} - {{select.maxValue | price}}
+                                        <v-icon right>
+                                            mdi-close
+                                        </v-icon>
+                                    </v-chip>
+                                </div>
+                                <div v-else>
+                                    <ul>
+                                        <li v-for="(value, valueIndex) in select.values" :key="valueIndex">
+                                            <v-chip
+
+                                                    :key="valueIndex"
+                                                    class="mr-3 mt-3"
+                                                    color="teal darken-3"
+                                                    text-color="white"
+                                                    @click="deleteSelectedFiltersValues({
                                                              filterType: null,
                                                             filterIndex: filterIndex,
                                                             selectedValueIndex: valueIndex,
                                                             id: select.id,
 
                                                         })"
+                                            >
+                                                {{select.name}}: {{value}}
+                                                <v-icon right>
+                                                    mdi-close
+                                                </v-icon>
+                                            </v-chip>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </li>
+                            <li v-if="productDependencies.searchFilters.length >= 1">
+                                <v-chip
+                                        class="mr-3 mt-3"
+                                        color="teal"
+                                        text-color="white"
+                                        @click="resetProductDependencies"
                                 >
-                                    {{select.name}}: {{value}}
+                                    Reset All Filters
                                     <v-icon right>
                                         mdi-close
                                     </v-icon>
                                 </v-chip>
-                            </div>
-                        </div>
-                        <div v-if="productDependencies.searchFilters.length >= 1">
-                            <v-chip
-                                    class="mr-3 mt-3"
-                                    color="teal"
-                                    text-color="white"
-                                    @click="resetProductDependencies"
-                            >
-                                Reset All Filters
-                                <v-icon right>
-                                    mdi-close
-                                </v-icon>
-                            </v-chip>
-                        </div>
+                            </li>
+                        </ul>
+                        <!-- <div v-for="(select, filterIndex) in productDependencies.searchFilters"
+                              :key=" filterIndex">
+                             <div v-if="select.filterType === 'range'">
+                                 <v-chip
+                                         class="mr-3 mt-3"
+                                         color="teal darken-3"
+                                         text-color="white"
+                                         @click="deleteSelectedFiltersValues({
+                                                     filterType: select.filterType,
+                                                     filterIndex: filterIndex,
+                                                     selectIndex: null,
+                                                      id: select.id,
+
+                                })"
+                                 >
+                                     {{select.name}}: {{select.minValue | price}} - {{select.maxValue | price}}
+                                     <v-icon right>
+                                         mdi-close
+                                     </v-icon>
+                                 </v-chip>
+                             </div>
+                             <div v-else>
+                                 <v-chip
+                                         v-for="(value, valueIndex) in select.values"
+                                         :key="valueIndex"
+                                         class="mr-3 mt-3"
+                                         color="teal darken-3"
+                                         text-color="white"
+                                         @click="deleteSelectedFiltersValues({
+                                                              filterType: null,
+                                                             filterIndex: filterIndex,
+                                                             selectedValueIndex: valueIndex,
+                                                             id: select.id,
+
+                                                         })"
+                                 >
+                                     {{select.name}}: {{value}}
+                                     <v-icon right>
+                                         mdi-close
+                                     </v-icon>
+                                 </v-chip>
+                             </div>
+                         </div>
+                         <div v-if="productDependencies.searchFilters.length >= 1">
+                             <v-chip
+                                     class="mr-3 mt-3"
+                                     color="teal"
+                                     text-color="white"
+                                     @click="resetProductDependencies"
+                             >
+                                 Reset All Filters
+                                 <v-icon right>
+                                     mdi-close
+                                 </v-icon>
+                             </v-chip>
+                         </div>-->
                     </article>
                     <!-- TODO QSC-331 BUG!-->
-                    <!-- <v-skeleton-loader
-                             :loading="skeletonLoader.loading"
-                             :transition="skeletonLoader.transition"
-                             type="card"
-                             :style="skeletonLoader.style"
-                     >-->
-                    <v-row no-gutters>
-                        <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
-                            <BasicProductCard :item="product"/>
-                        </v-col>
-                    </v-row>
-                    <!-- </v-skeleton-loader>-->
+                    <v-skeleton-loader
+                            :loading="skeletonLoader.loading"
+                            :transition="skeletonLoader.transition"
+                            type="card"
+                            :style="skeletonLoader.style"
+                    >
+                        <v-row no-gutters>
+                            <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
+                                <BasicProductCard :item="product"/>
+                            </v-col>
+                        </v-row>
+                    </v-skeleton-loader>
                     <v-pagination
                             v-if="!skeletonLoader.loading"
                             class="products-list_pagination mt-6"
@@ -312,6 +375,7 @@
                 },
                 "sliders": []
             },
+            filterSelected: [],
             skeletonLoader: {
                 loading: true,
                 transition: 'scale-transition',
@@ -323,6 +387,9 @@
         watch: {
             'autosuggest.search': function (val) {
                 val && val && this.getSuggestProducts(val)
+            },
+            'filterSelected': function (val) {
+                console.log('valueeeeee', val);
             }
         },
         methods: {
@@ -512,7 +579,11 @@
     }
 </script>
 
-<style scoped>
+<style scoped type="scss">
+    ul li {
+        display: inline;
+    }
+
     .products-card {
         min-height: 90vh;
     }

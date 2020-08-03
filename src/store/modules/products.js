@@ -21,21 +21,11 @@ export default {
     },
     mutations: {
         SET_PRODUCTS(state, payload) {
+            for (let i = 0; i < payload['facets'].length; i++) {
+                payload['facets'][i]['selected'] = [];
+            }
             state.products = payload;
         },
-        /* SET_PRODUCTS_FILTERS(state, payload) {
-             const sortFilters = [];
-
-             payload.map((filter, index) => {
-                 if (filter['id'] === 'category') {
-                     sortFilters.unshift(payload[index]);
-                     payload.splice(index, 1);
-                     sortFilters.push(...payload);
-                 }
-             });
-
-             state.filters = sortFilters;
-         },*/
         SET_SUGGEST_PRODUCTS(state, payload) {
             state.suggestProducts = payload;
         },

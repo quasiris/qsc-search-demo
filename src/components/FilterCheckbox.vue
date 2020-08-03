@@ -7,7 +7,7 @@
                    :id="`filter-checkbox_input_${filter.value.toLowerCase()}`"
                    @change="handleFilterCheckboxChange(filter.value)"
                    :value="filter.value"
-                   v-model="selected"/>
+                   v-model="filterSelectedValues"/>
             <label
                     :for="`filter-checkbox_input_${filter.value.toLowerCase()}`"
                     :class="`filter-checkbox_label_${filterId.toLowerCase()}`">
@@ -28,8 +28,12 @@
                 type: String,
                 required: true
             },
-            filterName:{
+            filterName: {
                 type: String,
+                required: true
+            },
+            filterSelected: {
+                type: Array,
                 required: true
             }
         },
@@ -38,16 +42,28 @@
                 selected: []
             }
         ),
-        computed: {},
+        computed: {
+            filterSelectedValues: {
+                get() {
+                    return this.filterSelected
+                },
+                set(value) {
+                    /*this.priceSliderValue = value;*/
+                    console.log('valueee', value)
+                    this.filterSelected.push(value);
+                }
+            },
+
+        },
         watch: {},
         methods: {
-            handleFilterCheckboxChange(value) {
-                this.$emit('filterCheckboxChange', {
-                    name: this.filterName,
-                    id: this.filterId,
-                    value: value,
-                    selected: this.selected
-                });
+            handleFilterCheckboxChange() {
+                /* this.$emit('filterCheckboxChange', {
+                     name: this.filterName,
+                     id: this.filterId,
+                     value: value,
+                     selected: this.selected
+                 });*/
             },
         }
     }
