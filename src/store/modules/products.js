@@ -21,9 +21,13 @@ export default {
     },
     mutations: {
         SET_PRODUCTS(state, payload) {
+
             for (let i = 0; i < payload['facets'].length; i++) {
                 payload['facets'][i]['selected'] = [];
             }
+
+            console.log('payload', payload);
+
             state.products = payload;
         },
         SET_SUGGEST_PRODUCTS(state, payload) {

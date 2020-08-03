@@ -70,9 +70,9 @@
                                                 {{filterValue.value}} ({{filterValue.count}})
                                             </label>
                                         </form>
-                                      <!--  <pre>
-                                            {{filter}}
-                                        </pre>-->
+                                        <!--  <pre>
+                                              {{filter}}
+                                          </pre>-->
                                         <!--<FilterCheckbox
                                                 @filterCheckboxChange="setFilterValues"
                                                 :key="i"
@@ -167,6 +167,7 @@
                                                     filterIndex: filterIndex,
                                                     selectIndex: null,
                                                      id: select.id,
+                                                     value: null,
 
                                })"
                                     >
@@ -190,7 +191,7 @@
                                                             filterIndex: filterIndex,
                                                             selectedValueIndex: valueIndex,
                                                             id: select.id,
-
+                                                             value: value
                                                         })"
                                             >
                                                 {{select.name}}: {{value}}
@@ -409,7 +410,6 @@
             }
         },
         methods: {
-
             searchQueryFormSubmit() {
                 if (!this.form.query) {
                     return;
@@ -490,7 +490,7 @@
                 this.productDependencies.searchFilters[index]['minValue'] = sliderValues[0];
                 this.productDependencies.searchFilters[index]['maxValue'] = sliderValues[1];
             },
-            handleFilterCheckboxChange(filterValue, filter){
+            handleFilterCheckboxChange(filterValue, filter) {
                 const newFilter = {
                     name: filter.name,
                     id: filter.id,
@@ -539,9 +539,8 @@
                 });
                 //this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
-            deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id}) {
+            deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id, value}) {
                 try {
-
                     if (filterType && filterType === 'range') {
                         this.productDependencies.searchFilters.splice(filterIndex, 1);
                         return;
@@ -559,7 +558,14 @@
                             }
                         });
 
-                   // this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+                    this.PRODUCTS.facets.map((val, i) => {
+                        if (val.id === id) {
+                            const index = val['selected'].indexOf(value);
+                            this.PRODUCTS.facets[i]['selected'].splice(index, 1);
+                        }
+                    })
+
 
                 } catch (e) {
                     this.$store
