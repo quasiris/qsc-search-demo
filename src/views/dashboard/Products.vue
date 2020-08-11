@@ -79,43 +79,43 @@
                             </v-expansion-panels>
                         </article>
                     </v-skeleton-loader>
-                   <!-- <v-skeleton-loader
-                            :loading="skeletonLoader.loading"
-                            :transition="skeletonLoader.transition"
-                            type="article"
-                    >-->
-                        <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                            <v-row>
-                                <v-col>
-                                    <v-text-field
-                                            @change="changeSlider(sliderValue)"
-                                            class="products-sliders_input"
-                                            type="number"
-                                            v-model="priceSliderValue[0]"
-                                            label="Minimum price"
-                                            required
-                                    />
-                                </v-col>
-                                <v-col>
-                                    <v-text-field
-                                            @change="changeSlider(sliderValue)"
-                                            class="products-sliders_input"
-                                            type="number"
-                                            v-model="priceSliderValue[1]"
-                                            label="Maximum price"
-                                            required
-                                    />
-                                </v-col>
-                            </v-row>
-                            <v-range-slider
-                                    @change="changeSlider(sliderValue)"
-                                    v-model="PRICE_SLIDER"
-                                    :max="sliderValue.maxRange"
-                                    :min="sliderValue.minRange"
-                            />
-                        </div>
-                        <!--</article>-->
-                   <!-- </v-skeleton-loader>-->
+                    <!-- <v-skeleton-loader
+                             :loading="skeletonLoader.loading"
+                             :transition="skeletonLoader.transition"
+                             type="article"
+                     >-->
+                    <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
+                        <v-row>
+                            <v-col>
+                                <v-text-field
+                                        @change="changeSlider(sliderValue)"
+                                        class="products-sliders_input"
+                                        type="number"
+                                        v-model="priceSliderValue[0]"
+                                        label="Minimum price"
+                                        required
+                                />
+                            </v-col>
+                            <v-col>
+                                <v-text-field
+                                        @change="changeSlider(sliderValue)"
+                                        class="products-sliders_input"
+                                        type="number"
+                                        v-model="priceSliderValue[1]"
+                                        label="Maximum price"
+                                        required
+                                />
+                            </v-col>
+                        </v-row>
+                        <v-range-slider
+                                @change="changeSlider(sliderValue)"
+                                v-model="PRICE_SLIDER"
+                                :max="sliderValue.maxRange"
+                                :min="sliderValue.minRange"
+                        />
+                    </div>
+                    <!--</article>-->
+                    <!-- </v-skeleton-loader>-->
                 </aside>
                 <article class="products-list">
                     <p class="products-list_total font-weight-light"
@@ -138,80 +138,68 @@
                     </v-skeleton-loader>
                     <article class="products-list_filter_chips">
                         <ul>
-                            <li v-for="(select, filterIndex) in productDependencies.searchFilters" :key=" filterIndex">
-                                <div v-if="select.filterType === 'range'">
-                                    <v-chip
-                                            class="mr-3 mt-3"
-                                            color="teal darken-3"
-                                            text-color="white"
-                                            @click="deleteSelectedFiltersValues({
+                            <template v-for="(select, filterIndex) in productDependencies.searchFilters">
+                                <li :key="filterIndex">
+                                    <ul v-if="select.filterType === 'range'" style="display: inline-block">
+                                        <template>
+                                            <v-chip
+                                                    class="mt-3"
+                                                    color="teal darken-3"
+                                                    text-color="white"
+                                                    @click="deleteSelectedFiltersValues({
                                                     filterType: select.filterType,
                                                     filterIndex: filterIndex,
                                                     selectIndex: null,
                                                      id: select.id,
                                                      value: null,
-
-                               })"
-                                    >
-                                        {{select.name}}: {{select.minValue | price}} - {{select.maxValue | price}}
-                                        <v-icon right>
-                                            mdi-close
-                                        </v-icon>
-                                    </v-chip>
-                                </div>
-                                <div v-else>
-                                    <ul>
-                                        <li v-for="(value, valueIndex) in select.values" :key="valueIndex">
-                                            <v-chip
-
-                                                    :key="valueIndex"
-                                                    class="mr-3 mt-3"
-                                                    color="teal darken-3"
-                                                    text-color="white"
-                                                    @click="deleteSelectedFiltersValues({
+                                                })"
+                                            >
+                                                {{select.name}}: {{select.minValue | price}} - {{select.maxValue |
+                                                price}}
+                                                <v-icon right>
+                                                    mdi-close
+                                                </v-icon>
+                                            </v-chip>
+                                        </template>
+                                    </ul>
+                                    <ul v-else style="display: inline-block">
+                                        <template v-for="(value, valueIndex) in select.values">
+                                            <li :key="valueIndex">
+                                                <v-chip :key="valueIndex"
+                                                        class="mt-3"
+                                                        color="teal darken-3"
+                                                        text-color="white"
+                                                        @click="deleteSelectedFiltersValues({
                                                              filterType: null,
                                                             filterIndex: filterIndex,
                                                             selectedValueIndex: valueIndex,
                                                             id: select.id,
                                                              value: value
                                                         })"
-                                            >
-                                                {{select.name}}: {{value}}
-                                                <v-icon right>
-                                                    mdi-close
-                                                </v-icon>
-                                            </v-chip>
-                                        </li>
+                                                >
+                                                    {{select.name}}: {{value}}
+                                                    <v-icon right>
+                                                        mdi-close
+                                                    </v-icon>
+                                                </v-chip>
+                                            </li>
+                                        </template>
                                     </ul>
-
-                                </div>
-                            </li>
-                            <li v-if="productDependencies.searchFilters.length >= 1">
-                                <v-chip
-                                        class="mr-3 mt-3"
-                                        color="teal"
-                                        text-color="white"
-                                        @click="resetProductDependencies"
-                                >
-                                    Reset All Filters
-                                    <v-icon right>
-                                        mdi-close
-                                    </v-icon>
-                                </v-chip>
-                            </li>
+                                </li>
+                            </template>
                         </ul>
                     </article>
                     <article>
                         <!-- TODO QSC-331 BUG!-->
-                       <!-- <v-skeleton-loader
-                                :loading="skeletonLoader.loading"
-                                type="text"
-                        >-->
-                            <v-row no-gutters>
-                                <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
-                                    <BasicProductCard :item="product"/>
-                                </v-col>
-                            </v-row>
+                        <!-- <v-skeleton-loader
+                                 :loading="skeletonLoader.loading"
+                                 type="text"
+                         >-->
+                        <v-row no-gutters>
+                            <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
+                                <BasicProductCard :item="product"/>
+                            </v-col>
+                        </v-row>
                         <!--</v-skeleton-loader>-->
                     </article>
                     <v-pagination
@@ -241,7 +229,6 @@
     const form = {
         query: ''
     };
-
     export default {
         name: "Products",
         components: {
@@ -250,7 +237,6 @@
             SearchButton,
             /*  FilterCheckbox*/
         },
-
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS', {
                 query: '*',
@@ -262,7 +248,6 @@
                     this.resetSkeletonStyle();
                     this.skeletonLoader.loading = false;
                 });
-
         },
         computed: {
             ...mapGetters([
@@ -279,7 +264,6 @@
             },
             categoryTreeItems() {
                 const facets = {...this.$store.state.products.products.facets[4]};
-
                 const treeViewObject = [];
                 treeViewObject.push({
                     children: facets['values'].map((val) => {
@@ -291,8 +275,6 @@
                 });
                 return treeViewObject;
             }
-
-
         },
         data: () => ({
             form: Object.assign({}, form),
@@ -354,7 +336,6 @@
                 if (!query) {
                     return;
                 }
-
                 this.autosuggest.loading = true;
                 this.$store.dispatch('GET_SUGGESTS_PRODUCTS', {
                     query: query
@@ -385,12 +366,10 @@
                     this.addNewSliderValue(id, name, sliderValues);
                     return;
                 }
-
                 if (this.checkIfSliderValueIsAlreadyExist(id, sliderValues)) {
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
-
                 this.addNewSliderValue(id, name, sliderValues);
             },
             addNewSliderValue(id, name, sliderValues) {
@@ -430,19 +409,15 @@
             },
             setFilterValues(filterValue) {
                 console.log('filter valueee', filterValue);
-
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
                 }
-
                 if (this.checkIfFilterValueIsAlreadyExist(filterValue)) {
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
-
                 this.addNewFilterValue(filterValue);
-
             },
             checkIfFilterValueIsAlreadyExist(filterValue) {
                 let filterAvailableStatus = false;
@@ -453,7 +428,6 @@
                             filterAvailableStatus = true;
                         }
                     });
-
                 return filterAvailableStatus;
             },
             setFilterValueIfIsAlreadyExist(index, filterValue) {
@@ -473,7 +447,6 @@
                         this.productDependencies.searchFilters.splice(filterIndex, 1);
                         return;
                     }
-
                     this.productDependencies.searchFilters
                         .map((filter, index) => {
                             if (filter.id === id) {
@@ -485,9 +458,7 @@
                                 }
                             }
                         });
-
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
-
                     //TODO finish this deleting QSC-333
                     this.PRODUCTS.facets.map((val, i) => {
                         if (val.id === id) {
@@ -495,8 +466,6 @@
                             this.PRODUCTS.facets[i]['selected'].splice(index, 1);
                         }
                     });
-
-
                 } catch (e) {
                     this.$store
                         .dispatch('SHOW_NOTIFICATION',
@@ -526,7 +495,6 @@
                     },
                     "sliders": []
                 };
-
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', defaultProductDependencies)
                     .then(() => {
                         this.productDependencies = {
@@ -534,8 +502,6 @@
                         };
                         this.setSlidersInFirstTouch();
                     })
-
-
             },
             resetSkeletonStyle() {
                 this.skeletonLoader.style = '';
@@ -556,6 +522,7 @@
     .products-list_sorting {
         width: 300px;
     }
+
     .filter-checkbox input {
         margin-right: 15px;
     }
@@ -577,5 +544,4 @@
             padding-right: 0;
         }
     }
-
 </style>
