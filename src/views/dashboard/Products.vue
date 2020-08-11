@@ -69,11 +69,10 @@
                                             <label>
                                                 {{filterValue.value}} ({{filterValue.count}})
                                             </label>
+
                                         </form>
-                                        <!--  <pre>
-                                              {{filter}}
-                                          </pre>-->
-                                        <!--<FilterCheckbox
+<!--
+                                        <FilterCheckbox
                                                 @filterCheckboxChange="setFilterValues"
                                                 :key="i"
                                                 :filter-id="filter.id"
@@ -94,38 +93,41 @@
                             :transition="skeletonLoader.transition"
                             type="article"
                     >
-                        <article class="products-sliders mt-10">
-                            <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                                <v-row>
-                                    <v-col>
-                                        <v-text-field
-                                                @change="changeSlider(sliderValue)"
-                                                class="products-sliders_input"
-                                                type="number"
-                                                v-model="priceSliderValue[0]"
-                                                label="Minimum price"
-                                                required
-                                        />
-                                    </v-col>
-                                    <v-col>
-                                        <v-text-field
-                                                @change="changeSlider(sliderValue)"
-                                                class="products-sliders_input"
-                                                type="number"
-                                                v-model="priceSliderValue[1]"
-                                                label="Maximum price"
-                                                required
-                                        />
-                                    </v-col>
-                                </v-row>
-                                <v-range-slider
-                                        @change="changeSlider(sliderValue)"
-                                        v-model="PRICE_SLIDER"
-                                        :max="sliderValue.maxRange"
-                                        :min="sliderValue.minRange"
-                                />
-                            </div>
-                        </article>
+                        test123
+                        <!-- <article class="products-sliders mt-10">-->
+                        <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
+                            {{sliderValue}}
+
+                            <!--<v-row>
+                                <v-col>
+                                    <v-text-field
+                                            @change="changeSlider(sliderValue)"
+                                            class="products-sliders_input"
+                                            type="number"
+                                            v-model="priceSliderValue[0]"
+                                            label="Minimum price"
+                                            required
+                                    />
+                                </v-col>
+                                <v-col>
+                                    <v-text-field
+                                            @change="changeSlider(sliderValue)"
+                                            class="products-sliders_input"
+                                            type="number"
+                                            v-model="priceSliderValue[1]"
+                                            label="Maximum price"
+                                            required
+                                    />
+                                </v-col>
+                            </v-row>
+                            <v-range-slider
+                                    @change="changeSlider(sliderValue)"
+                                    v-model="PRICE_SLIDER"
+                                    :max="sliderValue.maxRange"
+                                    :min="sliderValue.minRange"
+                            />-->
+                        </div>
+                        <!--</article>-->
                     </v-skeleton-loader>
                 </aside>
                 <article class="products-list">
@@ -147,7 +149,7 @@
                                 label="Sortierung"
                         />
                     </v-skeleton-loader>
-                    <article class="products-list_filter_chips w-100">
+                    <article class="products-list_filter_chips">
                         <ul>
                             <li v-for="(select, filterIndex) in productDependencies.searchFilters" :key=" filterIndex">
                                 <div v-if="select.filterType === 'range'">
@@ -212,19 +214,19 @@
                             </li>
                         </ul>
                     </article>
-                    <!-- TODO QSC-331 BUG!-->
-                    <v-skeleton-loader
-                            :loading="skeletonLoader.loading"
-                            :transition="skeletonLoader.transition"
-                            type="card"
-                            :style="skeletonLoader.style"
-                    >
-                        <v-row no-gutters>
-                            <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
-                                <BasicProductCard :item="product"/>
-                            </v-col>
-                        </v-row>
-                    </v-skeleton-loader>
+                    <article>
+                        <!-- TODO QSC-331 BUG!-->
+                        <v-skeleton-loader
+                                :loading="skeletonLoader.loading"
+                                type="text"
+                        >
+                            <v-row no-gutters>
+                                <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
+                                   <BasicProductCard :item="product"/>
+                                </v-col>
+                            </v-row>
+                        </v-skeleton-loader>
+                    </article>
                     <v-pagination
                             v-if="!skeletonLoader.loading"
                             class="products-list_pagination mt-6"
@@ -241,11 +243,13 @@
 </template>
 <script>
     import {mapGetters} from "vuex";
-    /*import FilterCheckbox from "../../components/FilterCheckbox";*/
+/*
+    import FilterCheckbox from "../../components/FilterCheckbox";
+*/
     import SearchButton from "../../components/SearchButton";
-    import BasicProductCard from "../../components/BasicProductCard";
     import ToolbarHeader from "../../components/ToolbarHeader";
     import {productsConstants} from '../../constants/productsConstants';
+    import BasicProductCard from "../../components/BasicProductCard";
 
     const form = {
         query: ''
@@ -257,7 +261,7 @@
             BasicProductCard,
             ToolbarHeader,
             SearchButton,
-            /*FilterCheckbox*/
+          /*  FilterCheckbox*/
         },
 
         beforeMount() {
