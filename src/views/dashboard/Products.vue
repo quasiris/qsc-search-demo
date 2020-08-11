@@ -20,6 +20,7 @@
                                         :search-input.sync="autosuggest.search"
                                         :rules="formOptions.query"
                                         flat
+                                        color="teal darken-3"
                                         ref="combobox"
                                         @input="searchQueryFormSubmit"
                                         v-on:keyup.enter="searchQueryFormSubmit"
@@ -50,7 +51,7 @@
                                     multiple
                             >
                                 <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
-                                    <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
+                                    <v-expansion-panel-header >{{filter.name}}</v-expansion-panel-header>
                                     <v-expansion-panel-content v-if="filter.id === 'category'">
                                         <ul>
                                             <li v-for="(filterValue, i) in filter.values"
@@ -94,6 +95,7 @@
                                         v-model="priceSliderValue[0]"
                                         label="Minimum price"
                                         required
+                                        color="teal darken-3"
                                 />
                             </v-col>
                             <v-col>
@@ -104,12 +106,14 @@
                                         v-model="priceSliderValue[1]"
                                         label="Maximum price"
                                         required
+                                        color="teal darken-3"
                                 />
                             </v-col>
                         </v-row>
                         <v-range-slider
                                 @change="changeSlider(sliderValue)"
                                 v-model="PRICE_SLIDER"
+                                color="teal darken-3"
                                 :max="sliderValue.maxRange"
                                 :min="sliderValue.minRange"
                         />

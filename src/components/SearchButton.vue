@@ -2,8 +2,9 @@
     <v-btn
             :disabled="!formOptions.valid"
             type="submit"
-            color="primary"
-            class="mt-3 w-100"
+            color="teal darken-3"
+            text-color="white"
+            class="search-button mt-3 w-100"
     >
         Search
     </v-btn>
@@ -20,3 +21,8 @@
         }
     }
 </script>
+<style scoped type="text/css">
+    .search-button{
+        color: white;
+    }
+</style>
