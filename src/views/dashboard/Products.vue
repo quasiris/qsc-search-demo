@@ -51,7 +51,7 @@
                                     multiple
                             >
                                 <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
-                                    <v-expansion-panel-header >{{filter.name}}</v-expansion-panel-header>
+                                    <v-expansion-panel-header>{{filter.name}}</v-expansion-panel-header>
                                     <v-expansion-panel-content v-if="filter.id === 'category'">
                                         <ul>
                                             <li v-for="(filterValue, i) in filter.values"
@@ -155,7 +155,7 @@
                                                     filterIndex: filterIndex,
                                                     selectIndex: null,
                                                      id: select.id,
-                                                     value: null,
+
                                                 })"
                                             >
                                                 {{select.name}}: {{select.minValue | price}} - {{select.maxValue |
@@ -178,7 +178,7 @@
                                                             filterIndex: filterIndex,
                                                             selectedValueIndex: valueIndex,
                                                             id: select.id,
-                                                             value: value
+
                                                         })"
                                                 >
                                                     {{select.name}}: {{value}}
@@ -195,16 +195,19 @@
                     </article>
                     <article>
                         <!-- TODO QSC-331 BUG!-->
-                        <!-- <v-skeleton-loader
-                                 :loading="skeletonLoader.loading"
-                                 type="text"
-                         >-->
-                        <v-row no-gutters>
-                            <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
-                                <BasicProductCard :item="product"/>
-                            </v-col>
-                        </v-row>
-                        <!--</v-skeleton-loader>-->
+                        <v-skeleton-loader
+                                :loading="skeletonLoader.loading"
+                                type="text"
+                        >
+                            <v-row>
+                                <v-col v-for="(product, index) in PRODUCTS.documents"
+                                       :key="index"
+                                       class="grid">
+                                    {{product.document}}
+                                   <!-- <BasicProductCard :item="product"/>-->
+                                </v-col>
+                            </v-row>
+                        </v-skeleton-loader>
                     </article>
                     <v-pagination
                             v-if="!skeletonLoader.loading"
@@ -222,13 +225,10 @@
 </template>
 <script>
     import {mapGetters} from "vuex";
-    /*
-        import FilterCheckbox from "../../components/FilterCheckbox";
-    */
     import SearchButton from "../../components/SearchButton";
     import ToolbarHeader from "../../components/ToolbarHeader";
     import {productsConstants} from '../../constants/productsConstants';
-    import BasicProductCard from "../../components/BasicProductCard";
+    /*import BasicProductCard from "../../components/BasicProductCard";*/
 
     const form = {
         query: ''
@@ -236,10 +236,9 @@
     export default {
         name: "Products",
         components: {
-            BasicProductCard,
+          /*  BasicProductCard,*/
             ToolbarHeader,
-            SearchButton,
-            /*  FilterCheckbox*/
+            SearchButton
         },
         beforeMount() {
             this.$store.dispatch('GET_PRODUCTS', {
@@ -445,12 +444,13 @@
                 });
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
-            deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id, value}) {
+            deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id}) {
                 try {
                     if (filterType && filterType === 'range') {
                         this.productDependencies.searchFilters.splice(filterIndex, 1);
                         return;
                     }
+
                     this.productDependencies.searchFilters
                         .map((filter, index) => {
                             if (filter.id === id) {
@@ -462,14 +462,10 @@
                                 }
                             }
                         });
-                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
-                    //TODO finish this deleting QSC-333
-                    this.PRODUCTS.facets.map((val, i) => {
-                        if (val.id === id) {
-                            const index = val['selected'].indexOf(value);
-                            this.PRODUCTS.facets[i]['selected'].splice(index, 1);
-                        }
-                    });
+
+
+                    this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
+
                 } catch (e) {
                     this.$store
                         .dispatch('SHOW_NOTIFICATION',
