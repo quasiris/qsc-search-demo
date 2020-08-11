@@ -61,44 +61,31 @@
                                     </v-expansion-panel-content>
                                     <v-expansion-panel-content v-else>
                                         <form v-for="(filterValue, i) in filter.values"
+                                              class="filter-checkbox"
                                               :key="i">
                                             <input type="checkbox"
+                                                   :class="`filter-checkbox_input_${filter.id.toLowerCase()}`"
+                                                   :id="`filter-checkbox_input_${filterValue.value.toLowerCase()}`"
                                                    :value="filterValue.value"
                                                    @change="handleFilterCheckboxChange(filterValue, filter)"
                                                    v-model="filter.selected"/>
-                                            <label>
+                                            <label :for="`filter-checkbox_input_${filterValue.value.toLowerCase()}`"
+                                                   :class="`filter-checkbox_label_${filter.id.toLowerCase()}`">
                                                 {{filterValue.value}} ({{filterValue.count}})
                                             </label>
-
                                         </form>
-<!--
-                                        <FilterCheckbox
-                                                @filterCheckboxChange="setFilterValues"
-                                                :key="i"
-                                                :filter-id="filter.id"
-                                                :filter-name="filter.name"
-                                                :filter-values="filter.values"
-                                                :filter-selected="filter.selected"
-                                        />-->
                                     </v-expansion-panel-content>
                                 </v-expansion-panel>
                             </v-expansion-panels>
                         </article>
                     </v-skeleton-loader>
-                    <!-- <pre>
-                         {{PRODUCTS.facets}}
-                     </pre>-->
-                    <v-skeleton-loader
+                   <!-- <v-skeleton-loader
                             :loading="skeletonLoader.loading"
                             :transition="skeletonLoader.transition"
                             type="article"
-                    >
-                        test123
-                        <!-- <article class="products-sliders mt-10">-->
+                    >-->
                         <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                            {{sliderValue}}
-
-                            <!--<v-row>
+                            <v-row>
                                 <v-col>
                                     <v-text-field
                                             @change="changeSlider(sliderValue)"
@@ -125,10 +112,10 @@
                                     v-model="PRICE_SLIDER"
                                     :max="sliderValue.maxRange"
                                     :min="sliderValue.minRange"
-                            />-->
+                            />
                         </div>
                         <!--</article>-->
-                    </v-skeleton-loader>
+                   <!-- </v-skeleton-loader>-->
                 </aside>
                 <article class="products-list">
                     <p class="products-list_total font-weight-light"
@@ -216,16 +203,16 @@
                     </article>
                     <article>
                         <!-- TODO QSC-331 BUG!-->
-                        <v-skeleton-loader
+                       <!-- <v-skeleton-loader
                                 :loading="skeletonLoader.loading"
                                 type="text"
-                        >
+                        >-->
                             <v-row no-gutters>
                                 <v-col v-for="(product, index) in PRODUCTS.documents" :key="index" class="grid">
-                                   <BasicProductCard :item="product"/>
+                                    <BasicProductCard :item="product"/>
                                 </v-col>
                             </v-row>
-                        </v-skeleton-loader>
+                        <!--</v-skeleton-loader>-->
                     </article>
                     <v-pagination
                             v-if="!skeletonLoader.loading"
@@ -243,9 +230,9 @@
 </template>
 <script>
     import {mapGetters} from "vuex";
-/*
-    import FilterCheckbox from "../../components/FilterCheckbox";
-*/
+    /*
+        import FilterCheckbox from "../../components/FilterCheckbox";
+    */
     import SearchButton from "../../components/SearchButton";
     import ToolbarHeader from "../../components/ToolbarHeader";
     import {productsConstants} from '../../constants/productsConstants';
@@ -261,7 +248,7 @@
             BasicProductCard,
             ToolbarHeader,
             SearchButton,
-          /*  FilterCheckbox*/
+            /*  FilterCheckbox*/
         },
 
         beforeMount() {
@@ -414,7 +401,6 @@
                     "minValue": parseFloat(sliderValues[0]),
                     "maxValue": parseFloat(sliderValues[1])
                 });
-                console.log('this.productDependencies.searchFilters', this.productDependencies.searchFilters);
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             checkIfSliderValueIsAlreadyExist(id, sliderValues) {
@@ -569,6 +555,13 @@
 
     .products-list_sorting {
         width: 300px;
+    }
+    .filter-checkbox input {
+        margin-right: 15px;
+    }
+
+    .filter-checkbox label:hover {
+        cursor: pointer;
     }
 
     aside {
