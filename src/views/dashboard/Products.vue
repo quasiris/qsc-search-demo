@@ -181,7 +181,7 @@
 
                                                         })"
                                                 >
-                                                    {{select.name}}: {{value}}
+                                                    {{select.name}}: {{value}} ({{select.count}})
                                                     <v-icon right>
                                                         mdi-close
                                                     </v-icon>
@@ -232,6 +232,7 @@
     const form = {
         query: ''
     };
+
     export default {
         name: "Products",
         components: {
@@ -404,13 +405,13 @@
                     name: filter.name,
                     id: filter.id,
                     value: filterValue.value,
+                    count: filterValue.count,
                     selected: filter.selected
                 };
-                console.log('new filter', newFilter);
+
                 this.setFilterValues(newFilter);
             },
             setFilterValues(filterValue) {
-                console.log('filter valueee', filterValue);
                 if (this.productDependencies.searchFilters.length <= 0) {
                     this.addNewFilterValue(filterValue);
                     return;
@@ -439,6 +440,7 @@
                 this.productDependencies.searchFilters.push({
                     "name": filterValue.name,
                     "id": filterValue.id,
+                    "count": filterValue.count,
                     "values": [filterValue.value]
                 });
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
