@@ -195,19 +195,18 @@
                     </article>
                     <article>
                         <!-- TODO QSC-331 BUG!-->
-                        <v-skeleton-loader
-                                :loading="skeletonLoader.loading"
-                                type="text"
-                        >
-                            <v-row>
-                                <v-col v-for="(product, index) in PRODUCTS.documents"
-                                       :key="index"
-                                       class="grid">
-                                    {{product.document}}
-                                   <!-- <BasicProductCard :item="product"/>-->
-                                </v-col>
-                            </v-row>
-                        </v-skeleton-loader>
+                        <!-- <v-skeleton-loader
+                                 :loading="skeletonLoader.loading"
+                                 type="text"
+                         >-->
+                        <v-row>
+                            <v-col v-for="(product, index) in PRODUCTS.documents"
+                                   :key="index"
+                                   class="grid">
+                                <BasicProductCard :item="product"/>
+                            </v-col>
+                        </v-row>
+                        <!--</v-skeleton-loader>-->
                     </article>
                     <v-pagination
                             v-if="!skeletonLoader.loading"
@@ -228,7 +227,7 @@
     import SearchButton from "../../components/SearchButton";
     import ToolbarHeader from "../../components/ToolbarHeader";
     import {productsConstants} from '../../constants/productsConstants';
-    /*import BasicProductCard from "../../components/BasicProductCard";*/
+    import BasicProductCard from "../../components/BasicProductCard";
 
     const form = {
         query: ''
@@ -236,7 +235,7 @@
     export default {
         name: "Products",
         components: {
-          /*  BasicProductCard,*/
+            BasicProductCard,
             ToolbarHeader,
             SearchButton
         },
