@@ -179,7 +179,7 @@
                                                             selectedValueIndex: valueIndex,
                                                             id: select.id,
 
-                                                        })"
+                                                       })"
                                                 >
                                                     {{select.name}}: {{value}} ({{select.count}})
                                                     <v-icon right>
@@ -189,6 +189,24 @@
                                             </li>
                                         </template>
                                     </ul>
+
+                                </li>
+                            </template>
+                        </ul>
+                        <ul v-if="productDependencies.searchFilters.length >= 1" style="display: inline-block">
+                            <template>
+                                <li>
+                                    <v-chip
+                                            class="mr-3 mt-3"
+                                            color="teal"
+                                            text-color="white"
+                                            @click="resetProductDependencies"
+                                    >
+                                        Reset All Filters
+                                        <v-icon right>
+                                            mdi-close
+                                        </v-icon>
+                                    </v-chip>
                                 </li>
                             </template>
                         </ul>
@@ -314,6 +332,9 @@
                     'marginTop': `${60}px`
                 }
             },
+            chips: {
+                isLast: false
+            }
         }),
         watch: {
             'autosuggest.search': function (val) {
@@ -466,6 +487,12 @@
 
 
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
+                        .then(() => {
+                            console.log('prodcttttt', this.productDependencies.searchFilters);
+                            if (this.productDependencies.searchFilters.length <= 0) {
+                                this.chips.isLast = true;
+                            }
+                        })
 
                 } catch (e) {
                     this.$store
