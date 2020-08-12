@@ -80,46 +80,41 @@
                             </v-expansion-panels>
                         </article>
                     </v-skeleton-loader>
-                    <!-- <v-skeleton-loader
-                             :loading="skeletonLoader.loading"
-                             :transition="skeletonLoader.transition"
-                             type="article"
-                     >-->
-                    <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                        <v-row>
-                            <v-col>
-                                <v-text-field
-                                        @change="changeSlider(sliderValue)"
-                                        class="products-sliders_input"
-                                        type="number"
-                                        v-model="priceSliderValue[0]"
-                                        label="Minimum price"
-                                        required
-                                        color="teal darken-3"
-                                />
-                            </v-col>
-                            <v-col>
-                                <v-text-field
-                                        @change="changeSlider(sliderValue)"
-                                        class="products-sliders_input"
-                                        type="number"
-                                        v-model="priceSliderValue[1]"
-                                        label="Maximum price"
-                                        required
-                                        color="teal darken-3"
-                                />
-                            </v-col>
-                        </v-row>
-                        <v-range-slider
-                                @change="changeSlider(sliderValue)"
-                                v-model="PRICE_SLIDER"
-                                color="teal darken-3"
-                                :max="sliderValue.maxRange"
-                                :min="sliderValue.minRange"
-                        />
-                    </div>
-                    <!--</article>-->
-                    <!-- </v-skeleton-loader>-->
+                    <article v-if="!skeletonLoader.loading">
+                        <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
+                            <v-row>
+                                <v-col>
+                                    <v-text-field
+                                            @change="changeSlider(sliderValue)"
+                                            class="products-sliders_input"
+                                            type="number"
+                                            v-model="priceSliderValue[0]"
+                                            label="Minimum price"
+                                            required
+                                            color="teal darken-3"
+                                    />
+                                </v-col>
+                                <v-col>
+                                    <v-text-field
+                                            @change="changeSlider(sliderValue)"
+                                            class="products-sliders_input"
+                                            type="number"
+                                            v-model="priceSliderValue[1]"
+                                            label="Maximum price"
+                                            required
+                                            color="teal darken-3"
+                                    />
+                                </v-col>
+                            </v-row>
+                            <v-range-slider
+                                    @change="changeSlider(sliderValue)"
+                                    v-model="PRICE_SLIDER"
+                                    color="teal darken-3"
+                                    :max="sliderValue.maxRange"
+                                    :min="sliderValue.minRange"
+                            />
+                        </div>
+                    </article>
                 </aside>
                 <article class="products-list">
                     <p class="products-list_total font-weight-light"
@@ -211,12 +206,15 @@
                             </template>
                         </ul>
                     </article>
-                    <article>
-                        <!-- TODO QSC-331 BUG!-->
-                        <!-- <v-skeleton-loader
-                                 :loading="skeletonLoader.loading"
-                                 type="text"
-                         >-->
+                    <article v-if="skeletonLoader.loading">
+                        <v-skeleton-loader
+                                :loading="skeletonLoader.loading"
+                                type="card"
+                                :transition="skeletonLoader.transition"
+                                :style="skeletonLoader.style"
+                        />
+                    </article>
+                    <article v-if="!skeletonLoader.loading">
                         <v-row>
                             <v-col v-for="(product, index) in PRODUCTS.documents"
                                    :key="index"
@@ -224,7 +222,6 @@
                                 <BasicProductCard :item="product"/>
                             </v-col>
                         </v-row>
-                        <!--</v-skeleton-loader>-->
                     </article>
                     <v-pagination
                             v-if="!skeletonLoader.loading"
