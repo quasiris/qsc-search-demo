@@ -154,7 +154,8 @@
 
                                                 })"
                                             >
-                                                {{select.name}}: {{select.minValue | price}} - {{select.maxValue | price}} ({{select.count}})
+                                                {{select.name}}: {{select.minValue | price}} - {{select.maxValue |
+                                                price}} ({{select.count}})
                                                 <v-icon right>
                                                     mdi-close
                                                 </v-icon>
@@ -165,7 +166,7 @@
                                         <template v-for="(value, valueIndex) in select.values">
                                             <li :key="valueIndex">
                                                 <v-chip :key="valueIndex"
-                                                        class="mt-3 products-list_filter_chips__chip"
+                                                        class="mt-3"
                                                         color="teal darken-3"
                                                         text-color="white"
                                                         @click="deleteSelectedFiltersValues({
@@ -188,17 +189,7 @@
                             </template>
                             <template v-if="productDependencies.searchFilters.length >= 1">
                                 <li>
-                                    <v-chip
-                                            class="ml-5 mt-3 products-list_filter_chips__chip"
-                                            color="teal"
-                                            text-color="white"
-                                            @click="resetProductDependencies"
-                                    >
-                                        Reset All Filters
-                                        <v-icon right>
-                                            mdi-close
-                                        </v-icon>
-                                    </v-chip>
+                                    <ResetAllFiltersChips v-on:resetAllFiltersChips="resetProductDependencies"/>
                                 </li>
                             </template>
                         </ul>
@@ -240,6 +231,7 @@
     import ToolbarHeader from "../../components/ToolbarHeader";
     import {productsConstants} from '../../constants/productsConstants';
     import BasicProductCard from "../../components/BasicProductCard";
+    import ResetAllFiltersChips from "../../components/ResetAllFiltersChips";
 
     const form = {
         query: ''
@@ -248,6 +240,7 @@
     export default {
         name: "Products",
         components: {
+            ResetAllFiltersChips,
             BasicProductCard,
             ToolbarHeader,
             SearchButton
@@ -510,6 +503,8 @@
                 }
             },
             resetProductDependencies() {
+                alert('reset!');
+
                 const defaultProductDependencies = {
                     "page": 1,
                     "q": this.form.query || '*',
@@ -567,5 +562,11 @@
             float: right;
             padding-right: 0;
         }
+
+        .products-list_filter_chips ul {
+            padding: 0;
+        }
+
+
     }
 </style>
