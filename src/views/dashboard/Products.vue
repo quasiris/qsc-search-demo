@@ -82,7 +82,6 @@
                     </v-skeleton-loader>
                     <article v-if="!skeletonLoader.loading">
                         <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
-                            {{sliderValue}}
                             <v-row>
                                 <v-col>
                                     <v-text-field
@@ -142,24 +141,17 @@
                                 <li :key="filterIndex">
                                     <ul v-if="select.filterType === 'range'" style="display: inline-block">
                                         <template>
-                                            <v-chip
-                                                    class="mt-3 products-list_filter_chips__chip"
-                                                    color="teal darken-3"
-                                                    text-color="white"
-                                                    @click="deleteSelectedFiltersValues({
-                                                    filterType: select.filterType,
-                                                    filterIndex: filterIndex,
-                                                    selectIndex: null,
-                                                     id: select.id,
-
-                                                })"
-                                            >
-                                                {{select.name}}: {{select.minValue | price}} - {{select.maxValue |
-                                                price}} ({{select.count}})
-                                                <v-icon right>
-                                                    mdi-close
-                                                </v-icon>
-                                            </v-chip>
+                                            <BasicPriceChip
+                                                    :key="filterIndex"
+                                                    :filter-index="filterIndex"
+                                                    :filter-type="select.filterType"
+                                                    :filter-id="select.id"
+                                                    :filter-name="select.name"
+                                                    :filter-min-price="select.minValue"
+                                                    :filter-max-price="select.maxValue"
+                                                    :filter-count="select.count"
+                                                    @handleDeleteSelectedFiltersChip="deleteSelectedFiltersValues"
+                                            />
                                         </template>
                                     </ul>
                                     <ul v-else style="display: inline-block">
@@ -183,7 +175,8 @@
                             </template>
                             <template v-if="productDependencies.searchFilters.length >= 1">
                                 <li>
-                                    <ResetAllFiltersChips @handleResetAllFiltersChips="resetProductDependencies"/>
+                                    <ResetAllFiltersChips
+                                            @handleResetAllFiltersChips="resetProductDependencies"/>
                                 </li>
                             </template>
                         </ul>
@@ -227,6 +220,7 @@
     import BasicProductCard from "../../components/BasicProductCard";
     import ResetAllFiltersChips from "../../components/ResetAllFiltersChips";
     import BasicChip from "../../components/BasicChip";
+    import BasicPriceChip from "../../components/BasicPriceChip";
 
     const form = {
         query: ''
@@ -235,6 +229,7 @@
     export default {
         name: "Products",
         components: {
+            BasicPriceChip,
             BasicChip,
             ResetAllFiltersChips,
             BasicProductCard,
