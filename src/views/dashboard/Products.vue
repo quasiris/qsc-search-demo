@@ -82,6 +82,7 @@
                     </v-skeleton-loader>
                     <article v-if="!skeletonLoader.loading">
                         <div v-for="(sliderValue, i) in PRODUCTS.sliders" :key="i">
+                            {{sliderValue}}
                             <v-row>
                                 <v-col>
                                     <v-text-field
@@ -153,8 +154,7 @@
 
                                                 })"
                                             >
-                                                {{select.name}}: {{select.minValue | price}} - {{select.maxValue |
-                                                price}}
+                                                {{select.name}}: {{select.minValue | price}} - {{select.maxValue | price}} ({{select.count}})
                                                 <v-icon right>
                                                     mdi-close
                                                 </v-icon>
@@ -376,31 +376,33 @@
                 this.productDependencies.sort.sort = sortValue;
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
-            changeSlider({id, name}) {
-                this.setSliderValues(id, name, this.priceSliderValue);
+            changeSlider(slider) {
+                this.setSliderValues(slider, this.priceSliderValue);
             },
             setSlidersInFirstTouch() {
                 this.priceSliderValue = [...this.PRICE_SLIDER];
             },
-            setSliderValues(id, name, sliderValues) {
+            setSliderValues(slider, sliderValues) {
                 if (this.productDependencies.searchFilters.length <= 0) {
-                    this.addNewSliderValue(id, name, sliderValues);
+                    this.addNewSliderValue(slider, sliderValues);
                     return;
                 }
-                if (this.checkIfSliderValueIsAlreadyExist(id, sliderValues)) {
+                if (this.checkIfSliderValueIsAlreadyExist(slider.id, sliderValues)) {
                     this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
                     return;
                 }
-                this.addNewSliderValue(id, name, sliderValues);
+                this.addNewSliderValue(slider, sliderValues);
             },
-            addNewSliderValue(id, name, sliderValues) {
+            addNewSliderValue(slider, sliderValues) {
                 this.productDependencies.searchFilters.push({
                     "filterType": "range",
-                    "id": id,
-                    name: name,
+                    "id": slider.id,
+                    "name": slider.name,
+                    "count": slider.count,
                     "minValue": parseFloat(sliderValues[0]),
                     "maxValue": parseFloat(sliderValues[1])
                 });
+
                 this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
             },
             checkIfSliderValueIsAlreadyExist(id, sliderValues) {
