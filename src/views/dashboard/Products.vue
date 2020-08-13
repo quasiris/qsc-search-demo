@@ -143,7 +143,7 @@
                                     <ul v-if="select.filterType === 'range'" style="display: inline-block">
                                         <template>
                                             <v-chip
-                                                    class="mt-3"
+                                                    class="mt-3 products-list_filter_chips__chip"
                                                     color="teal darken-3"
                                                     text-color="white"
                                                     @click="deleteSelectedFiltersValues({
@@ -165,7 +165,7 @@
                                         <template v-for="(value, valueIndex) in select.values">
                                             <li :key="valueIndex">
                                                 <v-chip :key="valueIndex"
-                                                        class="mt-3"
+                                                        class="mt-3 products-list_filter_chips__chip"
                                                         color="teal darken-3"
                                                         text-color="white"
                                                         @click="deleteSelectedFiltersValues({
@@ -184,15 +184,12 @@
                                             </li>
                                         </template>
                                     </ul>
-
                                 </li>
                             </template>
-                        </ul>
-                        <ul v-if="productDependencies.searchFilters.length >= 1" style="display: inline-block">
-                            <template>
+                            <template v-if="productDependencies.searchFilters.length >= 1">
                                 <li>
                                     <v-chip
-                                            class="mr-3 mt-3"
+                                            class="ml-5 mt-3 products-list_filter_chips__chip"
                                             color="teal"
                                             text-color="white"
                                             @click="resetProductDependencies"
