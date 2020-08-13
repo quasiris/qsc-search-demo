@@ -165,23 +165,17 @@
                                     <ul v-else style="display: inline-block">
                                         <template v-for="(value, valueIndex) in select.values">
                                             <li :key="valueIndex">
-                                                <v-chip :key="valueIndex"
-                                                        class="mt-3"
-                                                        color="teal darken-3"
-                                                        text-color="white"
-                                                        @click="deleteSelectedFiltersValues({
-                                                             filterType: null,
-                                                            filterIndex: filterIndex,
-                                                            selectedValueIndex: valueIndex,
-                                                            id: select.id,
-
-                                                       })"
-                                                >
-                                                    {{select.name}}: {{value}} ({{select.count}})
-                                                    <v-icon right>
-                                                        mdi-close
-                                                    </v-icon>
-                                                </v-chip>
+                                                <BasicChip
+                                                        :key="valueIndex"
+                                                        :filter-index="filterIndex"
+                                                        :filter-selected-value-index="valueIndex"
+                                                        :filter-type="null"
+                                                        :filter-id="select.id"
+                                                        :filter-name="select.name"
+                                                        :filter-value="value"
+                                                        :filter-count="select.count"
+                                                        @handleDeleteSelectedFiltersChip="deleteSelectedFiltersValues"
+                                                />
                                             </li>
                                         </template>
                                     </ul>
@@ -189,7 +183,7 @@
                             </template>
                             <template v-if="productDependencies.searchFilters.length >= 1">
                                 <li>
-                                    <ResetAllFiltersChips v-on:resetAllFiltersChips="resetProductDependencies"/>
+                                    <ResetAllFiltersChips @handleResetAllFiltersChips="resetProductDependencies"/>
                                 </li>
                             </template>
                         </ul>
@@ -232,6 +226,7 @@
     import {productsConstants} from '../../constants/productsConstants';
     import BasicProductCard from "../../components/BasicProductCard";
     import ResetAllFiltersChips from "../../components/ResetAllFiltersChips";
+    import BasicChip from "../../components/BasicChip";
 
     const form = {
         query: ''
@@ -240,6 +235,7 @@
     export default {
         name: "Products",
         components: {
+            BasicChip,
             ResetAllFiltersChips,
             BasicProductCard,
             ToolbarHeader,
@@ -503,8 +499,6 @@
                 }
             },
             resetProductDependencies() {
-                alert('reset!');
-
                 const defaultProductDependencies = {
                     "page": 1,
                     "q": this.form.query || '*',

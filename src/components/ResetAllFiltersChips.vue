@@ -3,7 +3,7 @@
             class="mt-3 reset-all-filters-chips"
             color="teal"
             text-color="white"
-            @click="resetAllFiltersChips"
+            @click="handleResetAllFiltersChips"
     >
         Reset All Filters
         <v-icon right>
@@ -16,8 +16,8 @@
     export default {
         name: "ResetAllFiltersChips",
         methods: {
-            resetAllFiltersChips() {
-                this.$emit('resetAllFiltersChips')
+            handleResetAllFiltersChips() {
+                this.$emit('handleResetAllFiltersChips')
             }
         }
 
