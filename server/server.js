@@ -6,7 +6,7 @@ const cors = require('cors');
 
 
 // Constants
-const PORT = process.env.PORT || 3000;
+const PORT = 8080;
 const HOST = '0.0.0.0';
 
 // App

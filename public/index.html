@@ -11,8 +11,10 @@
 </head>
 <body>
 <noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-        Please enable it to continue.</strong>
+    <strong>
+        We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please
+        enable it to continue.
+    </strong>
 </noscript>
 <div id="app"></div>
 </body>
@@ -27,32 +29,64 @@
           }, 2000);
       });*/
 
-   /* var observer = new MutationObserver(function (mutation) {
-        mutation.forEach(function(mutation2) {
-            console.log(mutation2);
-        });
-    });
+    function init() {
+        if (window.MutationObserver) {
+            startMutationObserver();
+        }
+    }
 
-    var observerConfig = {
-        attributes: true,
-        characterData: true,
-        childList: true,
-        subtree: true,
-        attributeOldValue: true,
-        characterDataOldValue: true
-    };
+    function startMutationObserver() {
+        // target node to be observed
+        var target = document.querySelector('body');
+        // mutation observer config object with the listeners configuration
+        var config = listenOnlyAttributeChanges();
 
+        // mutation observer instantiation
+        var mutationObs = new MutationObserver(callbackAttributeChange);
+
+        // observe initialization
+        mutationObs.observe(target, config);
+    }
+
+    function listenOnlyAttributeChanges() {
+        return {
+            attributes: true,
+            childList: true,
+            subtree: true
+        };
+    }
+
+    function callbackAttributeChange(mutations, mutationObs) {
+        console.log('mutations', mutations);
+        /*for (var i = 0, length = mutations.length; i < length; i++) {
+            var mutation = mutations[i];
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-text-color') {
+                var target = mutation.target;
+                target.setAttribute("style", "color:" + target.getAttribute('data-text-color'));
+            } else if (mutation.type === 'childList') {
+                for (var i = 0, length = mutation.addedNodes.length; i < length; i++) {
+                    var addedNode = mutation.addedNodes[i];
+                    if (addedNode.nodeName !== '#text') {
+                        addedNodes++;
+                        updateNodeCount();
+                    }
+                }
+            }
+        }*/
+    }
 
     setTimeout(() => {
-        const tableRows = document.querySelectorAll('.grid.col');
+        /* const tableRows = document.querySelectorAll('.grid.col');
 
-        console.log('table rows: ', tableRows);
+         console.log('table rows: ', tableRows);
 
-        for (i = 0; i < tableRows.length; i++) {
-            observer.observe(tableRows[i], observerConfig);
-        }
+         for (i = 0; i < tableRows.length; i++) {
+             observer.observe(tableRows[i], observerConfig);
+         }*/
+
+        init();
     }, 3000);
-*/
+
 
 </script>
 </html>
