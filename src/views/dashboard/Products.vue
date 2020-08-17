@@ -189,29 +189,30 @@
                 :style="skeletonLoader.style"
             />
           </article>
-          <article v-if="!skeletonLoader.loading" class="products-list_products">
-            <!--<v-row>
+          <article class="products-list_products">
+            <v-row>
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
                      class="grid">
-                <BasicProductCard :item="product"/>
+                <!-- <BasicProductCard :item="product"/>-->
+                {{ index }}
               </v-col>
-            </v-row>-->
-            <ul id="myList" class="list">
-              <li>Apples</li>
-              <li>Oranges</li>
-              <li>Bananas</li>
-              <li class="child">Peaches</li>
-              <li v-for="(product, index) in PRODUCTS.documents"
-                  :key="index">
-                {{ product }}
-              </li>
-            </ul>
-            <p>
-              <button class="btnChild">
-                Add/Remove a Child Node
-              </button>
-            </p>
+            </v-row>
+            <!-- <ul id="myList" class="list">
+               <li>Apples</li>
+               <li>Oranges</li>
+               <li>Bananas</li>
+               <li class="child">Peaches</li>
+               <li v-for="(product, index) in PRODUCTS.documents"
+                   :key="index">
+                 {{ product }}
+               </li>
+             </ul>
+             <p>
+               <button class="btnChild">
+                 Add/Remove a Child Node
+               </button>
+             </p>-->
           </article>
           <v-pagination
               v-if="!skeletonLoader.loading"
@@ -249,21 +250,25 @@ export default {
     BasicPriceChip,
     BasicChip,
     ResetAllFiltersChips,
-   /* BasicProductCard,*/
+    /* BasicProductCard,*/
     ToolbarHeader,
     SearchButton
   },
   beforeMount() {
-    this.$store.dispatch('GET_PRODUCTS', {
-      query: '*',
-      page: 1
-    })
-        .then(() => {
-          this.setExpansionPanelsValueInFirstTouch();
-          this.setSlidersInFirstTouch();
-          this.resetSkeletonStyle();
-          this.skeletonLoader.loading = false;
-        })
+    setTimeout(() => {
+      alert('ee!');
+      this.$store.dispatch('GET_PRODUCTS', {
+        query: '*',
+        page: 1
+      })
+          .then(() => {
+            this.setExpansionPanelsValueInFirstTouch();
+            this.setSlidersInFirstTouch();
+            this.resetSkeletonStyle();
+            this.skeletonLoader.loading = false;
+          })
+    }, 5000)
+
 
   },
   computed: {
