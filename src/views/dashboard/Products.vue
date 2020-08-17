@@ -189,7 +189,7 @@
                                 :style="skeletonLoader.style"
                         />
                     </article>
-                    <article v-if="!skeletonLoader.loading">
+                    <article v-if="!skeletonLoader.loading" class="products-list_products">
                         <v-row>
                             <v-col v-for="(product, index) in PRODUCTS.documents"
                                    :key="index"
@@ -246,7 +246,8 @@
                     this.setSlidersInFirstTouch();
                     this.resetSkeletonStyle();
                     this.skeletonLoader.loading = false;
-                });
+                })
+
         },
         computed: {
             ...mapGetters([

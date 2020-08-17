@@ -17,6 +17,9 @@
     </strong>
 </noscript>
 <div id="app"></div>
+<div class="nodes-playground"></div>
+
+
 </body>
 <script src="https://unpkg.com/@quasiris/search-data-picker@0.5.6/build/main.bundle.js"></script>
 <script>
@@ -34,56 +37,29 @@
             startMutationObserver();
         }
     }
-
     function startMutationObserver() {
-        // target node to be observed
-        var target = document.querySelector('body');
-        // mutation observer config object with the listeners configuration
         var config = listenOnlyAttributeChanges();
+        const target = document.querySelector('.products-list_products');
+        console.log('target: ', target);
 
-        // mutation observer instantiation
         var mutationObs = new MutationObserver(callbackAttributeChange);
-
-        // observe initialization
         mutationObs.observe(target, config);
     }
 
     function listenOnlyAttributeChanges() {
         return {
-            attributes: true,
             childList: true,
-            subtree: true
         };
     }
-
-    function callbackAttributeChange(mutations, mutationObs) {
-        console.log('mutations', mutations);
-        /*for (var i = 0, length = mutations.length; i < length; i++) {
-            var mutation = mutations[i];
-            if (mutation.type === 'attributes' && mutation.attributeName === 'data-text-color') {
-                var target = mutation.target;
-                target.setAttribute("style", "color:" + target.getAttribute('data-text-color'));
-            } else if (mutation.type === 'childList') {
-                for (var i = 0, length = mutation.addedNodes.length; i < length; i++) {
-                    var addedNode = mutation.addedNodes[i];
-                    if (addedNode.nodeName !== '#text') {
-                        addedNodes++;
-                        updateNodeCount();
-                    }
-                }
+    function callbackAttributeChange(mutations) {
+        for (let mutation of mutations) {
+            if (mutation.type === 'childList') {
+                console.log('Mutation Detected: A child node has been added or removed.');
             }
-        }*/
+        }
     }
 
     setTimeout(() => {
-        /* const tableRows = document.querySelectorAll('.grid.col');
-
-         console.log('table rows: ', tableRows);
-
-         for (i = 0; i < tableRows.length; i++) {
-             observer.observe(tableRows[i], observerConfig);
-         }*/
-
         init();
     }, 3000);
 
