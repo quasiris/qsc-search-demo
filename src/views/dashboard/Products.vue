@@ -190,18 +190,22 @@
             />
           </article>
           <article v-if="!skeletonLoader.loading" class="products-list_products">
-            <v-row>
+            <!--<v-row>
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
                      class="grid">
                 <BasicProductCard :item="product"/>
               </v-col>
-            </v-row>
+            </v-row>-->
             <ul id="myList" class="list">
               <li>Apples</li>
               <li>Oranges</li>
               <li>Bananas</li>
               <li class="child">Peaches</li>
+              <li v-for="(product, index) in PRODUCTS.documents"
+                  :key="index">
+                {{index}}
+              </li>
             </ul>
             <p>
               <button class="btnChild">
@@ -227,8 +231,10 @@
 import {mapGetters} from "vuex";
 import SearchButton from "../../components/SearchButton";
 import ToolbarHeader from "../../components/ToolbarHeader";
-import {productsConstants} from '../../constants/productsConstants';
+import {productsConstants} from '@/constants/productsConstants';
+/*
 import BasicProductCard from "../../components/BasicProductCard";
+*/
 import ResetAllFiltersChips from "../../components/ResetAllFiltersChips";
 import BasicChip from "../../components/BasicChip";
 import BasicPriceChip from "../../components/BasicPriceChip";
@@ -243,7 +249,7 @@ export default {
     BasicPriceChip,
     BasicChip,
     ResetAllFiltersChips,
-    BasicProductCard,
+   /* BasicProductCard,*/
     ToolbarHeader,
     SearchButton
   },
