@@ -47,12 +47,20 @@
         var mutationObs = new MutationObserver(callbackAttributeChange);
         mutationObs.observe(target, config);
         addButton();
+        console.log('target: ', target);
+
+        target.addEventListener('change', function (e) {
+            console.log('change: ', e);
+        })
     }
 
     function addButton() {
 
         let btnChild = document.querySelector('.btnChild');
         btnChild.addEventListener('click', function () {
+            target.addEventListener('change', function (e) {
+                console.log('change: ', e);
+            })
             target.insertAdjacentHTML('beforeend', '\n<li class="child">Peaches</li>');
         });
     }
@@ -60,18 +68,23 @@
     function listenOnlyAttributeChanges() {
         return {
             childList: true,
+            attributes: true,
+            characterData: true,
+            subtree: true,
+            attributeOldValue: true,
+            characterDataOldValue: true
         };
     }
 
     function callbackAttributeChange(mutations) {
         for (let mutation of mutations) {
-            if (mutation.type === 'childList') {
-                console.log('mutation: ', mutation.addedNodes);
-                for (let i = 0; i < mutation.addedNodes.length; i++) {
-                    console.log('Added nodes: ', mutation.addedNodes[i]);
-                }
-                console.log('Mutation Detected: A child node has been added or removed.');
+            /* if (mutation.type === 'childList') {*/
+            console.log('mutation: ', mutation);
+            for (let i = 0; i < mutation.addedNodes.length; i++) {
+                console.log('Added nodes: ', mutation.addedNodes[i]);
             }
+            console.log('Mutation Detected: A child node has been added or removed.');
+            /*  }*/
         }
     }
 
