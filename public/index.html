@@ -36,22 +36,29 @@
     function init() {
         if (window.MutationObserver) {
             target = document.getElementById('myList');
-            startMutationObserver(target);
+            // startMutationObserver(target);
+            startIntersectionObserver(target);
         }
     }
 
 
     function startMutationObserver(target) {
         var config = listenOnlyAttributeChanges();
-        console.log('target: ', target);
         var mutationObs = new MutationObserver(callbackAttributeChange);
         mutationObs.observe(target, config);
         addButton();
-        console.log('target: ', target);
 
-        target.addEventListener('change', function (e) {
-            console.log('change: ', e);
-        })
+    }
+
+    function startIntersectionObserver() {
+
+        observer = new IntersectionObserver((entry, observer) => {
+            console.log('entry:', entry);
+            //console.log('observer:', observer);
+        });
+
+        observer.observe(target);
+
     }
 
     function addButton() {

@@ -204,7 +204,7 @@
               <li class="child">Peaches</li>
               <li v-for="(product, index) in PRODUCTS.documents"
                   :key="index">
-                {{index}}
+                {{ product }}
               </li>
             </ul>
             <p>
