@@ -194,7 +194,7 @@
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
                      class="grid">
-                <BasicProductCard :item="product"/>
+                <BasicProductCard :item="product" v-if="!skeletonLoader.loading"/>
               </v-col>
             </v-row>
             <!-- <ul id="myList" class="list">
@@ -349,6 +349,7 @@ export default {
       }
       this.productDependencies.q = this.form.query;
 
+      this.skeletonLoader.loading = true;
       this.$store.dispatch('RESET', {
         type: 'products'
       });
@@ -357,6 +358,7 @@ export default {
           .then(() => {
             this.resetProductDependencies();
             this.$refs.combobox.isMenuActive = false;
+            this.skeletonLoader.loading = false;
           })
     },
     getSuggestProducts(query) {
@@ -373,6 +375,11 @@ export default {
     },
     changePagination(page) {
       this.productDependencies.page = page;
+
+      this.$store.dispatch('RESET', {
+        type: 'products'
+      });
+
       this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
       this.$vuetify.goTo(0, {
         duration: 1300
@@ -380,6 +387,11 @@ export default {
     },
     changeSort(sortValue) {
       this.productDependencies.sort.sort = sortValue;
+
+      this.$store.dispatch('RESET', {
+        type: 'products'
+      });
+
       this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
     },
     changeSlider(slider) {
