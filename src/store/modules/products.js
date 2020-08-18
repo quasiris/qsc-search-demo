@@ -36,6 +36,8 @@ export default {
             state.suggestProducts = payload;
         },
         RESET(state, type) {
+            console.log('type: ', type);
+
             const s = initialState();
             Object.keys(s).forEach(key => {
                 if (key === type) {
@@ -43,6 +45,8 @@ export default {
                 }
 
             })
+
+            console.log('products:', initialState().products);
         }
     },
     actions: {

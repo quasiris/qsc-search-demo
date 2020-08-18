@@ -194,8 +194,7 @@
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
                      class="grid">
-                <!-- <BasicProductCard :item="product"/>-->
-                {{ index }}
+                <BasicProductCard :item="product"/>
               </v-col>
             </v-row>
             <!-- <ul id="myList" class="list">
@@ -233,9 +232,7 @@ import {mapGetters} from "vuex";
 import SearchButton from "../../components/SearchButton";
 import ToolbarHeader from "../../components/ToolbarHeader";
 import {productsConstants} from '@/constants/productsConstants';
-/*
 import BasicProductCard from "../../components/BasicProductCard";
-*/
 import ResetAllFiltersChips from "../../components/ResetAllFiltersChips";
 import BasicChip from "../../components/BasicChip";
 import BasicPriceChip from "../../components/BasicPriceChip";
@@ -250,13 +247,13 @@ export default {
     BasicPriceChip,
     BasicChip,
     ResetAllFiltersChips,
-    /* BasicProductCard,*/
+    BasicProductCard,
     ToolbarHeader,
     SearchButton
   },
   beforeMount() {
     setTimeout(() => {
-      alert('ee!');
+      alert('done!');
       this.$store.dispatch('GET_PRODUCTS', {
         query: '*',
         page: 1
@@ -351,6 +348,11 @@ export default {
         return;
       }
       this.productDependencies.q = this.form.query;
+
+      this.$store.dispatch('RESET', {
+        type: 'products'
+      });
+
       this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
           .then(() => {
             this.resetProductDependencies();
