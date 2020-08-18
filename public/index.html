@@ -34,39 +34,24 @@
     let target = '';
 
     function init() {
-        if (window.MutationObserver) {
-            target = document.querySelector('.products-list_products');
-            startMutationObserver(target);
-        }
+        target = document.querySelector('.products-list_products');
+        console.log('target: ', target);
+        startIntersectionObserver(target);
     }
 
 
-    function startMutationObserver(target) {
-        var config = listenOnlyAttributeChanges();
-        var mutationObs = new MutationObserver(callbackAttributeChange);
-        mutationObs.observe(target, config);
+    function startIntersectionObserver() {
+        observer = new IntersectionObserver((entry, observer) => {
+            console.log('entry:', entry);
+        });
+
+        observer.observe(target);
+
     }
 
-
-    function listenOnlyAttributeChanges() {
-        return {
-            childList: true,
-            subtree: true,
-        };
-    }
-
-    function callbackAttributeChange(mutations) {
-        for (let mutation of mutations) {
-            for (let i = 0; i < mutation.addedNodes.length; i++) {
-                console.log('Added nodes: ', mutation.addedNodes[i]);
-            }
-        }
-    }
-
-    // wait for hidden skeleton loaders, and show products div
     setTimeout(() => {
         init();
-    }, 3000);
+    }, 2000);
 
 
 </script>

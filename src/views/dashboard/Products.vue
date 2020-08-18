@@ -26,7 +26,7 @@
                     v-on:keyup.enter="searchQueryFormSubmit"
                     hide-no-data
                     label="Search Query"
-                ></v-combobox>
+                />
               </v-col>
               <v-col cols="12"
                      sm="12"
@@ -53,12 +53,8 @@
                 <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
                   <v-expansion-panel-header>{{ filter.name }}</v-expansion-panel-header>
                   <v-expansion-panel-content v-if="filter.id === 'category'">
-                    <ul>
-                      <li v-for="(filterValue, i) in filter.values"
-                          :key="i">
-                        {{ filterValue.value }}
-                      </li>
-                    </ul>
+                    <v-treeview :items="categoryTreeItems" open-all>
+                    </v-treeview>
                   </v-expansion-panel-content>
                   <v-expansion-panel-content v-else>
                     <form v-for="(filterValue, i) in filter.values"
@@ -199,21 +195,6 @@
                 <BasicProductCard :item="product"/>
               </v-col>
             </v-row>
-            <!-- <ul id="myList" class="list">
-               <li>Apples</li>
-               <li>Oranges</li>
-               <li>Bananas</li>
-               <li class="child">Peaches</li>
-               <li v-for="(product, index) in PRODUCTS.documents"
-                   :key="index">
-                 {{ index }}
-               </li>
-             </ul>
-             <p>
-               <button class="btnChild">
-                 Add/Remove a Child Node
-               </button>
-             </p>-->
           </article>
           <v-pagination
               v-if="!skeletonLoader.loading"
@@ -239,6 +220,7 @@ import ResetAllFiltersChips from "../../components/ResetAllFiltersChips";
 import BasicChip from "../../components/BasicChip";
 import BasicPriceChip from "../../components/BasicPriceChip";
 
+
 const form = {
   query: ''
 };
@@ -254,8 +236,6 @@ export default {
     SearchButton
   },
   beforeMount() {
-
-    /*setTimeout(() => {*/
     this.$store.dispatch('GET_PRODUCTS', {
       query: '*',
       page: 1
@@ -266,8 +246,6 @@ export default {
           this.resetSkeletonStyle();
           this.skeletonLoader.loading = false;
         })
-    /* }, 5000);
- */
   },
   computed: {
     ...mapGetters([
@@ -426,7 +404,10 @@ export default {
         "maxValue": parseFloat(sliderValues[1])
       });
 
-      this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+      this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
+          .then((res) => {
+            console.log('response: ', res);
+          })
     },
     checkIfSliderValueIsAlreadyExist(id, sliderValues) {
       let filterAvailableStatus = false;
