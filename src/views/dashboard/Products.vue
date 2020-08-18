@@ -191,7 +191,7 @@
                 :style="skeletonLoader.style"
             />
           </article>
-          <article v-if="!skeletonLoader.loading">
+          <article>
             <v-row class="products-list_products">
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
@@ -206,7 +206,7 @@
                <li class="child">Peaches</li>
                <li v-for="(product, index) in PRODUCTS.documents"
                    :key="index">
-                 {{ product }}
+                 {{ index }}
                </li>
              </ul>
              <p>
@@ -254,6 +254,8 @@ export default {
     SearchButton
   },
   beforeMount() {
+
+    /*setTimeout(() => {*/
     this.$store.dispatch('GET_PRODUCTS', {
       query: '*',
       page: 1
@@ -264,6 +266,8 @@ export default {
           this.resetSkeletonStyle();
           this.skeletonLoader.loading = false;
         })
+    /* }, 5000);
+ */
   },
   computed: {
     ...mapGetters([
