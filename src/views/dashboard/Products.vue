@@ -64,12 +64,14 @@
                     <form v-for="(filterValue, i) in filter.values"
                           class="filter-checkbox"
                           :key="i">
-                      <input type="checkbox"
-                             :class="`filter-checkbox_input_${filter.id.toLowerCase()}`"
-                             :id="`filter-checkbox_input_${filterValue.value.toLowerCase()}`"
-                             :value="filterValue.value"
-                             @change="handleFilterCheckboxChange(filterValue, filter)"
-                             v-model="filter.selected"/>
+                      <label>
+                        <input type="checkbox"
+                               :class="`filter-checkbox_input_${filter.id.toLowerCase()}`"
+                               :id="`filter-checkbox_input_${filterValue.value.toLowerCase()}`"
+                               :value="filterValue.value"
+                               @change="handleFilterCheckboxChange(filterValue, filter)"
+                               v-model="filter.selected"/>
+                      </label>
                       <label :for="`filter-checkbox_input_${filterValue.value.toLowerCase()}`"
                              :class="`filter-checkbox_label_${filter.id.toLowerCase()}`">
                         {{ filterValue.value }} ({{ filterValue.count }})
@@ -135,7 +137,7 @@
                 label="Sortierung"
             />
           </v-skeleton-loader>
-          <article class="products-list_filter_chips">
+          <article v-if="!skeletonLoader.loading" class="products-list_filter_chips">
             <ul>
               <template v-for="(select, filterIndex) in productDependencies.searchFilters">
                 <li :key="filterIndex">
@@ -189,12 +191,12 @@
                 :style="skeletonLoader.style"
             />
           </article>
-          <article class="products-list_products">
-            <v-row>
+          <article v-if="!skeletonLoader.loading">
+            <v-row class="products-list_products">
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
                      class="grid">
-                <BasicProductCard :item="product" v-if="!skeletonLoader.loading"/>
+                <BasicProductCard :item="product"/>
               </v-col>
             </v-row>
             <!-- <ul id="myList" class="list">
@@ -252,21 +254,16 @@ export default {
     SearchButton
   },
   beforeMount() {
-    setTimeout(() => {
-      alert('done!');
-      this.$store.dispatch('GET_PRODUCTS', {
-        query: '*',
-        page: 1
-      })
-          .then(() => {
-            this.setExpansionPanelsValueInFirstTouch();
-            this.setSlidersInFirstTouch();
-            this.resetSkeletonStyle();
-            this.skeletonLoader.loading = false;
-          })
-    }, 5000)
-
-
+    this.$store.dispatch('GET_PRODUCTS', {
+      query: '*',
+      page: 1
+    })
+        .then(() => {
+          this.setExpansionPanelsValueInFirstTouch();
+          this.setSlidersInFirstTouch();
+          this.resetSkeletonStyle();
+          this.skeletonLoader.loading = false;
+        })
   },
   computed: {
     ...mapGetters([
@@ -380,7 +377,11 @@ export default {
         type: 'products'
       });
 
-      this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+      this.skeletonLoader.loading = true;
+      this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
+          .then(() => {
+            this.skeletonLoader.loading = false;
+          })
       this.$vuetify.goTo(0, {
         duration: 1300
       });
@@ -481,7 +482,16 @@ export default {
         "count": filterValue.count,
         "values": [filterValue.value]
       });
-      this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+
+      this.$store.dispatch('RESET', {
+        type: 'products'
+      });
+
+      this.skeletonLoader.loading = true;
+      this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
+          .then(() => {
+            this.skeletonLoader.loading = false;
+          })
     },
     deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id}) {
       try {

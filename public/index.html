@@ -40,6 +40,10 @@
             console.log('target: ', target);
             startMutationObserver(target);
             //startIntersectionObserver(target);
+            target.addEventListener('change', function (e) {
+                console.log('change: ', e);
+            });
+
         }
     }
 
