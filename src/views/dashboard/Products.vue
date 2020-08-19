@@ -53,8 +53,8 @@
                 <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
                   <v-expansion-panel-header>{{ filter.name }}</v-expansion-panel-header>
                   <v-expansion-panel-content v-if="filter.id === 'category'">
-                    <v-treeview :items="categoryTreeItems" open-all>
-                    </v-treeview>
+                    <!--<v-treeview :items="categoryTreeItems" open-all>
+                    </v-treeview>-->
                   </v-expansion-panel-content>
                   <v-expansion-panel-content v-else>
                     <form v-for="(filterValue, i) in filter.values"
@@ -245,6 +245,7 @@ export default {
           this.setSlidersInFirstTouch();
           this.resetSkeletonStyle();
           this.skeletonLoader.loading = false;
+          this.setCategoryTree(this.$store.state.products.products.facets[4]);
         })
   },
   computed: {
@@ -261,17 +262,21 @@ export default {
       }
     },
     categoryTreeItems() {
+      /* const facets = {...this.$store.state.products.products.facets[4]};
+       const treeViewObject = [];
+       treeViewObject.push({
+         children: facets['values'].map((val) => {
+           return {
+             name: `${val.value} (${val.count})`,
+             filter: val.filter,
+           }
+         })
+       });
+       return treeViewObject;*/
       const facets = {...this.$store.state.products.products.facets[4]};
-      const treeViewObject = [];
-      treeViewObject.push({
-        children: facets['values'].map((val) => {
-          return {
-            name: `${val.value} (${val.count})`,
-            filter: val.filter,
-          }
-        })
-      });
-      return treeViewObject;
+      this.setCategoryTree(facets);
+
+      return null;
     }
   },
   data: () => ({
@@ -322,6 +327,25 @@ export default {
     }
   },
   methods: {
+    /* TODO QSC-325 */
+    setCategoryTree(filter) {
+
+      if (filter.values.length <= 0) {
+        return;
+      }
+
+      console.log('filter values: ', filter.values);
+      for (let i = 0; i < filter.values.length; i++) {
+        const children = filter.values[i]['children'];
+        if (children) {
+          children['values'].forEach((val) => {
+            this.setCategoryTree(val.children);
+          })
+        }
+
+      }
+
+    },
     searchQueryFormSubmit() {
       if (!this.form.query) {
         return;
