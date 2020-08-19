@@ -334,7 +334,7 @@ export default {
         return;
       }
 
-      console.log('filter values: ', filter.values);
+      console.log('filter: ', filter);
       for (let i = 0; i < filter.values.length; i++) {
         const children = filter.values[i]['children'];
         if (children) {
