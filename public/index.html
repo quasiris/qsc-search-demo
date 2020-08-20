@@ -34,26 +34,40 @@
     let target = '';
 
     function init() {
-        target = document.querySelector('.products-list_products');
-        console.log('target: ', target);
-        startIntersectionObserver(target);
+        if (window.MutationObserver) {
+            target = document.querySelector('.products-list_products');
+            startMutationObserver(target);
+        }
+    }
+
+    const mutationConfig = {
+        childList: true,
+        subtree: true,
+        attributes: true
+    };
+
+    function startMutationObserver(target) {
+        const config = mutationConfig;
+        const mutationObs = new MutationObserver(callbackAttributeChange);
+        mutationObs.observe(target, config);
     }
 
 
-    function startIntersectionObserver() {
-        observer = new IntersectionObserver((entry, observer) => {
-            console.log('entry:', entry);
-        });
+    function callbackAttributeChange(mutations) {
+        for (let mutation of mutations) {
+            // console.log('Mutation!', mutations);
+            for (let mutation of mutations) {
+                for (let i = 0; i < mutation.addedNodes.length; i++) {
+                    console.log('Added nodes: ', mutation.addedNodes[i]);
+                }
 
-        observer.observe(target);
-
+            }
+        }
     }
 
-   /* TODO QSC-342
-    setTimeout(() => {
-        init();
-    }, 2000);
-*/
+    /* setTimeout(() => {*/
+    init();
+    /* }, 3000);*/
 
 </script>
 </html>

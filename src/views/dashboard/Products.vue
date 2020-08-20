@@ -178,20 +178,25 @@
               </template>
             </ul>
           </article>
-          <article v-if="skeletonLoader.loading">
-            <v-skeleton-loader
-                :loading="skeletonLoader.loading"
-                type="card"
-                :transition="skeletonLoader.transition"
-                :style="skeletonLoader.style"
-            />
-          </article>
-          <article>
-            <v-row class="products-list_products">
+          <!-- <article v-if="skeletonLoader.loading">
+             <v-skeleton-loader
+                 :loading="skeletonLoader.loading"
+                 type="card"
+                 :transition="skeletonLoader.transition"
+                 :style="skeletonLoader.style"
+             />
+           </article>-->
+          <!-- <div class="products-list_products">
+             PRODUCTS: {{PRODUCTS.documents}}
+           </div>-->
+
+          <article class="products-list_products">
+            <v-row>
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
                      class="grid">
-                <BasicProductCard :item="product"/>
+                <!--<BasicProductCard :item="product"/>-->
+                {{ product }}
               </v-col>
             </v-row>
           </article>
@@ -214,7 +219,9 @@ import {mapGetters} from "vuex";
 import SearchButton from "../../components/SearchButton";
 import ToolbarHeader from "../../components/ToolbarHeader";
 import {productsConstants} from '@/constants/productsConstants';
+/*
 import BasicProductCard from "../../components/BasicProductCard";
+*/
 import ResetAllFiltersChips from "../../components/ResetAllFiltersChips";
 import BasicChip from "../../components/BasicChip";
 import BasicPriceChip from "../../components/BasicPriceChip";
@@ -230,11 +237,11 @@ export default {
     BasicPriceChip,
     BasicChip,
     ResetAllFiltersChips,
-    BasicProductCard,
+    /* BasicProductCard,*/
     ToolbarHeader,
     SearchButton
   },
-  beforeMount() {
+  created() {
     this.$store.dispatch('GET_PRODUCTS', {
       query: '*',
       page: 1

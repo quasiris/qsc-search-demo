@@ -4,7 +4,7 @@ import errorParser from "../../utils/errorParser";
 
 function initialState() {
     return {
-        products: '',
+        products: [],
         suggestProducts: [],
     }
 }
