@@ -53,8 +53,7 @@
                 <v-expansion-panel v-for="(filter, i) in PRODUCTS.facets" :key="i">
                   <v-expansion-panel-header>{{ filter.name }}</v-expansion-panel-header>
                   <v-expansion-panel-content v-if="filter.id === 'category'">
-                    <!--<v-treeview :items="categoryTreeItems" open-all>
-                    </v-treeview>-->
+                    <v-treeview :items="categoryTree"></v-treeview>
                   </v-expansion-panel-content>
                   <v-expansion-panel-content v-else>
                     <form v-for="(filterValue, i) in filter.values"
@@ -245,7 +244,7 @@ export default {
           this.setSlidersInFirstTouch();
           this.resetSkeletonStyle();
           this.skeletonLoader.loading = false;
-          this.setCategoryTree(this.$store.state.products.products.facets[4]);
+          this.mappingCategoryTreeValues(this.$store.state.products.products.facets[4]['values']);
         })
   },
   computed: {
@@ -261,22 +260,8 @@ export default {
         this.priceSliderValue = value;
       }
     },
-    categoryTreeItems() {
-      /* const facets = {...this.$store.state.products.products.facets[4]};
-       const treeViewObject = [];
-       treeViewObject.push({
-         children: facets['values'].map((val) => {
-           return {
-             name: `${val.value} (${val.count})`,
-             filter: val.filter,
-           }
-         })
-       });
-       return treeViewObject;*/
-      const facets = {...this.$store.state.products.products.facets[4]};
-      this.setCategoryTree(facets);
-
-      return null;
+    categoryTree() {
+      return this.categoryTreeValues
     }
   },
   data: () => ({
@@ -316,35 +301,25 @@ export default {
     },
     chips: {
       isLast: false
-    }
+    },
+    categoryTreeValues: []
   }),
   watch: {
     'autosuggest.search': function (val) {
       val && val && this.getSuggestProducts(val)
-    },
-    'filterSelected': function (val) {
-      console.log('valueeeeee', val);
     }
   },
   methods: {
-    /* TODO QSC-325 */
-    setCategoryTree(filter) {
+    mappingCategoryTreeValues(filter) {
+      for (let i = 0; i < filter.length; i++) {
 
-      if (filter.values.length <= 0) {
-        return;
+        filter[i]['children'] = [...filter[i]['children']['values']]
+        filter[i]['name'] = filter[i]['value'];
+        filter[i]['id'] = filter[i]['filter'];
+
+        this.mappingCategoryTreeValues(filter[i]['children']);
       }
-
-      console.log('filter: ', filter);
-      for (let i = 0; i < filter.values.length; i++) {
-        const children = filter.values[i]['children'];
-        if (children) {
-          children['values'].forEach((val) => {
-            this.setCategoryTree(val.children);
-          })
-        }
-
-      }
-
+      this.categoryTreeValues = [...filter];
     },
     searchQueryFormSubmit() {
       if (!this.form.query) {
@@ -524,7 +499,6 @@ export default {
 
         this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
             .then(() => {
-              console.log('prodcttttt', this.productDependencies.searchFilters);
               if (this.productDependencies.searchFilters.length <= 0) {
                 this.chips.isLast = true;
               }
