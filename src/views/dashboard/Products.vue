@@ -261,6 +261,7 @@ export default {
       }
     },
     categoryTree() {
+      console.log('category tree: ', this.categoryTreeValues);
       return this.categoryTreeValues
     }
   },
@@ -314,7 +315,7 @@ export default {
       for (let i = 0; i < filter.length; i++) {
 
         filter[i]['children'] = [...filter[i]['children']['values']]
-        filter[i]['name'] = filter[i]['value'];
+        filter[i]['name'] = `${filter[i]['value']} (${filter[i]['count']})`;
         filter[i]['id'] = filter[i]['filter'];
 
         this.mappingCategoryTreeValues(filter[i]['children']);
