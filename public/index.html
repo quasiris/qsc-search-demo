@@ -55,19 +55,16 @@
 
     function callbackAttributeChange(mutations) {
         for (let mutation of mutations) {
-            // console.log('Mutation!', mutations);
-            for (let mutation of mutations) {
+            if (mutation.type === "childList") {
                 for (let i = 0; i < mutation.addedNodes.length; i++) {
                     console.log('Added nodes: ', mutation.addedNodes[i]);
                 }
-
             }
         }
+
     }
 
-    /* setTimeout(() => {*/
     init();
-    /* }, 3000);*/
 
 </script>
 </html>
