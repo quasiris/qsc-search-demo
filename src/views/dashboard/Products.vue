@@ -195,8 +195,7 @@
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
                      class="grid">
-                <!--<BasicProductCard :item="product"/>-->
-                {{ product }}
+                <BasicProductCard :item="product"/>
               </v-col>
             </v-row>
           </article>
@@ -219,9 +218,7 @@ import {mapGetters} from "vuex";
 import SearchButton from "../../components/SearchButton";
 import ToolbarHeader from "../../components/ToolbarHeader";
 import {productsConstants} from '@/constants/productsConstants';
-/*
 import BasicProductCard from "../../components/BasicProductCard";
-*/
 import ResetAllFiltersChips from "../../components/ResetAllFiltersChips";
 import BasicChip from "../../components/BasicChip";
 import BasicPriceChip from "../../components/BasicPriceChip";
@@ -237,7 +234,7 @@ export default {
     BasicPriceChip,
     BasicChip,
     ResetAllFiltersChips,
-    /* BasicProductCard,*/
+    BasicProductCard,
     ToolbarHeader,
     SearchButton
   },

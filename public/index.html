@@ -58,6 +58,11 @@
             if (mutation.type === "childList") {
                 for (let i = 0; i < mutation.addedNodes.length; i++) {
                     console.log('Added nodes: ', mutation.addedNodes[i]);
+                    const selector = mutation.addedNodes[i].querySelector('a').href;
+                    if (selector) {
+                        console.log('ID: ', selector)
+                    }
+
                 }
             }
         }
