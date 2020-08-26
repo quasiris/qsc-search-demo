@@ -20,56 +20,14 @@
 
 
 </body>
-<script src="https://unpkg.com/@quasiris/search-data-picker@0.5.6/build/main.bundle.js"></script>
+<script src="https://unpkg.com/@quasiris/search-data-picker@0.8.9/build/main.bundle.js"></script>
 <script>
-    /* const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
-     picker.initPicker.fromUrl(url);*/
-    /* window.addEventListener("load", function () {
-          setTimeout(() => {
-              const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
-              picker.initPicker.fromUrl(url);
-          }, 2000);
-      });*/
-
-    let target = '';
-
-    function init() {
-        if (window.MutationObserver) {
-            target = document.querySelector('.products-list_products');
-            startMutationObserver(target);
-        }
-    }
-
-    const mutationConfig = {
-        childList: true,
-        subtree: true,
-        attributes: true
-    };
-
-    function startMutationObserver(target) {
-        const config = mutationConfig;
-        const mutationObs = new MutationObserver(callbackAttributeChange);
-        mutationObs.observe(target, config);
-    }
-
-
-    function callbackAttributeChange(mutations) {
-        for (let mutation of mutations) {
-            if (mutation.type === "childList") {
-                for (let i = 0; i < mutation.addedNodes.length; i++) {
-                    console.log('Added nodes: ', mutation.addedNodes[i]);
-                    const selector = mutation.addedNodes[i].querySelector('a').href;
-                    if (selector) {
-                        console.log('ID: ', selector)
-                    }
-
-                }
-            }
-        }
-
-    }
-
-    init();
+    /*const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
+    picker.initPicker.fromUrl(url);*/
+    window.addEventListener("load", function () {
+        const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
+        picker.initPicker.fromUrl(url);
+    });
 
 </script>
 </html>

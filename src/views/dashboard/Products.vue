@@ -178,14 +178,14 @@
               </template>
             </ul>
           </article>
-          <!-- <article v-if="skeletonLoader.loading">
+           <article v-if="skeletonLoader.loading">
              <v-skeleton-loader
                  :loading="skeletonLoader.loading"
                  type="card"
                  :transition="skeletonLoader.transition"
                  :style="skeletonLoader.style"
              />
-           </article>-->
+           </article>
           <!-- <div class="products-list_products">
              PRODUCTS: {{PRODUCTS.documents}}
            </div>-->
