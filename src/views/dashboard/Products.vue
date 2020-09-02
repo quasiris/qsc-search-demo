@@ -178,20 +178,8 @@
               </template>
             </ul>
           </article>
-           <article v-if="skeletonLoader.loading">
-             <v-skeleton-loader
-                 :loading="skeletonLoader.loading"
-                 type="card"
-                 :transition="skeletonLoader.transition"
-                 :style="skeletonLoader.style"
-             />
-           </article>
-          <!-- <div class="products-list_products">
-             PRODUCTS: {{PRODUCTS.documents}}
-           </div>-->
-
-          <article class="products-list_products">
-            <v-row>
+          <article>
+            <v-row class="products-list_products">
               <v-col v-for="(product, index) in PRODUCTS.documents"
                      :key="index"
                      class="grid">

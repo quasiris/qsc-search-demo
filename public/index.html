@@ -17,17 +17,22 @@
     </strong>
 </noscript>
 <div id="app"></div>
-
-
 </body>
-<script src="https://unpkg.com/@quasiris/search-data-picker@0.8.9/build/main.bundle.js"></script>
+<script src="https://unpkg.com/@quasiris/search-data-picker@1.5.0/build/main.bundle.js"></script>
 <script>
-    /*const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
-    picker.initPicker.fromUrl(url);*/
     window.addEventListener("load", function () {
         const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
         picker.initPicker.fromUrl(url);
     });
+
+    window.addEventListener('hashchange', function (e) {
+        console.log('e: ', e);
+        console.log('The hash has changed!')
+    }, false);
+
+    window.addEventListener('locationchange', function () {
+        console.log('location changed!');
+    })
 
 </script>
 </html>

@@ -8,63 +8,23 @@
     <title>Quasiris Search Demo</title>
     <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
     <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css>
-    <link href=/css/app.370ee6f2.css rel=preload as=style>
-    <link href=/css/chunk-vendors.928d46ad.css rel=preload as=style>
-    <link href=/js/app.4f3e94d2.js rel=preload as=script>
-    <link href=/js/chunk-vendors.056efca2.js rel=preload as=script>
-    <link href=/css/chunk-vendors.928d46ad.css rel=stylesheet>
-    <link href=/css/app.370ee6f2.css rel=stylesheet>
+    <link href=/css/app.eb922c59.css rel=preload as=style>
+    <link href=/css/chunk-vendors.63081ea0.css rel=preload as=style>
+    <link href=/js/app.cf41eab7.js rel=preload as=script>
+    <link href=/js/chunk-vendors.a94b1679.js rel=preload as=script>
+    <link href=/css/chunk-vendors.63081ea0.css rel=stylesheet>
+    <link href=/css/app.eb922c59.css rel=stylesheet>
 </head>
 <body>
 <noscript><strong>We're sorry but qsc-search-demo doesn't work properly without JavaScript enabled. Please enable it to
     continue.</strong></noscript>
 <div id=app></div>
-<script src=/js/chunk-vendors.056efca2.js></script>
-<script src=/js/app.4f3e94d2.js></script>
+<script src=/js/chunk-vendors.a94b1679.js></script>
+<script src=/js/app.cf41eab7.js></script>
 </body>
-<script src=https://unpkg.com/@quasiris/search-data-picker@0.5.6/build/main.bundle.js></script>
-<script>/* const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
-     picker.initPicker.fromUrl(url);*/
-/* window.addEventListener("load", function () {
-      setTimeout(() => {
-          const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
-          picker.initPicker.fromUrl(url);
-      }, 2000);
-  });*/
-
-let target = '';
-
-function init() {
-    if (window.MutationObserver) {
-        target = document.querySelector('.products-list_products');
-        startMutationObserver(target);
-    }
-}
-
-
-function startMutationObserver(target) {
-    var config = listenOnlyAttributeChanges();
-    var mutationObs = new MutationObserver(callbackAttributeChange);
-    mutationObs.observe(target, config);
-}
-
-
-function listenOnlyAttributeChanges() {
-    return {
-        childList: true,
-        subtree: true,
-    };
-}
-
-function callbackAttributeChange(mutations) {
-    for (let mutation of mutations) {
-        for (let i = 0; i < mutation.addedNodes.length; i++) {
-            console.log('Added nodes: ', mutation.addedNodes[i]);
-        }
-    }
-}
-
-setTimeout(() => {
-    init();
-}, 3000);</script>
+<script src=https://unpkg.com/@quasiris/search-data-picker@1.4.6/build/main.bundle.js></script>
+<script>window.addEventListener("load", function () {
+    const url = "https://qsc-dev.quasiris.de/api/v1/admin/config/hornbach-de/merge/qsc-search-demo";
+    picker.initPicker.fromUrl(url);
+});</script>
 </html>
