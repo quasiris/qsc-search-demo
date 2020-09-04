@@ -297,6 +297,11 @@ export default {
     },
     categoryTreeValues: []
   }),
+  destroyed() {
+    this.$store.dispatch('RESET', {
+      type: 'products'
+    });
+  },
   watch: {
     'autosuggest.search': function (val) {
       val && val && this.getSuggestProducts(val)
