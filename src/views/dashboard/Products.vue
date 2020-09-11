@@ -246,7 +246,10 @@ export default {
     ]),
     PRICE_SLIDER: {
       get() {
-        return [this.$store.state.products.products.sliders[0].minRange, this.$store.state.products.products.sliders[0].maxRange]
+        return [
+          parseFloat(this.$store.state.products.products.sliders[0].minRange).toFixed(2),
+          parseFloat(this.$store.state.products.products.sliders[0].maxRange).toFixed(2),
+        ]
       },
       set(value) {
         this.priceSliderValue = value;
