@@ -73,8 +73,8 @@ export default {
         POST_PRODUCT_DEPENDENCIES: async (context, payload) => {
             return ProductService.postProductDependencies(payload)
                 .then((response) => {
-                    console.log('response', response.data.result.search);
                     context.commit('SET_PRODUCTS', response.data.result.search);
+                    return response.data.result.search;
                 })
                 .catch((error) => {
                     errorParser.parse(error);

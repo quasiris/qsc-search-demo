@@ -192,7 +192,7 @@
               class="products-list_pagination mt-6"
               previous-aria-label="Previous"
               @input="changePagination"
-              v-model="PRODUCTS.paging.currentPage"
+              v-model="productDependencies.page"
               :length="PRODUCTS.paging.pageCount"
               :total-visible="10"
           />
@@ -353,8 +353,8 @@ export default {
           })
     },
     changePagination(page) {
-      this.productDependencies.page = page;
 
+      this.productDependencies.page = page;
       this.$store.dispatch('RESET', {
         type: 'products'
       });
@@ -368,6 +368,9 @@ export default {
         duration: 1300
       });
     },
+    resetPagination() {
+      this.productDependencies.page = 1;
+    },
     changeSort(sortValue) {
       this.productDependencies.sort.sort = sortValue;
 
@@ -375,7 +378,10 @@ export default {
         type: 'products'
       });
 
-      this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies);
+      this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
+          .then(() => {
+            this.resetPagination();
+          })
     },
     changeSlider(slider) {
       this.setSliderValues(slider, this.priceSliderValue);
@@ -405,8 +411,8 @@ export default {
       });
 
       this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
-          .then((res) => {
-            console.log('response: ', res);
+          .then(() => {
+            this.resetPagination();
           })
     },
     checkIfSliderValueIsAlreadyExist(id, sliderValues) {
@@ -476,6 +482,7 @@ export default {
       this.$store.dispatch('POST_PRODUCT_DEPENDENCIES', this.productDependencies)
           .then(() => {
             this.skeletonLoader.loading = false;
+            this.resetPagination();
           })
     },
     deleteSelectedFiltersValues({filterType, filterIndex, selectValueIndex, id}) {
